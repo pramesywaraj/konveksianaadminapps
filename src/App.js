@@ -3,17 +3,19 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Login from './Components/Login/Login';
 import Dashboard from './Components/Dashboard/Dashboard';
 
+import Layout from './Components/Layout/Layout';
+
 function App() {
   return (
     <BrowserRouter>
       <div>
-        {/* <Navbar /> */}
+        <Layout>
+          <Switch>
+            <Route exact path="/login" component={Login}/>
+            <Route exact path="/dashboard" component={Dashboard}/>          
 
-        <Switch>
-          <Route exact path="/login" component={Login}/>
-          <Route exact path="/" component={Dashboard}/>          
-
-        </Switch>
+          </Switch>
+        </Layout>
       </div>
     </BrowserRouter>
   );

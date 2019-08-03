@@ -1,23 +1,24 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Login from './Components/Login/Login';
-import Dashboard from './Components/Dashboard/Dashboard';
+import { Router, Switch, Route } from 'react-router-dom';
+import { Login } from './Components/Login/Login';
+import { Dashboard } from './Components/Dashboard/Dashboard';
+import { history } from './Helpers';
+import { PrivateRoute } from './Components/PrivateRoute';
 
 import Layout from './Components/Layout/Layout';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div>
-        <Layout>
+    <div>
+      <Router history={history}>
+        <div>
           <Switch>
-            <Route exact path="/login" component={Login}/>
-            <Route exact path="/dashboard" component={Dashboard}/>          
-
+            <PrivateRoute exact path='/dashboard' component={Dashboard}/>
+            <Route exact path='/login' component={Login} />
           </Switch>
-        </Layout>
-      </div>
-    </BrowserRouter>
+        </div>
+      </Router>
+    </div>
   );
 }
 

@@ -11,18 +11,18 @@ const styles = theme => ({
 });
 
 
-class Dashboard extends Component {
+class Order extends Component {
     render() {
         const { classes } = this.props;
         return(
             <div className={classes.root}>
-                <p>Home</p>
+                <p>Order</p>
             </div>
         )
     }
 }
 
-Dashboard.propTypes = {
+Order.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
@@ -30,10 +30,10 @@ function mapStateToProps(state) {
     return state;
 }
 
-const connectedHomePage = withRouter(connect(mapStateToProps, null, null, 
+const connectedOrderPage = withRouter(connect(mapStateToProps, null, null, 
     {
         pure: false
     }
-)(withStyles(styles)(Dashboard)));
+)(withStyles(styles)(Order)));
 
-export { connectedHomePage as Dashboard };
+export { connectedOrderPage as Order };

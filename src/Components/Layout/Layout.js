@@ -105,7 +105,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Layout(props) {
-    console.log(props);
+    // console.log(props);
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -130,7 +130,7 @@ export default function Layout(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Dashboard
+                        Konveksiana Admin
                     </Typography>
                     {/* <IconButton color="inherit">
                         <Badge badgeContent={4} color="secondary">
@@ -162,9 +162,9 @@ export default function Layout(props) {
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
+                    {/* <Grid container spacing={4}> */}
                         {props.children}
-                    </Grid>
+                    {/* </Grid> */}
                 </Container>
             </main>
         </div>

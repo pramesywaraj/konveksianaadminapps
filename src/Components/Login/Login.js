@@ -17,6 +17,7 @@ import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 function MadeWithLove() {
@@ -54,6 +55,15 @@ const styles = theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+
+  buttonProgress: {
+    color: '#4caf50',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 });
 
 class Login extends Component {
@@ -63,7 +73,8 @@ class Login extends Component {
         this.state = {
             email: '',
             password: '',
-            showPassword: false
+            showPassword: false,
+            loading: false
         }
     }
 
@@ -77,19 +88,25 @@ class Login extends Component {
         this.setState({ [prop]: event.target.value });
     };
 
-    login = event => {
-        this.setState({ submitted : true });
+    login = (e) => {
+        this.setState({ loading : true });
         const { email, password } = this.state;
         const { dispatch } = this.props;
         if(email && password) {
-            dispatch(userActions.login(email, password));
+            setTimeout(() => {
+                this.setState({loading: false});
+                dispatch(userActions.login(email, password));
+            }, 3000);
         }
+
     }
 
     render() {
         const { classes } = this.props;
+        const { loading } = this.state;
         return (
             <Container component="main" maxWidth="xs">
+                {loading ? <LinearProgress variant="query" /> : ''}
                 <CssBaseline />
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
@@ -136,6 +153,7 @@ class Login extends Component {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            disabled={loading}
                             onClick={(e) => {this.login()}} 
                         >
                             Login

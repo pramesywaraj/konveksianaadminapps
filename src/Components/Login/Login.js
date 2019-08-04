@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { history } from '../../Helpers/history';
+import { userActions } from '../../Actions/userActions';
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+
+import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -54,6 +57,35 @@ const styles = theme => ({
 });
 
 class Login extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email: '',
+            password: '',
+            showPassword: false
+        }
+    }
+
+    componentDidMount() {
+        if(localStorage.getItem('auth')) {
+            history.push('/dashboard');
+        }
+    }
+
+    handleChange = prop => event => {
+        this.setState({ [prop]: event.target.value });
+    };
+
+    login = event => {
+        this.setState({ submitted : true });
+        const { email, password } = this.state;
+        const { dispatch } = this.props;
+        if(email && password) {
+            dispatch(userActions.login(email, password));
+        }
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -66,7 +98,7 @@ class Login extends Component {
                     <Typography component="h1" variant="h5">
                         Konveksiana Admin Apps
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    {/* <form className={classes.form} noValidate> */}
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -77,6 +109,8 @@ class Login extends Component {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            value={this.state.email}
+                            onChange={this.handleChange('email')}
                         />
                         <TextField
                             variant="outlined"
@@ -88,21 +122,25 @@ class Login extends Component {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            value={this.state.value}
+                            onChange={this.handleChange('password')}
+
                         />
-                        <FormControlLabel
+                        {/* <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
-                        />
+                        /> */}
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={(e) => {this.login()}} 
                         >
                             Login
                         </Button>
-                    </form>
+                    {/* </form> */}
                 </div>
                 <Box m={5}>
                     <MadeWithLove />
@@ -117,8 +155,11 @@ Login.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-function mapStateToProps(state) {
-    return state;
+const mapStateToProps = (state) => {
+    const { loggingIn } = state.authentication;
+    return {
+        loggingIn
+    };
 }
 
 const connectedLoginPage = withRouter(connect(mapStateToProps, null, null, {

@@ -18,7 +18,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 // import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems } from './SidemenuItems';
+import SidemenuItems from './SidemenuItems';
 // import Chart from './Chart';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
@@ -155,7 +155,9 @@ export default function Layout(props) {
                     </IconButton>
                 </div>
                 <Divider />
-                    <List>{mainListItems}</List>
+                    <List>
+                        <SidemenuItems />
+                    </List>
                 <Divider />
                 {/* <List>{secondaryListItems}</List> */}
             </Drawer>

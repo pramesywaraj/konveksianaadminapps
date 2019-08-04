@@ -33,11 +33,12 @@ function login(email, password) {
 
 function logout() {
     return dispatch => {
+        alert('Anda Keluar dari Aplikasi');
         localStorage.removeItem('token');
         localStorage.removeItem('auth');
         localStorage.removeItem('user');
         dispatch(logoutUser());
-        history.push('/login');        
+        history.push('/login');
     }
 }
 

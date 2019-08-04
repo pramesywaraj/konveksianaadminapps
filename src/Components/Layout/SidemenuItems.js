@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
@@ -7,9 +7,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 // import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
+import { userActions } from '../../Actions/userActions';
+import { connect } from 'react-redux';
 // import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import { NavLink as RouterLink } from 'react-router-dom';
@@ -41,39 +43,39 @@ ListItemNavLink.propTypes = {
 };
 
 
-export const mainListItems = (
-    <div>
-        <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
-        <ListItemNavLink to='/order' primary='Orders' icon={<ShoppingCartIcon />} />
-        {/* <ListItem href="/dashboard" button>
-            <ListItemIcon>
-                <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem to="/order" button>
-            <ListItemIcon>
-                <ShoppingCartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Orders" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon>
-                <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Customers" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon>
-                <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Reports" />
-        </ListItem>
-        <ListItem button>
-            <ListItemIcon>
-                <LayersIcon />
-            </ListItemIcon>
-            <ListItemText primary="Integrations" />
-        </ListItem> */}
-    </div>
-);
+class SidemenuItems extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {};
+    }
+
+    logout = event => {
+        const { dispatch } = this.props;
+        dispatch(userActions.logout());
+    }
+
+    render() {
+        return (
+            <div>
+                <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
+                <ListItemNavLink to='/order' primary='Orders' icon={<ShoppingCartIcon />} />
+            
+                <ListItem button onClick={(e) => {this.logout()}}>
+                    <ListItemIcon>
+                        <ExitToAppIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Keluar" />
+                </ListItem>
+            </div>
+        )
+    }
+}
+
+const mapStateToProps = (state) =>{
+    const { loggingIn } = state.authentication;
+    return {
+       loggingIn
+    };
+}
+export default connect(mapStateToProps)(SidemenuItems);

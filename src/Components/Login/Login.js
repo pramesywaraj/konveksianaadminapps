@@ -84,6 +84,10 @@ class Login extends Component {
         }
     }
 
+    componentWillReceiveProps(newProps){
+        this.setState({ loading: newProps.loading }); // remove the loading progress when logged in or fail to log in
+     }
+
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
     };
@@ -93,12 +97,8 @@ class Login extends Component {
         const { email, password } = this.state;
         const { dispatch } = this.props;
         if(email && password) {
-            setTimeout(() => {
-                this.setState({loading: false});
-                dispatch(userActions.login(email, password));
-            }, 3000);
+            dispatch(userActions.login(email, password));
         }
-
     }
 
     render() {
@@ -174,9 +174,10 @@ Login.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    const { loggingIn } = state.authentication;
+    const { loggingIn, loading } = state.authentication;
     return {
-        loggingIn
+        loggingIn,
+        loading
     };
 }
 

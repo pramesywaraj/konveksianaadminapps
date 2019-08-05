@@ -25,6 +25,7 @@ function login(email, password) {
                     history.push('/dashboard');
                     alert(res.data.message);
                 } else {
+                    dispatch(loginFailed());
                     alert(res.data.message);
                 }
             })
@@ -48,6 +49,12 @@ export function setUserDetails(data) {
         auth: true,
         token: data.token,
         user: JSON.stringify(data.result)
+    }
+}
+
+export function loginFailed() {
+    return {
+        type: "LOGIN_FAILED",
     }
 }
 

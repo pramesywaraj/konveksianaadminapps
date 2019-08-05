@@ -4,6 +4,7 @@ let user = localStorage.getItem('user'); // Users data
 
 const initialState = auth ? {
     loggedIn: true,
+    loading: true,    
     auth,
     token,
     user
@@ -14,9 +15,15 @@ export function authentication(state = initialState, action) {
         case 'LOGIN_SUCCESS':
             return {
                 loggingIn: true,
+                loading: false,
                 auth: action.auth,
                 token: action.token,
                 user: action.user
+            };
+        case 'LOGIN_FAILED':
+            return {
+                loggingIn: false,
+                loading: false
             };
         case 'LOGOUT_SUCCESS':
             return {

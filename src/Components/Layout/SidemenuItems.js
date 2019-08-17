@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 // import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
@@ -60,6 +61,7 @@ class SidemenuItems extends Component {
             <div>
                 <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
                 <ListItemNavLink to='/order' primary='Orders' icon={<ShoppingCartIcon />} />
+                <ListItemNavLink to='/' primary='Products' icon={<ShoppingBasketIcon />} />
             
                 <ListItem button onClick={(e) => {this.logout()}}>
                     <ListItemIcon>

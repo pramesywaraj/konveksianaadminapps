@@ -9,7 +9,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import BarChartIcon from '@material-ui/icons/BarChart';
+import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import LayersIcon from '@material-ui/icons/Layers';
 import { userActions } from '../../Actions/userActions';
 import { connect } from 'react-redux';
@@ -60,8 +60,9 @@ class SidemenuItems extends Component {
         return (
             <div>
                 <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
-                <ListItemNavLink to='/order' primary='Orders' icon={<ShoppingCartIcon />} />
-                <ListItemNavLink to='/' primary='Products' icon={<ShoppingBasketIcon />} />
+                <ListItemNavLink to='/orders' primary='Orders' icon={<ShoppingCartIcon />} />
+                <ListItemNavLink to='/products' primary='Products' icon={<ShoppingBasketIcon />} />
+                <ListItemNavLink to='/clients' primary='Clients' icon={<BusinessCenterIcon />} />
             
                 <ListItem button onClick={(e) => {this.logout()}}>
                     <ListItemIcon>

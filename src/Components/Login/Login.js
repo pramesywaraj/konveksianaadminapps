@@ -70,6 +70,10 @@ class Login extends Component {
     constructor(props) {
         super(props);
 
+        if(localStorage.getItem('auth')) {
+            history.push('/dashboard');
+        }
+
         this.state = {
             email: '',
             password: '',
@@ -78,19 +82,19 @@ class Login extends Component {
         }
     }
 
-    componentDidMount() {
-        if(localStorage.getItem('auth')) {
-            history.push('/dashboard');
-        }
-    }
-
     componentWillReceiveProps(newProps){
-        this.setState({ loading: newProps.loading }); // remove the loading progress when logged in or fail to log in
-     }
+        this.setState({ loading: newProps.loading });
+    }
 
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
-    };
+    }
+
+    handleKeyPress = (e) => {
+        if(e.key === 'Enter') {
+            this.login();
+        }
+    } 
 
     login = (e) => {
         this.setState({ loading : true });
@@ -98,6 +102,9 @@ class Login extends Component {
         const { dispatch } = this.props;
         if(email && password) {
             dispatch(userActions.login(email, password));
+        } else {
+            alert('Anda belum mengisi email atau password. Silahkan masukkan email atau password Anda terlebih dahulu.');
+            this.setState({ loading: false });
         }
     }
 
@@ -128,6 +135,7 @@ class Login extends Component {
                             autoFocus
                             value={this.state.email}
                             onChange={this.handleChange('email')}
+                            onKeyPress={(e) => this.handleKeyPress(e)} 
                         />
                         <TextField
                             variant="outlined"
@@ -141,7 +149,7 @@ class Login extends Component {
                             autoComplete="current-password"
                             value={this.state.value}
                             onChange={this.handleChange('password')}
-
+                            onKeyPress={(e) => this.handleKeyPress(e)} 
                         />
                         {/* <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}

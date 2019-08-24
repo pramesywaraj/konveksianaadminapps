@@ -48,15 +48,18 @@ class SidemenuItems extends Component {
 
     constructor(props){
         super(props);
-        this.state = {};
+        this.state = {
+            selected: ''
+        };
     }
 
-    logout = event => {
+    logout = () => {
         const { dispatch } = this.props;
         dispatch(userActions.logout());
     }
 
     render() {
+        const { selected } = this.state;
         return (
             <div>
                 <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
@@ -64,7 +67,7 @@ class SidemenuItems extends Component {
                 <ListItemNavLink to='/products' primary='Products' icon={<ShoppingBasketIcon />} />
                 <ListItemNavLink to='/clients' primary='Clients' icon={<BusinessCenterIcon />} />
             
-                <ListItem button onClick={(e) => {this.logout()}}>
+                <ListItem button onClick={this.logout}>
                     <ListItemIcon>
                         <ExitToAppIcon />
                     </ListItemIcon>
@@ -76,9 +79,8 @@ class SidemenuItems extends Component {
 }
 
 const mapStateToProps = (state) =>{
-    const { loggingIn } = state.authentication;
     return {
-       loggingIn
+       state
     };
 }
 export default connect(mapStateToProps)(SidemenuItems);

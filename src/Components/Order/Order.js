@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(1),
         overflowX: 'auto',
     },
     table: {
@@ -25,6 +25,12 @@ const styles = theme => ({
     },
     table_row_clickable: {
         cursor: 'pointer'
+    },
+
+    noOrder: {
+        padding: theme.spacing(3, 2),
+        width: '100%',
+        textAlign: 'center'
     }
 });
 
@@ -38,8 +44,11 @@ class Order extends Component {
     render() {
         const { classes } = this.props;
         const { orders } = this.props.orders;
-        return(
-            <Paper className={classes.root}>
+
+        let orderList = null;
+
+        if(orders) {
+            orderList = (
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
@@ -49,21 +58,33 @@ class Order extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {orders.map(order => (
-                            <TableRow key={order._id} className={classes.table_row_clickable}>
-                                <TableCell component="th" scope="row">
-                                    {order.user.name}
-                                </TableCell>
-                                <TableCell align="right">{order.category.name}</TableCell>
-                                <TableCell align="right">
-                                    <Moment format="D MMM YYYY">
-                                        {order.createdAt}
-                                    </Moment>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                    {orders.map(order => (
+                        <TableRow key={order._id} className={classes.table_row_clickable}>
+                            <TableCell component="th" scope="row">
+                                {order.user.name}
+                            </TableCell>
+                            <TableCell align="right">{order.category.name}</TableCell>
+                            <TableCell align="right">
+                                <Moment format="D MMM YYYY">
+                                    {order.createdAt}
+                                </Moment>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                     </TableBody>
                 </Table>
+            );
+        } else {
+            orderList = (
+                <Paper className={classes.noOrder}>
+                    <p>Tidak ada order untuk ditampilkan.</p>
+                </Paper>
+            )
+        }
+
+        return(
+            <Paper className={classes.root}>
+                {orderList}
             </Paper>
         )
     }

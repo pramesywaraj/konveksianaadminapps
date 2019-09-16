@@ -1,6 +1,8 @@
 import { orderService } from '../Services/orderService';
 import { history } from '../Helpers';
 
+import { FETCHED_ALL_ORDERS } from './actionTypes';
+
 export const orderAction = {
     getAllOrder
 };
@@ -21,7 +23,7 @@ function getAllOrder() {
 
 export function getOrderList(orders) {
     return {
-        type: 'FETCHED_ALL_ORDERS',
+        type: FETCHED_ALL_ORDERS,
         orders: orders
     }
 }

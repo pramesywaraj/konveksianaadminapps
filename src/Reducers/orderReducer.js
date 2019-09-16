@@ -1,3 +1,5 @@
+import { FETCHED_ALL_ORDERS } from '../Actions/actionTypes';
+
 const initialState = {
     orders: [],
     _id: '',
@@ -11,7 +13,7 @@ const initialState = {
 
 export function order(state = initialState, action) {
     switch(action.type) {
-        case 'FETCHED_ALL_ORDERS':
+        case FETCHED_ALL_ORDERS:
             return {
                 ...state,
                 orders: action.orders

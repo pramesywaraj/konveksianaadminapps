@@ -9,8 +9,8 @@ function getAllOrder() {
     return dispatch => {
         let apiEndpoint = 'order';
         orderService.getAllOrder(apiEndpoint)
-            .then((res) => {
-                if(res.data.status) {
+            .then(res => {
+                if(res.data.status === 200) {
                     dispatch(getOrderList(res.data.order));
                 }
             }, err => {

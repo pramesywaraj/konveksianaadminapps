@@ -11,11 +11,11 @@ function getAllOrder(apiEndpoint) {
             return res;
         },  err => {
             console.log(err);
-            return err.response;
+            return err;
         });
 }
 
-function getOptions(){
+function getOptions() {
     let options = {};
     if(localStorage.getItem('token')){
         options.headers = { 'Authorization': 'Bearer ' + localStorage.getItem('token') };

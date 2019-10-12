@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -10,7 +11,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
-import LayersIcon from '@material-ui/icons/Layers';
+// import LayersIcon from '@material-ui/icons/Layers';
 import { userActions } from '../../Actions/userActions';
 import { connect } from 'react-redux';
 // import AssignmentIcon from '@material-ui/icons/Assignment';
@@ -43,7 +44,6 @@ ListItemNavLink.propTypes = {
     to: PropTypes.string.isRequired,
 };
 
-
 class SidemenuItems extends Component {
 
     constructor(props){
@@ -67,9 +67,9 @@ class SidemenuItems extends Component {
                 <ListItemNavLink to='/products' primary='Products' icon={<ShoppingBasketIcon />} />
                 <ListItemNavLink to='/clients' primary='Clients' icon={<BusinessCenterIcon />} />
             
-                <ListItem button onClick={this.logout}>
+                <ListItem style={{color: 'red'}} button onClick={this.logout}>
                     <ListItemIcon>
-                        <ExitToAppIcon />
+                        <ExitToAppIcon style={{color: 'red'}} />
                     </ListItemIcon>
                     <ListItemText primary="Keluar" />
                 </ListItem>

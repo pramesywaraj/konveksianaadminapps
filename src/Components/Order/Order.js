@@ -58,7 +58,7 @@ class Order extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {orders.map(order => (
+                    {orders > 0 ? orders.map(order => (
                         <TableRow key={order._id} className={classes.table_row_clickable}>
                             <TableCell component="th" scope="row">
                                 {order.user.name}
@@ -70,7 +70,11 @@ class Order extends Component {
                                 </Moment>
                             </TableCell>
                         </TableRow>
-                    ))}
+                    )) : 
+                        <TableRow>
+                            <h4>Tidak ada pesanan untuk ditampilkan.</h4>
+                        </TableRow>
+                    }
                     </TableBody>
                 </Table>
             );

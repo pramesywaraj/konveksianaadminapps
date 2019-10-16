@@ -48,7 +48,7 @@ function createNewClient(data) {
             res => {
                 if (res.status === 201) {
                     alert('Client berhasil dibuat.');
-                    history.push("/client");
+                    history.push("/clients");
                     dispatch(clientCreated());
                 }
 

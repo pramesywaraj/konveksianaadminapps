@@ -11,9 +11,7 @@ import NewClientForm from './NewClientForm';
 import ClientCard from './ClientCard';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
+import CustomModal from '../OtherComponent/CustomModal';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -29,19 +27,13 @@ const styles = theme => ({
         float: 'right'
     },
 
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        borderRadius: '20px',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-        width: '50%'
-    },
+    // paper: {
+    //     backgroundColor: theme.palette.background.paper,
+    //     borderRadius: '20px',
+    //     boxShadow: theme.shadows[5],
+    //     padding: theme.spacing(2, 4, 3),
+    //     width: '50%'
+    // },
 
     progress: {
         textAlign: 'center',
@@ -73,7 +65,6 @@ class Client extends Component {
     handleChange = prop => event => {
         const { dispatch } = this.props;
         dispatch(clientActions.onChangeProps(prop, event));
-        // this.setState({ [prop]: event.target.value });
     }
 
     submitNewClient = () => {
@@ -131,25 +122,16 @@ class Client extends Component {
                                 }
                                 
                             </Grid>
-
-                            <Modal
-                                className={classes.modal}
-                                open={modal}
-                                onClose={handleClose}
-                                closeAfterTransition
-                                BackdropComponent={Backdrop}
-                                BackdropProps={{
-                                    timeout: 500,
-                                }}
+                            <CustomModal 
+                                modal={modal}
+                                handleClose={handleClose}
                             >
-                                <Fade in={modal}>
-                                    <NewClientForm 
-                                        newClientProps={this.props.client} 
-                                        onFormFieldChange={this.handleChange} 
-                                        onSubmitNewClient={this.submitNewClient} 
-                                    />
-                                </Fade>
-                            </Modal>
+                                <NewClientForm 
+                                    newClientProps={this.props.client} 
+                                    onFormFieldChange={this.handleChange} 
+                                    onSubmitNewClient={this.submitNewClient} 
+                                />
+                            </CustomModal>
                         </div>
                     )
                     :

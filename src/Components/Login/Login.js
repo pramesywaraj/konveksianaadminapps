@@ -122,7 +122,6 @@ class Login extends Component {
                     <Typography component="h1" variant="h5">
                         Konveksiana Admin Apps
                     </Typography>
-                    {/* <form className={classes.form} noValidate> */}
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -151,10 +150,6 @@ class Login extends Component {
                             onChange={this.handleChange('password')}
                             onKeyPress={(e) => this.handleKeyPress(e)} 
                         />
-                        {/* <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        /> */}
                         <Button
                             type="submit"
                             fullWidth

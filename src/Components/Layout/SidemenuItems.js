@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,10 +10,10 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
-// import LayersIcon from '@material-ui/icons/Layers';
+import TextSmsIcon from '@material-ui/icons/Textsms';
+
 import { userActions } from '../../Actions/userActions';
 import { connect } from 'react-redux';
-// import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import { NavLink as RouterLink } from 'react-router-dom';
 
@@ -59,13 +58,13 @@ class SidemenuItems extends Component {
     }
 
     render() {
-        const { selected } = this.state;
         return (
             <div>
                 <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
                 <ListItemNavLink to='/orders' primary='Orders' icon={<ShoppingCartIcon />} />
                 <ListItemNavLink to='/products' primary='Products' icon={<ShoppingBasketIcon />} />
                 <ListItemNavLink to='/clients' primary='Clients' icon={<BusinessCenterIcon />} />
+                <ListItemNavLink to='/reviews' primary='Review' icon={<TextSmsIcon />} />
             
                 <ListItem style={{color: 'red'}} button onClick={this.logout}>
                     <ListItemIcon>

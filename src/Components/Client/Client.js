@@ -59,6 +59,7 @@ class Client extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
+        console.log(dispatch(clientActions.getAllClients()));
         dispatch(clientActions.getAllClients());
     }
 

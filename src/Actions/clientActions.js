@@ -23,6 +23,7 @@ function getAllClients() {
         let apiEndpoint = "client";
         clientService.getAllClients(apiEndpoint).then(
             res => {
+                console.log(res);
                 if (res.data.status === 200) {
                     dispatch(getClientList(res.data.client));
                 }

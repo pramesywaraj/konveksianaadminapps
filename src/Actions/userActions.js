@@ -16,7 +16,7 @@ function login(email, password) {
 
         authService.post(apiEndpoint, payload)
             .then(res => {
-                if(res != undefined) {
+                if(res !== undefined) {
                     if(res.data && res.data.status === 200) {
                         localStorage.setItem('token', res.data.token);
                         localStorage.setItem('auth', true);

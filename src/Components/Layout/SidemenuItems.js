@@ -43,38 +43,36 @@ ListItemNavLink.propTypes = {
     to: PropTypes.string.isRequired,
 };
 
-class SidemenuItems extends Component {
+const SidemenuItems = (props) => {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            selected: ''
-        };
-    }
+    // constructor(props){
+    //     super(props);
+    //     this.state = {
+    //         selected: ''
+    //     };
+    // }
 
-    logout = () => {
-        const { dispatch } = this.props;
+    const logout = () => {
+        const { dispatch } = props;
         dispatch(userActions.logout());
     }
 
-    render() {
-        return (
-            <div>
-                <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
-                <ListItemNavLink to='/orders' primary='Orders' icon={<ShoppingCartIcon />} />
-                <ListItemNavLink to='/products' primary='Products' icon={<ShoppingBasketIcon />} />
-                <ListItemNavLink to='/clients' primary='Clients' icon={<BusinessCenterIcon />} />
-                <ListItemNavLink to='/reviews' primary='Review' icon={<TextSmsIcon />} />
-            
-                <ListItem style={{color: 'red'}} button onClick={this.logout}>
-                    <ListItemIcon>
-                        <ExitToAppIcon style={{color: 'red'}} />
-                    </ListItemIcon>
-                    <ListItemText primary="Keluar" />
-                </ListItem>
-            </div>
-        )
-    }
+    return (
+        <div>
+            <ListItemNavLink to='/dashboard' primary='Dashboard' icon={<DashboardIcon />} />
+            <ListItemNavLink to='/orders' primary='Orders' icon={<ShoppingCartIcon />} />
+            <ListItemNavLink to='/products' primary='Products' icon={<ShoppingBasketIcon />} />
+            <ListItemNavLink to='/clients' primary='Clients' icon={<BusinessCenterIcon />} />
+            <ListItemNavLink to='/reviews' primary='Review' icon={<TextSmsIcon />} />
+        
+            <ListItem style={{color: 'red'}} button onClick={logout}>
+                <ListItemIcon>
+                    <ExitToAppIcon style={{color: 'red'}} />
+                </ListItemIcon>
+                <ListItemText primary="Keluar" />
+            </ListItem>
+        </div>
+    )
 }
 
 const mapStateToProps = (state) =>{

@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 
 const ImgMediaCard = props => {
   const classes = useStyles();
-//   const baseUrl = "endpoint.konveksiana.id/";
+  const baseUrl = "https://endpoint.konveksiana.id/";
 
   return (
     <Card className={classes.card}>
@@ -38,7 +38,7 @@ const ImgMediaCard = props => {
 				component="img"
 				alt="Contemplative Reptile"
 				height="140"
-				image="endpoint.konveksiana.id/uploads/clients/1565793496000r.jpg"
+				image={baseUrl + props.clientProps.urlImage}
 				title="Contemplative Reptile"
 			/>
 			<CardContent>

@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -21,16 +22,19 @@ class Product extends Component {
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <Paper className={classes.paper}>
-                            <Button variant="contained" color="primary" className={classes.addButton}>
-                                <AddIcon />
-                                Tambah Kategori
-                            </Button>
+                            <Box display='flex' flexDirection='row-reverse'>
+                                <Button variant="contained" color="primary" >
+                                    <AddIcon />
+                                    Tambah Kategori
+                                </Button>
+                            </Box>
                             
+                            <h2>How to make undefine</h2>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.paper}>
-                            
+
                         </Paper>
                         <Paper className={[classes.paper, classes.marginTop10].join(' ')}>
                             

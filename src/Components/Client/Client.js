@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CustomModal from '../OtherComponent/CustomModal';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Box from '@material-ui/core/Box';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -23,17 +24,9 @@ const styles = theme => ({
         flexGrow: 1
     },
     
-    button: {
-        float: 'right'
+    buttonMarginBottom20: {
+        marginBottom: '20px'
     },
-
-    // paper: {
-    //     backgroundColor: theme.palette.background.paper,
-    //     borderRadius: '20px',
-    //     boxShadow: theme.shadows[5],
-    //     padding: theme.spacing(2, 4, 3),
-    //     width: '50%'
-    // },
 
     progress: {
         textAlign: 'center',
@@ -59,7 +52,6 @@ class Client extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
-        console.log(dispatch(clientActions.getAllClients()));
         dispatch(clientActions.getAllClients());
     }
 
@@ -104,10 +96,16 @@ class Client extends Component {
                 {!loading ? 
                     (
                         <div>
-                            <Button variant="contained" color="primary" className={classes.button} onClick={handleOpen}>
-                                <AddIcon />
-                                Tambahkan Client Baru
-                            </Button>
+                            <div className={classes.buttonMarginBottom20}>
+                                <Box display='flex' flexDirection='row-reverse'>
+                                    <Button variant="contained" color="primary" className={classes.button} onClick={handleOpen}>
+                                        <AddIcon />
+                                        Tambahkan Client Baru
+                                    </Button>
+                                </Box>
+                            </div>
+                            
+                            
                             <Grid container spacing={3}>
                                 {clients.length > 0 ? clients.map(
                                     client => (

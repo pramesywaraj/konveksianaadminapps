@@ -3,27 +3,36 @@ import config from './config';
 
 export const clientService = {
     getAllClients,
-    addNewClient
+    addNewClient,
+    deleteClient
 }
 
 function getAllClients(endpoint) {
     return axios.get(config.baseUrl+endpoint, getOptions())
-        .then((res) => {
-            console.log('On clientService getAllClients function success', res);
-            return res;
-        },  err => {
-            console.log('On clientService getAllClients function fail', err);
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
             return err;
         });
 }
 
 function addNewClient(endpoint, data) {
-    return axios.post(config.baseUrl + endpoint, data, getOptions('FORM'))
-        .then(res => {
-            console.log('On clientService addNewClient function success', res);
-            return res;
-        }, err => {
-            console.log('On clientService addNewClient function fail', err);
+    return axios.post(config.baseUrl + endpoint, getOptions('FORM'))
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        });
+}
+
+function deleteClient(endpoint, id) {
+    return axios.delete(config.baseUrl + endpoint + '/' + id, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
             return err;
         });
 }

@@ -4,8 +4,7 @@ const initialState = {
     clients: [],
     modal: false,
     loading: true,
-    success: false,
-    fail: false,
+    isSuccess: false,
     id: '',
     name: '',
     urlWeb: '',
@@ -27,12 +26,12 @@ export function client(state = initialState, action) {
                 name: '',
                 urlWeb: '',
                 clientImage: '',
-                success: true
+                isSuccess: true
             }
         case POST_FAIL:
             return {
                 ...state,
-                fail: true
+                isSuccess: false
             }
         case OPEN_MODAL:
             return {
@@ -47,8 +46,7 @@ export function client(state = initialState, action) {
         case CLOSE_SNACKBAR:
             return {
                 ...state,
-                success: false,
-                fail: false
+                isSuccess: false,
             }
         case HANDLE_ON_CHANGE:
             return {

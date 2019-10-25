@@ -7,10 +7,11 @@ export const authService = {
 
 function post(apiEndpoint, payload) {
     return axios.post(config.baseUrl + apiEndpoint, payload)
-        .then(res => {
-            return res;
-        }, err => {
-            return err.response;
+        .then((response) => {
+            return response;
         })
+        .catch((err) => {
+            return err;
+        });
 }
 

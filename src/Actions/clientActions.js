@@ -16,28 +16,30 @@ export const clientActions = {
     onChangeProps,
     getAllClients,
     createNewClient,
+    deleteClient
 };
+
+const endpoint = 'client';
 
 function getAllClients() {
     return dispatch => {
-        let apiEndpoint = "client";
-        clientService.getAllClients(apiEndpoint).then(
-            res => {
+        clientService.getAllClients(endpoint).then(
+            (res) => {
                 console.log(res);
                 if (res.data.status === 200) {
                     dispatch(getClientList(res.data.client));
                 }
-            },
+            }
+        ).catch(
             err => {
                 console.log(err);
-            },
+            }
         );
     };
 }
 
 function createNewClient(data) {
     return dispatch => {
-        let endpoint = "client";
         let payload = new FormData();
 
         payload.append("name", data.name);
@@ -46,7 +48,7 @@ function createNewClient(data) {
         payload.append("status", true);
 
         clientService.addNewClient(endpoint, payload).then(
-            res => {
+            (res) => {
                 if (res.status === 201) {
                     alert('Client berhasil dibuat.');
                     history.push("/clients");
@@ -54,13 +56,26 @@ function createNewClient(data) {
                 }
 
                 dispatch(closeSnackbar());
-            },
-            err => {
+            }
+        ).catch(
+            (err) => {
                 console.log("Error detected in createNewClient", err);
                 dispatch(closeSnackbar());
             },
         );
     };
+}
+
+function deleteClient(id) {
+    return dispatch => {
+        clientService.deleteClient(endpoint, id).then(
+            res => {
+                if (res.status === 201) {
+
+                }
+            }
+        )
+    }
 }
 
 function openModal() {

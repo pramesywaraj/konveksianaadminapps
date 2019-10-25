@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { clientActions } from '../../Actions/clientActions';
 
 import NewClientForm from './NewClientForm';
+import CustomSnackbar from '../OtherComponent/CustomSnackbar';
 
 import ClientCard from './ClientCard';
 import Button from '@material-ui/core/Button';
@@ -76,6 +77,10 @@ class Client extends Component {
 
     }
 
+    deleteClient = (id) => {
+        const { dispatch } = this.props;
+        // dispatch()
+    }
 
     render() {
         const handleOpen = () => {
@@ -88,9 +93,7 @@ class Client extends Component {
             dispatch(clientActions.closeModal());
         }
 
-        const { classes } = this.props;
-        const { modal, loading, clients, success, fail } = this.props.client;
-
+        const { classes, loading, modal, clients, isSuccess, other } = this.props;
         return (
             <div className={classes.root}>
                 {!loading ? 
@@ -126,7 +129,7 @@ class Client extends Component {
                                 handleClose={handleClose}
                             >
                                 <NewClientForm 
-                                    newClientProps={this.props.client} 
+                                    newClientProps={other} 
                                     onFormFieldChange={this.handleChange} 
                                     onSubmitNewClient={this.submitNewClient} 
                                 />
@@ -141,6 +144,8 @@ class Client extends Component {
                         </div>
                     </div>)             
                 }
+
+                {/* <CustomSnackbar />                         */}
             </div>
         )
     }
@@ -152,7 +157,11 @@ Client.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        client: state.client
+        clients: state.client.clients,
+        isSuccess: state.client.isSuccess,
+        modal: state.client.modal,
+        loading: state.client.loading,
+        other: state.client
     };
 }
 

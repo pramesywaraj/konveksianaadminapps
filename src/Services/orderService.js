@@ -6,12 +6,11 @@ export const orderService = {
 }
 
 function getAllOrder(apiEndpoint) {
-    return axios.get(config.baseUrl+apiEndpoint, getOptions())
-        .then((res) => {
-            console.log(res);
-            return res;
-        },  err => {
-            console.log(err);
+    return axios.get(config.baseUrl + apiEndpoint, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
             return err;
         });
 }

@@ -1,18 +1,22 @@
 import { history } from "../Helpers/history";
 import {
-    OPEN_MODAL,
-    CLOSE_MODAL,
     POST_SUCCESS,
     POST_FAIL,
     HANDLE_ON_CHANGE,
-    FETCHED_ALL_CLIENTS,
-    CLOSE_SNACKBAR
+    FETCHED_ALL_CLIENTS
 } from "./actionTypes";
+import { 
+    changeSnackbarToClose,
+    changeSnackbarToOpen,
+    changeModalToClose,
+    changeModalToOpen 
+} from './generalActions';
 import { clientService } from "../Services/clientService";
 
 export const clientActions = {
     openModal,
     closeModal,
+    closeSnackbar,
     onChangeProps,
     getAllClients,
     createNewClient,
@@ -50,17 +54,17 @@ function createNewClient(data) {
         clientService.addNewClient(endpoint, payload).then(
             (res) => {
                 if (res.status === 201) {
-                    alert('Client berhasil dibuat.');
-                    history.push("/clients");
                     dispatch(clientCreated());
+                    dispatch(openSnackbar('Client berhasil ditambahkan.'));
+                    dispatch(closeModal());
+                    history.push("/clients");
                 }
-
-                dispatch(closeSnackbar());
             }
         ).catch(
             (err) => {
                 console.log("Error detected in createNewClient", err);
-                dispatch(closeSnackbar());
+                dispatch(clientFailedCreated());
+                dispatch(openSnackbar('Terjadi kesalahan.'));
             },
         );
     };
@@ -69,30 +73,39 @@ function createNewClient(data) {
 function deleteClient(id) {
     return dispatch => {
         clientService.deleteClient(endpoint, id).then(
-            res => {
+            (res) => {
                 if (res.status === 201) {
 
                 }
             }
         )
+        .catch((err) => {
+            console.log(err);
+        })
     }
 }
 
 function openModal() {
     return dispatch => {
-        dispatch(changeToOpen());
+        dispatch(changeModalToOpen());
     };
 }
 
 function closeModal() {
     return dispatch => {
-        dispatch(changeToClose());
+        dispatch(changeModalToClose());
     };
 }
 
 function closeSnackbar() {
     return dispatch => {
-        dispatch(snackbarClosed());
+        dispatch(changeSnackbarToClose());
+    };
+}
+
+function openSnackbar(message) {
+    return dispatch => {
+        dispatch(changeSnackbarToOpen(message));
     };
 }
 
@@ -123,26 +136,6 @@ function clientCreated() {
 function clientFailedCreated() {
     return {
         type: POST_FAIL,
-    };
-}
-
-function snackbarClosed() {
-    return {
-        type: CLOSE_SNACKBAR
-    };
-}
-
-function changeToOpen() {
-    return {
-        type: OPEN_MODAL,
-        modal: true,
-    };
-}
-
-function changeToClose() {
-    return {
-        type: CLOSE_MODAL,
-        modal: false,
     };
 }
 

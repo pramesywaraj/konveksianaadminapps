@@ -78,7 +78,7 @@ class Client extends Component {
     }
 
     deleteClient = (id) => {
-        const { dispatch } = this.props;
+        // const { dispatch } = this.props;
         // dispatch()
     }
 
@@ -93,7 +93,13 @@ class Client extends Component {
             dispatch(clientActions.closeModal());
         }
 
-        const { classes, loading, modal, clients, isSuccess, other } = this.props;
+        const handleCloseSnackbar = () => {
+            const { dispatch } = this.props;
+            dispatch(clientActions.closeSnackbar());
+        }
+
+        const { classes, client } = this.props;
+        const { loading, modal, clients, isSuccess, other, message, snackbar } = client;
         return (
             <div className={classes.root}>
                 {!loading ? 
@@ -129,7 +135,7 @@ class Client extends Component {
                                 handleClose={handleClose}
                             >
                                 <NewClientForm 
-                                    newClientProps={other} 
+                                    newClientProps={client} 
                                     onFormFieldChange={this.handleChange} 
                                     onSubmitNewClient={this.submitNewClient} 
                                 />
@@ -145,7 +151,12 @@ class Client extends Component {
                     </div>)             
                 }
 
-                {/* <CustomSnackbar />                         */}
+                <CustomSnackbar 
+                    snackbar={snackbar} 
+                    isSuccess={isSuccess}
+                    message={message}
+                    close={handleCloseSnackbar}
+                />                        
             </div>
         )
     }
@@ -157,11 +168,7 @@ Client.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        clients: state.client.clients,
-        isSuccess: state.client.isSuccess,
-        modal: state.client.modal,
-        loading: state.client.loading,
-        other: state.client
+        client: state.client
     };
 }
 

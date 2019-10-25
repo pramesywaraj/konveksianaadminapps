@@ -1,10 +1,21 @@
-import { OPEN_MODAL, CLOSE_MODAL, HANDLE_ON_CHANGE, FETCHED_ALL_CLIENTS, POST_SUCCESS, POST_FAIL, CLOSE_SNACKBAR } from '../Actions/actionTypes';
+import { 
+    OPEN_MODAL, 
+    CLOSE_MODAL, 
+    HANDLE_ON_CHANGE, 
+    FETCHED_ALL_CLIENTS, 
+    POST_SUCCESS, 
+    POST_FAIL, 
+    CLOSE_SNACKBAR,
+    OPEN_SNACKBAR
+} from '../Actions/actionTypes';
 
 const initialState = {
     clients: [],
     modal: false,
+    snackbar: false,
     loading: true,
     isSuccess: false,
+    message: null,
     id: '',
     name: '',
     urlWeb: '',
@@ -43,10 +54,16 @@ export function client(state = initialState, action) {
                 ...state,
                 modal: false
             }
+        case OPEN_SNACKBAR:
+            return {
+                ...state,
+                snackbar: true,
+                message: action.message
+            }
         case CLOSE_SNACKBAR:
             return {
                 ...state,
-                isSuccess: false,
+                snackbar: false
             }
         case HANDLE_ON_CHANGE:
             return {

@@ -18,7 +18,7 @@ function getAllClients(endpoint) {
 }
 
 function addNewClient(endpoint, data) {
-    return axios.post(config.baseUrl + endpoint, getOptions('FORM'))
+    return axios.post(config.baseUrl + endpoint, data, getOptions('FORM'))
         .then((response) => {
             return response;
         })

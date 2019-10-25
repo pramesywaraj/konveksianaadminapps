@@ -92,21 +92,21 @@ export default function CustomSnackbar(props) {
                     vertical: "top",
                     horizontal: "right",
                 }}
-                open={props.data.open}
+                open={props.snackbar}
                 autoHideDuration={2000}
                 onClose={props.close}
             >
-                {props.data.success ? (
+                {props.isSuccess ? (
                     <MySnackbarContentWrapper
                         onClose={props.close}
                         variant="success"
-                        message={props.data.message}
+                        message={props.message}
                     />
                 ) : (
                     <MySnackbarContentWrapper
                         variant="error"
                         onClose={props.close}
-                        message={props.data.message}
+                        message={props.message}
                     />
                 )}
             </Snackbar>

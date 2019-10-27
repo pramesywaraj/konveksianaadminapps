@@ -4,9 +4,11 @@ import {
     HANDLE_ON_CHANGE, 
     FETCHED_ALL_CLIENTS, 
     POST_SUCCESS, 
-    POST_FAIL, 
+    // POST_FAIL, 
     CLOSE_SNACKBAR,
-    OPEN_SNACKBAR
+    OPEN_SNACKBAR,
+    ERROR,
+    DELETE_SUCCESS
 } from '../Actions/actionTypes';
 
 const initialState = {
@@ -31,6 +33,11 @@ export function client(state = initialState, action) {
                 clients: action.clients,
                 loading: false
             }
+        case ERROR:
+            return {
+                ...state,
+                isSuccess: false
+            }
         case POST_SUCCESS:
             return {
                 ...state,
@@ -39,10 +46,11 @@ export function client(state = initialState, action) {
                 clientImage: '',
                 isSuccess: true
             }
-        case POST_FAIL:
+        case DELETE_SUCCESS:
             return {
                 ...state,
-                isSuccess: false
+                clients: state.clients.filter(client => client._id !== action.clientId),
+                isSuccess: true
             }
         case OPEN_MODAL:
             return {

@@ -1,10 +1,13 @@
 // Universal
 export const POST_SUCCESS = 'POST_SUCCESS';
 export const POST_FAIL = 'POST_FAIL';
+export const DELETE_SUCCESS = 'DELETE_SUCCESS';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
+export const ERROR = 'ERROR';
+
 
 // Auth Action Types
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';

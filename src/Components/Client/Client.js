@@ -48,7 +48,12 @@ class Client extends Component {
 
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
+        // this.state = {
+        //     id: '',
+        //     name: '',
+        //     urlWeb: '',
+        //     clientImage: '',
+        // }
     }
 
     componentDidMount() {
@@ -72,14 +77,14 @@ class Client extends Component {
         if(data.name && data.urlWeb && data.clientImage) {
             dispatch(clientActions.createNewClient(data));
         } else {
-            alert('Please fill the form correctly!');
+            alert('Mohon untuk mengisi seluruh form!');
         }
 
     }
 
     deleteClient = (id) => {
-        // const { dispatch } = this.props;
-        // dispatch()
+        const { dispatch } = this.props;
+        dispatch(clientActions.deleteClient(id));
     }
 
     render() {
@@ -99,7 +104,8 @@ class Client extends Component {
         }
 
         const { classes, client } = this.props;
-        const { loading, modal, clients, isSuccess, other, message, snackbar } = client;
+        const { loading, modal, clients, isSuccess, message, snackbar } = client;
+
         return (
             <div className={classes.root}>
                 {!loading ? 
@@ -119,7 +125,7 @@ class Client extends Component {
                                 {clients.length > 0 ? clients.map(
                                     client => (
                                         <Grid item xs={4} key={client._id}>
-                                            <ClientCard clientProps={client}/>
+                                            <ClientCard clientProps={client} onDelete={this.deleteClient}/>
                                         </Grid>
                                     )
                                 )
@@ -174,7 +180,7 @@ const mapStateToProps = (state) => {
 
 const connectedHomePage = withRouter(connect(mapStateToProps, null, null, 
     {
-        pure: false
+        pure: true
     }
 )(withStyles(styles)(Client)));
 

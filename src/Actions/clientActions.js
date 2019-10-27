@@ -1,8 +1,9 @@
 import { history } from "../Helpers/history";
 import {
     POST_SUCCESS,
-    POST_FAIL,
+    ERROR,
     HANDLE_ON_CHANGE,
+    DELETE_SUCCESS,
     FETCHED_ALL_CLIENTS
 } from "./actionTypes";
 import { 
@@ -11,11 +12,13 @@ import {
     changeModalToClose,
     changeModalToOpen 
 } from './generalActions';
+
 import { clientService } from "../Services/clientService";
 
 export const clientActions = {
     openModal,
     closeModal,
+    openSnackbar,
     closeSnackbar,
     onChangeProps,
     getAllClients,
@@ -37,6 +40,8 @@ function getAllClients() {
         ).catch(
             err => {
                 console.log(err);
+                dispatch(errorFunction());
+                dispatch(openSnackbar('Terjadi kesalahan. Gagal mendapatkan Client.'))
             }
         );
     };
@@ -57,14 +62,14 @@ function createNewClient(data) {
                     dispatch(clientCreated());
                     dispatch(openSnackbar('Client berhasil ditambahkan.'));
                     dispatch(closeModal());
-                    history.push("/clients");
+                    history.push('/clients');
                 }
             }
         ).catch(
             (err) => {
                 console.log("Error detected in createNewClient", err);
-                dispatch(clientFailedCreated());
-                dispatch(openSnackbar('Terjadi kesalahan.'));
+                dispatch(errorFunction());
+                dispatch(openSnackbar('Terjadi kesalahan. Gagal membuat Client.'));
             },
         );
     };
@@ -75,12 +80,16 @@ function deleteClient(id) {
         clientService.deleteClient(endpoint, id).then(
             (res) => {
                 if (res.status === 201) {
-
+                    dispatch(clientDeleted(id));
+                    dispatch(openSnackbar('Client berhasil dihapus.'));
+                    history.push('/clients');
                 }
             }
         )
         .catch((err) => {
-            console.log(err);
+            console.log("Error detected in deleteClient", err);
+            dispatch(errorFunction());
+            dispatch(openSnackbar('Terjadi kesalahan. Gagal menghapus Client'));
         })
     }
 }
@@ -133,9 +142,16 @@ function clientCreated() {
     };
 }
 
-function clientFailedCreated() {
+function clientDeleted(id) {
     return {
-        type: POST_FAIL,
+        type: DELETE_SUCCESS,
+        clientId: id
+    };
+}
+
+function errorFunction() {
+    return {
+        type: ERROR,
     };
 }
 

@@ -43,7 +43,7 @@ const ImgMediaCard = props => {
             <CardActionArea>
                 <CardMedia
                     component="img"
-                    alt="Contemplative Reptile"
+                    alt="Kindly refresh the page if you want to know this image :)"
                     height="140"
                     image={baseUrl + props.clientProps.urlImage}
                     title="Contemplative Reptile"

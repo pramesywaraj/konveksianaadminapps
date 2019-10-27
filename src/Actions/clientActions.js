@@ -59,7 +59,7 @@ function createNewClient(data) {
         clientService.addNewClient(endpoint, payload).then(
             (res) => {
                 if (res.status === 201) {
-                    dispatch(clientCreated());
+                    dispatch(clientCreated(data));
                     dispatch(openSnackbar('Client berhasil ditambahkan.'));
                     dispatch(closeModal());
                     history.push('/clients');
@@ -136,9 +136,10 @@ function handleOnChangeProps(props, value) {
     };
 }
 
-function clientCreated() {
+function clientCreated(data) {
     return {
         type: POST_SUCCESS,
+        client: data
     };
 }
 

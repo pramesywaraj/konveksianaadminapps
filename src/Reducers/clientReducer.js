@@ -39,8 +39,10 @@ export function client(state = initialState, action) {
                 isSuccess: false
             }
         case POST_SUCCESS:
+            let newClients = state.clients.concat(action.client);
             return {
                 ...state,
+                clients: newClients,
                 name: '',
                 urlWeb: '',
                 clientImage: '',

@@ -4,7 +4,8 @@ import config from './config';
 export const clientService = {
     getAllClients,
     addNewClient,
-    deleteClient
+    deleteClient,
+    changeStatus
 }
 
 function getAllClients(endpoint) {
@@ -29,6 +30,16 @@ function addNewClient(endpoint, data) {
 
 function deleteClient(endpoint, id) {
     return axios.delete(config.baseUrl + endpoint + '/' + id, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        });
+}
+
+function changeStatus(endpoint, id) {
+    return axios.get(config.baseUrl + endpoint + `/change-status/${id}`, getOptions())
         .then((response) => {
             return response;
         })

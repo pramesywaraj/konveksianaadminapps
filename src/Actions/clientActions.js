@@ -4,7 +4,8 @@ import {
     ERROR,
     HANDLE_ON_CHANGE,
     DELETE_SUCCESS,
-    FETCHED_ALL_CLIENTS
+    FETCHED_ALL_CLIENTS,
+    CLIENT_STATUS_CHANGED
 } from "./actionTypes";
 import { 
     changeSnackbarToClose,
@@ -23,7 +24,8 @@ export const clientActions = {
     onChangeProps,
     getAllClients,
     createNewClient,
-    deleteClient
+    deleteClient,
+    changeClientStatus
 };
 
 const endpoint = 'client';
@@ -94,6 +96,23 @@ function deleteClient(id) {
     }
 }
 
+function changeClientStatus(id) {
+    return dispatch => {
+        clientService.changeStatus(endpoint, id)
+            .then((res) => {
+                if(res.status === 201) {
+                    dispatch(clientStatusChanged());
+                    dispatch(openSnackbar('Status berhasil diubah.'));
+                }
+            })
+            .catch((err) => {
+                console.log("Error detected in chagneClientStatus", err);
+                dispatch(errorFunction());
+                dispatch(openSnackbar('Terjadi kesalahan. Gagal mengubah status.'));
+            })
+    }
+}
+
 function openModal() {
     return dispatch => {
         dispatch(changeModalToOpen());
@@ -154,6 +173,12 @@ function errorFunction() {
     return {
         type: ERROR,
     };
+}
+
+function clientStatusChanged() {
+    return {
+        type: CLIENT_STATUS_CHANGED
+    }
 }
 
 export function getClientList(clients) {

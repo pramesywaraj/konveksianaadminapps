@@ -8,7 +8,8 @@ import {
     CLOSE_SNACKBAR,
     OPEN_SNACKBAR,
     ERROR,
-    DELETE_SUCCESS
+    DELETE_SUCCESS,
+    CLIENT_STATUS_CHANGED
 } from '../Actions/actionTypes';
 
 const initialState = {
@@ -22,7 +23,6 @@ const initialState = {
     name: '',
     urlWeb: '',
     clientImage: '',
-    status: true
 };
 
 export function client(state = initialState, action) {
@@ -52,6 +52,11 @@ export function client(state = initialState, action) {
             return {
                 ...state,
                 clients: state.clients.filter(client => client._id !== action.clientId),
+                isSuccess: true
+            }
+        case CLIENT_STATUS_CHANGED:
+            return {
+                ...state,
                 isSuccess: true
             }
         case OPEN_MODAL:

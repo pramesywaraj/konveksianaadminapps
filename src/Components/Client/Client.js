@@ -87,6 +87,11 @@ class Client extends Component {
         dispatch(clientActions.deleteClient(id));
     }
 
+    clientChangeStatusHandle = (id) => {
+        const { dispatch } = this.props;
+        dispatch(clientActions.changeClientStatus(id));
+    }
+
     render() {
         const handleOpen = () => {
             const { dispatch } = this.props;
@@ -125,7 +130,7 @@ class Client extends Component {
                                 {clients.length > 0 ? clients.map(
                                     client => (
                                         <Grid item xs={4} key={client._id}>
-                                            <ClientCard clientProps={client} onDelete={this.deleteClient}/>
+                                            <ClientCard clientProps={client} onDelete={this.deleteClient} onChangeStatusHandle={this.clientChangeStatusHandle}/>
                                         </Grid>
                                     )
                                 )

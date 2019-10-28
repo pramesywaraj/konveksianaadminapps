@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -29,7 +29,8 @@ const useStyles = makeStyles({
 
 const ImgMediaCard = props => {
     const classes = useStyles();
-    const baseUrl = "https://endpoint.konveksiana.id/";
+	const baseUrl = "https://endpoint.konveksiana.id/";
+	const [status, setStatus] = useState(props.clientProps.status);
 
     const deleteHandler = () => {
 		let answer = window.confirm('Apakah Anda yakin untuk menghapus Client ini?');
@@ -37,6 +38,11 @@ const ImgMediaCard = props => {
 			props.onDelete(props.clientProps._id);
 		}
 	};
+
+	const statusOnChange = () => {
+		setStatus(!status);
+		props.onChangeStatusHandle(props.clientProps._id);
+	}
 
     return (
         <Card className={classes.card}>
@@ -67,7 +73,8 @@ const ImgMediaCard = props => {
                     control={
                         <Switch
                             color="primary"
-                            value={props.clientProps.status}
+                            checked={status}
+							onChange={statusOnChange}
                         />
                     }
                     label="Sembunyikan"

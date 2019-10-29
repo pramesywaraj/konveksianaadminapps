@@ -77,7 +77,7 @@ const ImgMediaCard = props => {
 							onChange={statusOnChange}
                         />
                     }
-                    label="Sembunyikan"
+                    label={status ? "Hide" : "Show"}
                     labelPlacement="start"
                 />
                 <Button

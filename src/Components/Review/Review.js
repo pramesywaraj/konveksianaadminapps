@@ -31,9 +31,13 @@ class Review extends Component {
         const { classes, reviewProps } = this.props;
         const { reviews } = reviewProps;
 
+        console.log(reviews);
+
         return (
             <div className={classes.root}>
-                <ReviewList />
+                <ReviewList 
+                    reviews={reviews} 
+                />
             </div>
         )
     }

@@ -83,7 +83,6 @@ function deleteClient(id) {
                 if (res.status === 201) {
                     dispatch(clientDeleted(id));
                     dispatch(openSnackbar('Client berhasil dihapus.'));
-                    dispatch(this.getAllClients());
                 }
             }
         )

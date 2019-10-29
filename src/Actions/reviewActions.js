@@ -1,6 +1,5 @@
 import { history } from "../Helpers/history";
 import {
-    POST_SUCCESS,
     ERROR,
     FETCHED_ALL_REVIEWS,
 } from "./actionTypes";
@@ -12,7 +11,8 @@ import {
 import { reviewService } from "../Services/reviewService";
 
 export const reviewActions = {
-    getReviewAction
+    getReviewAction,
+    changeSnackbarToClose
 }
 
 function getReviewAction() {
@@ -20,12 +20,15 @@ function getReviewAction() {
         let endpoint = 'review';
         reviewService.getReviews(endpoint)
             .then((res) => {
-                if(res.data.status === 200) {
+                console.log(res);
+                if(res.status === 200) {
                     dispatch(dispatchGetReview(res.data));
                 }
             })
             .catch((err) => {
                 console.log(err);
+                dispatch(dispatchError());
+                dispatch(changeSnackbarToOpen('Terjadi Kesalahan. Coba refresh halaman ini.'))
             })
     }
 }
@@ -36,6 +39,12 @@ function dispatchGetReview(data) {
     return {
         type: FETCHED_ALL_REVIEWS,
         reviews: data
+    }
+}
+
+function dispatchError() {
+    return {
+        type: ERROR
     }
 }
 

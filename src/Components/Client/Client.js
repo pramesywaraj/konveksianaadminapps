@@ -46,17 +46,16 @@ const styles = theme => ({
 
 class Client extends Component {
 
-    constructor(props) {
-        super(props);
-        // this.state = {
-        //     id: '',
-        //     name: '',
-        //     urlWeb: '',
-        //     clientImage: '',
-        // }
+    // constructor(props) {
+    //     super();
+    // }
+
+    
+    componentDidMount() {
+        this.fetchClientData();
     }
 
-    componentDidMount() {
+    fetchClientData() {
         const { dispatch } = this.props;
         dispatch(clientActions.getAllClients());
     }

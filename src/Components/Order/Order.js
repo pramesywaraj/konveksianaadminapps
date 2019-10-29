@@ -53,27 +53,24 @@ class Order extends Component {
                     <TableHead>
                         <TableRow>
                             <TableCell>Pelanggan</TableCell>
-                            <TableCell align="right">Kategori</TableCell>
+                            {/* <TableCell align="right">Kategori</TableCell> */}
                             <TableCell align="right">Tanggal Masuk</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {orders > 0 ? orders.map(order => (
+                    {orders.map(order => (
                         <TableRow key={order._id} className={classes.table_row_clickable}>
                             <TableCell component="th" scope="row">
                                 {order.user.name}
                             </TableCell>
-                            <TableCell align="right">{order.category.name}</TableCell>
+                            {/* <TableCell align="right">{order.category.name}</TableCell> */}
                             <TableCell align="right">
                                 <Moment format="D MMM YYYY">
                                     {order.createdAt}
                                 </Moment>
                             </TableCell>
                         </TableRow>
-                    )) : 
-                        <TableRow>
-                            <h4>Tidak ada pesanan untuk ditampilkan.</h4>
-                        </TableRow>
+                        ))
                     }
                     </TableBody>
                 </Table>

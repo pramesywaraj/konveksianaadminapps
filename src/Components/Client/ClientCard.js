@@ -15,7 +15,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = makeStyles({
     card: {
-        maxWidth: 345,
+        minWidth: 345,
     },
 
     buttonFloatRight: {

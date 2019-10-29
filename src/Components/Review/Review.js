@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 
-import PropTypes from 'prop-types';
+import ReviewList from './ReviewList';
+
+import { reviewActions } from '../../Actions/reviewActions';
+
+// import PropTypes from 'prop-types';
 
 const styles = theme => ({
     root: {
@@ -14,21 +18,31 @@ const styles = theme => ({
 });
 
 class Review extends Component {
-    // static propTypes = {
-    //     prop: PropTypes
-    // }
+    constructor(props) {
+        super();
+    }
+
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(reviewActions.getReviewAction());
+    }
 
     render() {
+        const { classes, reviewProps } = this.props;
+        const { reviews } = reviewProps;
+
         return (
-            <div>
-                
+            <div className={classes.root}>
+                <ReviewList />
             </div>
         )
     }
 }
 
 const mapStateToProps = (state) => {
-    return state;
+    return {
+        reviewProps: state.review
+    };
 }
 
 const connectedReviewPage = withRouter(connect(mapStateToProps, null, null, 

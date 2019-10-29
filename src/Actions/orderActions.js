@@ -1,7 +1,15 @@
 import { orderService } from '../Services/orderService';
-import { history } from '../Helpers';
+// import { history } from '../Helpers';
 
-import { FETCHED_ALL_ORDERS } from './actionTypes';
+import { 
+    FETCHED_ALL_ORDERS, 
+    ERROR 
+} from './actionTypes';
+
+import {
+    changeSnackbarToOpen,
+    changeSnackbarToClose
+} from './generalActions';
 
 export const orderAction = {
     getAllOrder
@@ -15,13 +23,17 @@ function getAllOrder() {
                 if(res.data.status === 200) {
                     dispatch(getOrderList(res.data.order));
                 }
-            }, err => {
-                console.log(err);
+            })
+            .catch((err) => {
+                console.log('There is error on getAllOrder', err);
+                dispatch(changeSnackbarToOpen('Terjadi kesalahan dalam mengambil data.'));
             })
     }
 } 
 
-export function getOrderList(orders) {
+// dispatch to order reducer function
+
+function getOrderList(orders) {
     return {
         type: FETCHED_ALL_ORDERS,
         orders: orders

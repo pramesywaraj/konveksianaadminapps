@@ -34,7 +34,6 @@ function getAllClients() {
     return dispatch => {
         clientService.getAllClients(endpoint).then(
             (res) => {
-                console.log(res);
                 if (res.data.status === 200) {
                     dispatch(getClientList(res.data.client));
                 }
@@ -61,10 +60,10 @@ function createNewClient(data) {
         clientService.addNewClient(endpoint, payload).then(
             (res) => {
                 if (res.status === 201) {
-                    dispatch(clientCreated(data));
+                    dispatch(clientCreated());
                     dispatch(openSnackbar('Client berhasil ditambahkan.'));
                     dispatch(closeModal());
-                    history.push('/clients');
+                    dispatch(this.getAllClients());
                 }
             }
         ).catch(
@@ -84,7 +83,7 @@ function deleteClient(id) {
                 if (res.status === 201) {
                     dispatch(clientDeleted(id));
                     dispatch(openSnackbar('Client berhasil dihapus.'));
-                    history.push('/clients');
+                    dispatch(this.getAllClients());
                 }
             }
         )
@@ -155,10 +154,9 @@ function handleOnChangeProps(props, value) {
     };
 }
 
-function clientCreated(data) {
+function clientCreated() {
     return {
-        type: POST_SUCCESS,
-        client: data
+        type: POST_SUCCESS
     };
 }
 

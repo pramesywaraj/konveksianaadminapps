@@ -1,7 +1,9 @@
-import { FETCHED_ALL_ORDERS } from '../Actions/actionTypes';
+import { FETCHED_ALL_ORDERS, ERROR } from '../Actions/actionTypes';
 
 const initialState = {
     orders: [],
+    isSucces: false,
+    message: '',
     _id: '',
     categoryId: "",
     userId: "",
@@ -18,6 +20,11 @@ export function order(state = initialState, action) {
                 ...state,
                 orders: action.orders
             };
+        case ERROR:
+            return {
+                ...state,
+                isSuccess: false
+            }
         default:
             return state;
     }

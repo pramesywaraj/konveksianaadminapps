@@ -9,7 +9,6 @@ const initialState = {
     categories: [],
     products: [],
     materials: [],
-    modal: false,
     snackbar: false,
     isSuccess: false,
     message: null

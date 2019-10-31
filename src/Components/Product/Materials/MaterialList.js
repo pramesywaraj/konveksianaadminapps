@@ -11,21 +11,28 @@ const styles = makeStyles(
     (theme) => ({
         paper: {
             padding: theme.spacing(2),
-            color: theme.palette.text.secondary
+            color: theme.palette.text.secondary,
+            overflow: 'hidden',
+            height: 245,
+            maxHeight: 250
         },
+
+        marginTop10: {
+            marginTop: 10
+        }
     })
 )
 
-export default function ProductList(props) {
+export default function MaterialList(props) {
     const classes = styles();
 
 
     return (
-        <Paper className={classes.paper}>
+        <Paper className={[classes.paper, classes.marginTop10].join(' ')}>
             <Box display='flex' flexDirection='row-reverse'>
                 <Button variant="contained" color="primary" >
                     <AddIcon />
-                    Tambah Produk
+                    Tambah Material
                 </Button>
             </Box>
             {/* Categories */}

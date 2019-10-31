@@ -8,9 +8,9 @@ import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 
 
-import CategoriesList from './CategoriesList';
-import ProductList from './ProductList';
-import MaterialList from './MaterialList';
+import CategoriesList from './Categories/CategoriesList';
+import ProductList from './Products/ProductList';
+import MaterialList from './Materials/MaterialList';
 
 
 class ProductContainer extends Component {

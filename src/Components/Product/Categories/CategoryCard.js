@@ -32,7 +32,7 @@ export default function CategoryCard(props) {
             <CardContent className={classes.contentContainer}>
                 <div>
                     <Typography variant="body1">
-                        Jaket
+                        {props.name}
                     </Typography>
                 </div>
                 <div>

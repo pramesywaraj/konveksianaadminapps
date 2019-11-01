@@ -12,16 +12,27 @@ import CategoriesList from './Categories/CategoriesList';
 import ProductList from './Products/ProductList';
 import MaterialList from './Materials/MaterialList';
 
+import { productActions } from '../../Actions/productActions';
+
 
 class ProductContainer extends Component {
+
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(productActions.getAllCategories());
+    }
+
     render() {
-        const { classes } = this.props;
+        const { classes, products } = this.props;
+        const { categories } = products;
+
+        console.log(categories);
 
         return (
             <div className={classes.root}>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <CategoriesList />
+                        <CategoriesList categories={categories}/>
                     </Grid>
                     <Grid item xs={6}>
                         <ProductList />
@@ -53,7 +64,7 @@ ProductContainer.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        product: state.product
+        products: state.product
     };
 }
 

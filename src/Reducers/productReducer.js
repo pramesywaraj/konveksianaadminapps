@@ -2,7 +2,8 @@ import {
     OPEN_MODAL, 
     CLOSE_MODAL, 
     HANDLE_ON_CHANGE, 
-    FETCHED_ALL_CLIENTS
+    FETCHED_ALL_CATEGORIES,
+    ERROR
 } from '../Actions/actionTypes';
 
 const initialState = {
@@ -16,10 +17,15 @@ const initialState = {
 
 export function product(state = initialState, action) {
     switch(action.type) {
-        case FETCHED_ALL_CLIENTS:
+        case FETCHED_ALL_CATEGORIES:
             return {
                 ...state,
-                clients: action.clients
+                categories: action.categories
+            }
+        case ERROR:
+            return {
+                ...state,
+                isSuccess: false
             }
         default: 
             return state;

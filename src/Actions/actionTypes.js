@@ -27,3 +27,7 @@ export const CLIENT_STATUS_CHANGED = 'CLIENT_STATUS_CHANGED';
 
 // Review Action Types
 export const FETCHED_ALL_REVIEWS = 'FETCHED_ALL_REVIEWS';
+
+// Review Action Types
+export const FETCHED_ALL_CATEGORIES = 'FETCHED_ALL_CATEGORIES';
+

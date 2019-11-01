@@ -7,6 +7,7 @@ import Box from '@material-ui/core/Box';
 
 import AddIcon from '@material-ui/icons/Add';
 import CategoryCard from './CategoryCard';
+import Typography from '@material-ui/core/Typography';
 
 const styles = makeStyles(
     (theme) => ({
@@ -44,7 +45,17 @@ export default function CategoriesList(props) {
             </Box>
             {/* Categories */}
             <div className={classes.contentLayout}>
-                <CategoryCard />
+                {props.categories.length > 0 ? props.categories.map(
+                    (category) => (
+                        <CategoryCard 
+                            key={category._id}
+                            name={category.name}
+                        />
+                    )
+                )
+                :
+                <Typography>Tidak ada Category untuk ditampilkan.</Typography>
+                }
             </div>
         </Paper>
     )

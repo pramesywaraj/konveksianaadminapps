@@ -18,7 +18,6 @@ const styles = makeStyles((theme) => ({
     contentContainer: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         padding: '10px 15px !important'
     },
@@ -31,23 +30,22 @@ const styles = makeStyles((theme) => ({
             backgroundSize: '100%',
             transition: "background 0s"
         }
+    },
+
+    flexGrow2: {
+        flexGrow: 2
     }
 }));
 
-export default function MaterialCard(props) {
+export default function ProductCard(props) {
     const classes = styles();
 
     return (
         <Card className={classes.card} elevation={2}>
             <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
-                <div>
+                <div className={classes.flexGrow2}>
                     <Typography variant="body1">
                         Nama
-                    </Typography>
-                </div>
-                <div>
-                    <Typography variant="body1">
-                        Rp.{props.name}
                     </Typography>
                 </div>
                 <div>

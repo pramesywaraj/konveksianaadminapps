@@ -26,8 +26,6 @@ class ProductContainer extends Component {
         const { classes, products } = this.props;
         const { categories } = products;
 
-        console.log(categories);
-
         return (
             <div className={classes.root}>
                 <Grid container spacing={2}>

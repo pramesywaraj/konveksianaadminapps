@@ -7,6 +7,8 @@ import Box from '@material-ui/core/Box';
 
 import AddIcon from '@material-ui/icons/Add';
 
+import MaterialCard from './MaterialCard';
+
 const styles = makeStyles(
     (theme) => ({
         paper: {
@@ -15,6 +17,14 @@ const styles = makeStyles(
             overflow: 'hidden',
             height: 245,
             maxHeight: 250
+        },
+
+        contentLayout: {
+            overflow: 'auto',
+            height: 245,
+            '&::-webkit-scrollbar': { 
+                display: 'none'
+            } 
         },
 
         marginTop10: {
@@ -35,7 +45,10 @@ export default function MaterialList(props) {
                     Tambah Material
                 </Button>
             </Box>
-            {/* Categories */}
+            {/* Material */}
+            <div className={classes.contentLayout}>
+                <MaterialCard />
+            </div>
         </Paper>
     )
 }

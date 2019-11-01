@@ -37,7 +37,7 @@ const styles = makeStyles((theme) => ({
     }
 }));
 
-export default function CategoryCard(props) {
+export default function MaterialCard(props) {
     const classes = styles();
 
     return (

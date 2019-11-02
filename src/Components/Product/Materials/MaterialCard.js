@@ -37,17 +37,19 @@ const styles = makeStyles((theme) => ({
 export default function MaterialCard(props) {
     const classes = styles();
 
+    console.log(props);
+
     return (
         <Card className={classes.card} elevation={2}>
             <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
                 <div>
                     <Typography variant="body1">
-                        Nama
+                        {props.material.name}
                     </Typography>
                 </div>
                 <div>
                     <Typography variant="body1">
-                        Rp.{props.name}
+                        Rp.{props.material.priceMargin}
                     </Typography>
                 </div>
                 <div>

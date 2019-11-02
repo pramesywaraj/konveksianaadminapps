@@ -3,7 +3,8 @@ import config from './config';
 
 export const productService = {
     getCategories,
-    getProduct
+    getProduct,
+    getMaterial
 }
 
 function getCategories(endpoint) {
@@ -18,6 +19,16 @@ function getCategories(endpoint) {
 
 function getProduct(categoryId) {
     return axios.get(config.baseUrl + 'product/category/' + categoryId, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        });
+}
+
+function getMaterial(productId) {
+    return axios.get(config.baseUrl + 'material/product/' + productId, getOptions())
         .then((response) => {
             return response;
         })

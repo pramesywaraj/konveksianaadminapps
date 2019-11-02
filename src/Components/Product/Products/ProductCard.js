@@ -42,7 +42,11 @@ export default function ProductCard(props) {
     const classes = styles();
 
     return (
-        <Card className={classes.card} elevation={2}>
+        <Card 
+            className={classes.card}
+            elevation={2}
+            onClick={props.onClicked}    
+        >
             <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
                 <div className={classes.flexGrow2}>
                     <Typography variant="body1">

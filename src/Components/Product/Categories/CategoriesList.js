@@ -50,6 +50,7 @@ export default function CategoriesList(props) {
                         <CategoryCard 
                             key={category._id}
                             name={category.name}
+                            onClicked={() => props.onClickCard(category._id)}
                         />
                     )
                 )

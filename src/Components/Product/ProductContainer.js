@@ -16,24 +16,42 @@ import { productActions } from '../../Actions/productActions';
 
 
 class ProductContainer extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedCategoryId: ''
+        }
+    }
 
     componentDidMount() {
         const { dispatch } = this.props;
         dispatch(productActions.getAllCategories());
     }
 
+    selectCategoriesHandler = (id) => {
+        this.setState({
+            selectedCategoryId: id
+        })
+    }
+
     render() {
         const { classes, products } = this.props;
         const { categories } = products;
+
+        const { selectedCategoryId } = this.state;
 
         return (
             <div className={classes.root}>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <CategoriesList categories={categories}/>
+                        <CategoriesList 
+                            onClickCard={this.selectCategoriesHandler} 
+                            categories={categories}
+                        />
                     </Grid>
                     <Grid item xs={6}>
-                        <ProductList />
+                        <ProductList categoryId={selectedCategoryId}/>
                         <MaterialList />
                     </Grid>
                 </Grid>

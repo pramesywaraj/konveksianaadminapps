@@ -41,7 +41,11 @@ export default function CategoryCard(props) {
     const classes = styles();
 
     return (
-        <Card className={classes.card} elevation={2}>
+        <Card 
+            onClick={props.onClicked} 
+            className={classes.card} 
+            elevation={2}
+        >
             <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
                 <div className={classes.flexGrow2}>
                     <Typography variant="body1">

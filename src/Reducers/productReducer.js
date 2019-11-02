@@ -10,6 +10,7 @@ const initialState = {
     categories: [],
     products: [],
     materials: [],
+    loading: true,
     snackbar: false,
     isSuccess: false,
     message: null
@@ -20,7 +21,8 @@ export function product(state = initialState, action) {
         case FETCHED_ALL_CATEGORIES:
             return {
                 ...state,
-                categories: action.categories
+                categories: action.categories,
+                loading: false
             }
         case ERROR:
             return {

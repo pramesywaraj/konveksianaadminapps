@@ -20,7 +20,8 @@ class ProductContainer extends Component {
         super(props);
 
         this.state = {
-            selectedCategoryId: ''
+            selectedCategoryId: '',
+            selectedProductId: ''
         }
     }
 
@@ -35,11 +36,17 @@ class ProductContainer extends Component {
         })
     }
 
+    selectProductsHandler = (id) => {
+        this.setState({
+            selectedProductId: id
+        })
+    }
+
     render() {
         const { classes, products } = this.props;
-        const { categories } = products;
+        const { categories, loading } = products;
 
-        const { selectedCategoryId } = this.state;
+        const { selectedCategoryId, selectedProductId } = this.state;
 
         return (
             <div className={classes.root}>
@@ -51,8 +58,11 @@ class ProductContainer extends Component {
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <ProductList categoryId={selectedCategoryId}/>
-                        <MaterialList />
+                        <ProductList 
+                            categoryId={selectedCategoryId} 
+                            onSelectProduct={this.selectProductsHandler}
+                        />
+                        <MaterialList productId={selectedProductId} />
                     </Grid>
                 </Grid>
             </div>

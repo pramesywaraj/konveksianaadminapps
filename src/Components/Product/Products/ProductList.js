@@ -7,6 +7,7 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 import ProductCard from './ProductCard';
+import Typography from '@material-ui/core/Typography';
 
 import {productService} from '../../../Services/productService';
 
@@ -16,14 +17,17 @@ const styles = makeStyles(
         paper: {
             padding: theme.spacing(2),
             color: theme.palette.text.secondary,
-            overflow: 'hidden',
+            overflow: 'auto',
             height: 245,
-            maxHeight: 250
+            maxHeight: 250,
+            '&::-webkit-scrollbar': { 
+                display: 'none'
+            } 
         },
 
         contentLayout: {
-            overflow: 'auto',
-            height: 245,
+            overflow: 'scroll',
+            height: 'inherit',
             '&::-webkit-scrollbar': { 
                 display: 'none'
             } 
@@ -32,6 +36,10 @@ const styles = makeStyles(
         progress: {
             margin: theme.spacing(2),
         },
+
+        marginTop20: {
+            marginTop: 20
+        }
     })
 )
 
@@ -70,11 +78,17 @@ export default function ProductList(props) {
                 ) : (
                     productData ? (
                         productData.map((product) => (
-                            <ProductCard key={product._id} />
+                            <ProductCard key={product._id} product={product}/>
                         ))
                     )
                     :
-                       ( <p>Tidak ada produk untuk ditampilkan.</p>)
+                       ( 
+                            <Typography 
+                                align='center'
+                                className={classes.marginTop20}
+                            >
+                                Tidak ada produk untuk ditampilkan.
+                            </Typography> )
                 )}
             </div>
         </Paper>

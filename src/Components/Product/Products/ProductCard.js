@@ -4,6 +4,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { product } from '../../../Reducers/productReducer';
 
 const styles = makeStyles((theme) => ({
     card: {
@@ -45,7 +46,7 @@ export default function ProductCard(props) {
             <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
                 <div className={classes.flexGrow2}>
                     <Typography variant="body1">
-                        Nama
+                        {props.product.name}
                     </Typography>
                 </div>
                 <div>

@@ -17,14 +17,17 @@ const styles = makeStyles(
         paper: {
             padding: theme.spacing(2),
             color: theme.palette.text.secondary,
-            overflow: 'hidden',
+            overflow: 'auto',
             height: 245,
-            maxHeight: 250
+            maxHeight: 250,
+            '&::-webkit-scrollbar': { 
+                display: 'none'
+            } 
         },
 
         contentLayout: {
-            overflow: 'auto',
-            height: 245,
+            overflow: 'scroll',
+            height: 'inherit',
             '&::-webkit-scrollbar': { 
                 display: 'none'
             } 
@@ -44,6 +47,36 @@ const styles = makeStyles(
     })
 )
 
+function Loading() {
+    const classes = styles();
+    return (
+        <CircularProgress className={classes.progress} />
+    )
+}
+
+function MaterialMap(props) {
+    const classes = styles();
+    let materials = props.materialData;
+
+    if(materials.length > 0) {
+        return (
+            materials.map((material) => (
+                <MaterialCard key={material._id} material={material}/>
+            ))
+            
+        )
+    } else {
+        return (
+            <Typography 
+                align='center'
+                className={classes.marginTop20}
+            >
+                Tidak ada material untuk ditampilkan.
+            </Typography>
+        )
+    }
+}
+
 export default function MaterialList(props) {
     const classes = styles();
     const [loading, setLoading] = useState(false);
@@ -51,20 +84,21 @@ export default function MaterialList(props) {
 
     useEffect(() => {
         setLoading(true);
+        let temp = [];
 
         productService.getMaterial(props.productId)
             .then((res) => {
-                setLoading(false);
-                setMaterialData(res.data.material);
+                temp.push(res.data.material);
             })
             .catch((err) => {
                 setLoading(false);
                 console.log(err);
-            })
+            });
+        
+        setMaterialData(temp);
+        setLoading(false);
 
     }, [props.productId])
-
-
 
     return (
         <Paper className={[classes.paper, classes.marginTop10].join(' ')}>
@@ -76,10 +110,10 @@ export default function MaterialList(props) {
             </Box>
             {/* Material */}
             <div className={classes.contentLayout}>
-                {loading ? (
+                {/* {loading ? (
                         <CircularProgress className={classes.progress} />
                     ) : (
-                        materialData ? (
+                        materialData.length > 0 ? (
                             materialData.map((material) => (
                                 <MaterialCard key={material._id} material={material}/>
                             ))
@@ -92,7 +126,13 @@ export default function MaterialList(props) {
                                 >
                                     Tidak ada material untuk ditampilkan.
                                 </Typography> )
-                )}
+                )} */}
+                {loading ? (
+                        <Loading />
+                    ) : (
+                        <MaterialMap materialData={materialData}/>
+                    )
+                }
             </div>
         </Paper>
     )

@@ -44,7 +44,7 @@ class ProductContainer extends Component {
 
     render() {
         const { classes, products } = this.props;
-        const { categories, loading } = products;
+        const { categories } = products;
 
         const { selectedCategoryId, selectedProductId } = this.state;
 

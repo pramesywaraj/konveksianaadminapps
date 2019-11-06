@@ -8,8 +8,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 import CategoryCard from './CategoryCard';
 import Typography from '@material-ui/core/Typography';
-import CustomModal from '../../OtherComponent/CustomModal';
 import TextField from '@material-ui/core/TextField';
+import CustomModal from '../../OtherComponent/CustomModal';
+import CustomSnackbar from '../../OtherComponent/CustomSnackbar';
+import { productService } from '../../../Services/productService';
 
 const styles = makeStyles(
     (theme) => ({
@@ -88,8 +90,14 @@ export default function CategoriesList(props) {
     const classes = styles();
     const [loading, setLoading] = useState(true);
     const [categoryData, setCategoryData] = useState([]);
-    
     const [modal, setModalOpenClose] = useState(false);
+    const [snackbar, setSnackbarState] = useState({
+        open: false,
+        message: '',
+        isSuccess: false
+    });
+    
+    // state for the form 
     const [newCategory, setCategory] = useState({
         name: '',
     });
@@ -98,16 +106,47 @@ export default function CategoriesList(props) {
         [e.target.name]: e.target.value
     });
 
-    const handleModalOpen = () => {
+    const handleModalOpen = (message) => {
         setModalOpenClose(true);
     }
 
-    const handleModalCLose = () => {
+    const handleModalClose = () => {
         setModalOpenClose(false);
     }
 
+    function snackBarOpenAction(isSuccess, message) {
+        setSnackbarState({
+            open: true,
+            message: message,
+            isSuccess: isSuccess
+        });
+    }
+    
+
+    const handleSnackbarClose = () => {
+        setSnackbarState({
+            open: false,
+            message: '',
+            isSuccess: false
+        })
+    }
+
     const submitNewCategory = () => {
-        console.log(newCategory.name);
+        if(newCategory.name === '' || newCategory.name === null || newCategory.name === undefined) {
+            snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
+        } else {
+            productService.postNewCategory(newCategory)
+                .then((res) => {
+                    if(res.status === 201) {
+                        snackBarOpenAction(true, 'Berhasil membuat jenis Kategori baru.');
+                        handleModalClose();
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
+                })
+        }
     }
 
     useEffect(() => {
@@ -158,7 +197,13 @@ export default function CategoriesList(props) {
                 handleNewCategoryChange={handleNewCategoryChange}
                 onSubmitNewCategory={submitNewCategory}
                 modal={modal}
-                onModalClose={handleModalCLose}
+                onModalClose={handleModalClose}
+            />
+            <CustomSnackbar 
+                snackbar={snackbar.open}
+                close={handleSnackbarClose}
+                isSuccess={snackbar.isSuccess}
+                message={snackbar.message}
             />
         </React.Fragment>
         

@@ -59,6 +59,7 @@ function MaterialMap(props) {
     let materials = props.materialData;
 
     if(materials.length > 0) {
+        console.log(materials);
         return (
             materials.map((material) => (
                 <MaterialCard key={material._id} material={material}/>
@@ -84,21 +85,24 @@ export default function MaterialList(props) {
 
     useEffect(() => {
         setLoading(true);
-        let temp = [];
 
-        productService.getMaterial(props.productId)
+        if(props.productId !== '') {
+            productService.getMaterial(props.productId)
             .then((res) => {
-                temp.push(res.data.material);
+                if(res.data.material !== [] || res.data.material.length > 0) {
+                    setLoading(false);
+                    setMaterialData(res.data.material);
+                }
             })
             .catch((err) => {
                 setLoading(false);
                 console.log(err);
             });
-        
-        setMaterialData(temp);
-        setLoading(false);
+        } else {
+            setLoading(false);
+        }
 
-    }, [props.productId])
+    }, [props.productId]);
 
     return (
         <Paper className={[classes.paper, classes.marginTop10].join(' ')}>
@@ -110,23 +114,6 @@ export default function MaterialList(props) {
             </Box>
             {/* Material */}
             <div className={classes.contentLayout}>
-                {/* {loading ? (
-                        <CircularProgress className={classes.progress} />
-                    ) : (
-                        materialData.length > 0 ? (
-                            materialData.map((material) => (
-                                <MaterialCard key={material._id} material={material}/>
-                            ))
-                        )
-                        :
-                        ( 
-                                <Typography 
-                                    align='center'
-                                    className={classes.marginTop20}
-                                >
-                                    Tidak ada material untuk ditampilkan.
-                                </Typography> )
-                )} */}
                 {loading ? (
                         <Loading />
                     ) : (

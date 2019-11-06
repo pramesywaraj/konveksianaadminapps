@@ -32,12 +32,14 @@ class ProductContainer extends Component {
 
     selectCategoriesHandler = (id) => {
         this.setState({
+            ...this.state,
             selectedCategoryId: id
         })
     }
 
     selectProductsHandler = (id) => {
         this.setState({
+            ...this.state,
             selectedProductId: id
         })
     }

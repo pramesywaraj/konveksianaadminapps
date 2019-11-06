@@ -50,16 +50,21 @@ export default function ProductList(props) {
     useEffect(() => {
         setLoading(true);
 
-        productService.getProduct(props.categoryId)
+        if(props.categoryId !== '') {
+            productService.getProduct(props.categoryId)
             .then((res) => {
-                setLoading(false);
-                setProductData(res.data.product);
+                if(res.data.product !== [] || res.data.product.length > 0) {
+                    setLoading(false);
+                    setProductData(res.data.product);
+                }
             })
             .catch((err) => {
                 setLoading(false);
                 console.log(err);
-            })
-
+            });
+        } else {
+            setLoading(false);
+        }
     }, [props.categoryId])
 
     return (
@@ -75,7 +80,7 @@ export default function ProductList(props) {
                 {loading ? (
                     <CircularProgress className={classes.progress} />
                 ) : (
-                    productData ? (
+                    productData.length > 0 ? (
                         productData.map((product) => (
                             <ProductCard 
                                 key={product._id} 
@@ -91,7 +96,8 @@ export default function ProductList(props) {
                                 className={classes.marginTop20}
                             >
                                 Tidak ada produk untuk ditampilkan.
-                            </Typography> )
+                            </Typography> 
+                        )
                 )}
             </div>
         </Paper>

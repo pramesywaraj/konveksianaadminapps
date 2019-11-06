@@ -4,22 +4,19 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
 import Grid from '@material-ui/core/Grid';
-
-
 import CategoriesList from './Categories/CategoriesList';
 import ProductList from './Products/ProductList';
 import MaterialList from './Materials/MaterialList';
-
 import { productActions } from '../../Actions/productActions';
-
+import CustomModal from '../OtherComponent/CustomModal';
 
 class ProductContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            modal: false,
             selectedCategoryId: '',
             selectedProductId: ''
         }
@@ -32,8 +29,8 @@ class ProductContainer extends Component {
 
     selectCategoriesHandler = (id) => {
         this.setState({
-            ...this.state,
-            selectedCategoryId: id
+            selectedCategoryId: id,
+            selectedProductId: ''
         })
     }
 

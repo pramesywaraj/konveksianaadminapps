@@ -8,6 +8,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 import CategoryCard from './CategoryCard';
 import Typography from '@material-ui/core/Typography';
+import CustomModal from '../../OtherComponent/CustomModal';
+import TextField from '@material-ui/core/TextField';
 
 const styles = makeStyles(
     (theme) => ({
@@ -26,17 +28,87 @@ const styles = makeStyles(
                 display: 'none'
             } 
         },
+
         progress: {
             margin: theme.spacing(2),
         },
+
+        formField: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
+            width: "100%"
+        },
+    
+        button: {
+            margin: theme.spacing(1),
+        },
+
+        submitButton: {
+            margin: theme.spacing(1),
+            float: 'right',
+        },
+    
         
     })
 )
+
+const CategoryModal = (props) => {
+    const classes = styles();
+ 
+    return (
+        <CustomModal 
+            modal={props.modal}
+            handleClose={props.onModalClose}
+        >
+            <form autoComplete="off" >
+                <TextField
+                    label="Nama"
+                    name="name"
+                    className={classes.formField}
+                    value={props.newCategory.name}
+                    margin="normal"
+                    variant="outlined"
+                    onChange={props.handleNewCategoryChange}
+                />
+                <Button 
+                    variant="contained" 
+                    size="medium" 
+                    color="primary" 
+                    className={classes.submitButton}
+                    onClick={props.onSubmitNewCategory}
+                >
+                    Simpan
+                </Button>
+            </form>
+        </CustomModal>
+    )
+}
 
 export default function CategoriesList(props) {
     const classes = styles();
     const [loading, setLoading] = useState(true);
     const [categoryData, setCategoryData] = useState([]);
+    
+    const [modal, setModalOpenClose] = useState(false);
+    const [newCategory, setCategory] = useState({
+        name: '',
+    });
+
+    const handleNewCategoryChange = (e) => setCategory({
+        [e.target.name]: e.target.value
+    });
+
+    const handleModalOpen = () => {
+        setModalOpenClose(true);
+    }
+
+    const handleModalCLose = () => {
+        setModalOpenClose(false);
+    }
+
+    const submitNewCategory = () => {
+        console.log(newCategory.name);
+    }
 
     useEffect(() => {
         setLoading(true)
@@ -49,35 +121,46 @@ export default function CategoriesList(props) {
     }, [props.categories]);
 
     return (
-        <Paper className={classes.paper}>
-            <Box display='flex' flexDirection='row-reverse'>
-                <Button variant="contained" color="primary" >
-                    <AddIcon />
-                    Tambah Kategori
-                </Button>
-            </Box>
-            {/* Categories */}
-            <div className={classes.contentLayout}>
-                {loading ? (
-                    <CircularProgress className={classes.progress} />
-                ) : (
-                    categoryData.length > 0 ? categoryData.map(
-                        (category) => (
-                            <CategoryCard 
-                                key={category._id}
-                                name={category.name}
-                                onClicked={() => props.onClickCard(category._id)}
-                            />
+        <React.Fragment>
+            <Paper className={classes.paper}>
+                <Box display='flex' flexDirection='row-reverse'>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        onClick={handleModalOpen}
+                    >
+                        <AddIcon />
+                        Tambah Kategori
+                    </Button>
+                </Box>
+                {/* Categories */}
+                <div className={classes.contentLayout}>
+                    {loading ? (
+                        <CircularProgress className={classes.progress} />
+                    ) : (
+                        categoryData.length > 0 ? categoryData.map(
+                            (category) => (
+                                <CategoryCard 
+                                    key={category._id}
+                                    name={category.name}
+                                    onClicked={() => props.onClickCard(category._id)}
+                                />
+                            )
                         )
-                    )
-                    :
-                        <Typography>Tidak ada Category untuk ditampilkan.</Typography>
-                    )
-                }
-                
-                    
-
-            </div>
-        </Paper>
+                        :
+                            <Typography>Tidak ada Category untuk ditampilkan.</Typography>
+                        )
+                    }
+                </div>
+            </Paper>
+            <CategoryModal 
+                newCategory={newCategory}
+                handleNewCategoryChange={handleNewCategoryChange}
+                onSubmitNewCategory={submitNewCategory}
+                modal={modal}
+                onModalClose={handleModalCLose}
+            />
+        </React.Fragment>
+        
     )
 }

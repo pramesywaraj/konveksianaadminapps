@@ -11,6 +11,14 @@ const styles = makeStyles(theme => ({
         alignItems: "center",
         justifyContent: "center",
     },
+
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: '15px',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(5, 10),
+        width: '50%'
+    },
 }));
 
 const CustomModal = (props) => {
@@ -28,7 +36,9 @@ const CustomModal = (props) => {
                 }}
             >
                 <Fade in={props.modal}>
-                    {props.children}
+                    <div className={classes.paper}>
+                        {props.children}
+                    </div>
                 </Fade>
             </Modal>
         </div>

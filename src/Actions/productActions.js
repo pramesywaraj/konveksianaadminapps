@@ -16,7 +16,7 @@ export const productActions = {
 
 function getAllCategories() {
     return dispatch => {
-        let apiEndpoint = 'category';
+        let apiEndpoint = 'category/step';
         productService.getCategories(apiEndpoint)
             .then(res => {
                 if(res.data.status === 200) {

@@ -100,6 +100,7 @@ export default function MaterialList(props) {
             });
         } else {
             setLoading(false);
+            setMaterialData([]);
         }
 
     }, [props.productId]);

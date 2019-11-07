@@ -1,6 +1,7 @@
 {
   "name": "konveksiana",
   "author": "Pramesywara Jembar Panalar",
+  "homepage": "http://admin.konveksiana.id",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

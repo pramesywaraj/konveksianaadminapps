@@ -25,14 +25,14 @@ function login(email, password) {
                         history.push('/dashboard');
                         alert(res.data.message);
                     } else {
-                        dispatch(loginFailed());
-                        alert(res.data.message);
+                        
                     }
-                } else {
-                    dispatch(loginFailed());
-                    alert('Gagal melakukan login, silahkan ulangi kembali dan pastikan Anda terhubung dengan Internet.');
                 }
-                
+            })
+            .catch((err) => {
+                console.log(err);
+                dispatch(loginFailed());
+                alert('Gagal melakukan login, silahkan ulangi kembali dan pastikan Anda terhubung dengan Internet.');
             })
     };
 }

@@ -18,14 +18,17 @@ const styles = makeStyles(
         paper: {
             padding: theme.spacing(2),
             color: theme.palette.text.secondary,
-            overflow: 'hidden',
+            overflowY: 'hidden',
             height: 500,
-            maxHeight: 500
+            '&::-webkit-scrollbar': { 
+                display: 'none'
+            } 
         },
 
         contentLayout: {
             overflow: 'auto',
-            height: 500,
+            height: 450,
+            paddingBottom: 20,
             '&::-webkit-scrollbar': { 
                 display: 'none'
             } 
@@ -149,6 +152,10 @@ export default function CategoriesList(props) {
         }
     }
 
+    const handleDelete = (id) => {
+        console.log('Id Category', id);
+    }
+
     useEffect(() => {
         setLoading(true)
         setCategoryData(props.categories);
@@ -183,6 +190,7 @@ export default function CategoriesList(props) {
                                     key={category._id}
                                     name={category.name}
                                     onClicked={() => props.onClickCard(category._id)}
+                                    onDelete={() => handleDelete(category._id)}
                                 />
                             )
                         )

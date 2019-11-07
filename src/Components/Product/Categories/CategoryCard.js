@@ -53,9 +53,11 @@ export default function CategoryCard(props) {
         >
             <div 
                 className={classes.flexGrow2} 
-                onClick={props.onClicked}
             >
-                <CardContent className={[classes.contentContainer, classes.ripple, classes.body1Font].join(' ')}>
+                <CardContent 
+                    className={[classes.contentContainer, classes.ripple, classes.body1Font].join(' ')} 
+                    onClick={props.onClicked}
+                >
                     <p>
                         {props.name}
                     </p>
@@ -64,7 +66,7 @@ export default function CategoryCard(props) {
             <div className={classes.marginAuto}>
                 <CardContent className={classes.contentContainer}>
                     <Button 
-                        onClick={props.onClicked} 
+                        onClick={props.onDelete} 
                         color="secondary"
                     >
                         Hapus

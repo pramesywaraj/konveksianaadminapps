@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 const styles = makeStyles((theme) => ({
     card: {
         width: '100%',
+        display: 'flex',
         marginTop: 20,
         cursor: 'pointer',
         '&:hover': {
@@ -16,9 +17,6 @@ const styles = makeStyles((theme) => ({
     },
 
     contentContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
         padding: '10px 15px !important'
     },
 
@@ -34,6 +32,14 @@ const styles = makeStyles((theme) => ({
 
     flexGrow2: {
         flexGrow: 2
+    },
+
+    marginAuto: {
+        margin: 'auto'
+    },
+
+    body1Font: {
+        fontSize: 14
     }
 }));
 
@@ -42,22 +48,29 @@ export default function CategoryCard(props) {
 
     return (
         <Card 
-            onClick={props.onClicked} 
             className={classes.card} 
             elevation={2}
         >
-            <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
-                <div className={classes.flexGrow2}>
-                    <Typography variant="body1">
+            <div 
+                className={classes.flexGrow2} 
+                onClick={props.onClicked}
+            >
+                <CardContent className={[classes.contentContainer, classes.ripple, classes.body1Font].join(' ')}>
+                    <p>
                         {props.name}
-                    </Typography>
-                </div>
-                <div>
-                    <Button color="secondary" className={classes.button}>
+                    </p>
+                </CardContent>
+            </div>
+            <div className={classes.marginAuto}>
+                <CardContent className={classes.contentContainer}>
+                    <Button 
+                        onClick={props.onClicked} 
+                        color="secondary"
+                    >
                         Hapus
                     </Button>
-                </div>
-            </CardContent>
+                </CardContent>
+            </div>
             
         </Card>
     )

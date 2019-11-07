@@ -5,7 +5,13 @@ export const productService = {
     getCategories,
     getProduct,
     getMaterial,
-    postNewCategory
+    postNewCategory,
+    postNewProduct,
+    postNewMaterial,
+    deleteCategory,
+    deleteProduct,
+    deleteMaterial,
+
 }
 
 function getCategories(endpoint) {
@@ -46,6 +52,56 @@ function postNewCategory(data) {
         .catch((err) => {
             return err;
         });
+}
+
+function postNewProduct(data) {
+    return axios.post(config.baseUrl + 'product', data, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        });
+}
+
+function postNewMaterial(data) {
+    return axios.post(config.baseUrl + 'material', data, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        });
+}
+
+function deleteCategory(id) {
+    return axios.delete(config.baseUrl + 'category/' + id, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        })
+}
+
+function deleteProduct(id) {
+    return axios.delete(config.baseUrl + 'product/' + id, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        })
+}
+
+function deleteMaterial(id) {
+    return axios.delete(config.baseUrl + 'material/' + id, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        })
 }
 
 function getOptions(type) {

@@ -152,8 +152,19 @@ export default function CategoriesList(props) {
         }
     }
 
-    const handleDelete = (id) => {
-        console.log('Id Category', id);
+    const handleDelete = (id, name) => {
+        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus Kategori ${name}?`);
+
+        if(confirm) {
+            productService.deleteCategory(id)
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+        
     }
 
     useEffect(() => {
@@ -185,14 +196,21 @@ export default function CategoriesList(props) {
                         <CircularProgress className={classes.progress} />
                     ) : (
                         categoryData.length > 0 ? categoryData.map(
-                            (category) => (
-                                <CategoryCard 
-                                    key={category._id}
-                                    name={category.name}
-                                    onClicked={() => props.onClickCard(category._id)}
-                                    onDelete={() => handleDelete(category._id)}
-                                />
-                            )
+                            (category) => {
+                                let selected = props.selected;
+                                return (
+                                    <CategoryCard 
+                                        key={category._id}
+                                        id={category._id}
+                                        selected={selected}
+                                        name={category.name}
+                                        onClicked={() => props.onClickCard(category._id)}
+                                        onDelete={() => handleDelete(category._id, category.name)}
+                                    />
+                                )
+                            }
+                            
+                            
                         )
                         :
                             <Typography>Tidak ada Category untuk ditampilkan.</Typography>

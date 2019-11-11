@@ -52,7 +52,8 @@ class ProductContainer extends Component {
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <CategoriesList 
-                            onClickCard={this.selectCategoriesHandler} 
+                            onClickCard={this.selectCategoriesHandler}
+                            selected={selectedCategoryId}
                             categories={categories}
                         />
                     </Grid>

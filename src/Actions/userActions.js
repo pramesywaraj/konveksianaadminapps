@@ -16,17 +16,13 @@ function login(email, password) {
 
         authService.post(apiEndpoint, payload)
             .then(res => {
-                if(res !== undefined) {
-                    if(res.data && res.data.status === 200) {
-                        localStorage.setItem('token', res.data.token);
-                        localStorage.setItem('auth', true);
-                        localStorage.setItem('user', JSON.stringify(res.data.result));                    
-                        dispatch(setUserDetails(res.data));
-                        history.push('/dashboard');
-                        alert(res.data.message);
-                    } else {
-                        
-                    }
+                if(res.data && res.data.status === 200) {
+                    localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('auth', true);
+                    localStorage.setItem('user', JSON.stringify(res.data.result));                    
+                    dispatch(setUserDetails(res.data));
+                    history.push('/dashboard');
+                    alert(res.data.message);
                 }
             })
             .catch((err) => {

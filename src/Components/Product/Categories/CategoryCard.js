@@ -40,11 +40,21 @@ const styles = makeStyles((theme) => ({
 
     body1Font: {
         fontSize: 14
+    },
+
+    selected: {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)'
     }
 }));
 
 export default function CategoryCard(props) {
     const classes = styles();
+    let CardClass = [classes.contentContainer, classes.ripple, classes.body1Font];
+
+    if(props.id === props.selected) {
+        CardClass.push(classes.selected);
+    }
+   
 
     return (
         <Card 
@@ -55,7 +65,7 @@ export default function CategoryCard(props) {
                 className={classes.flexGrow2} 
             >
                 <CardContent 
-                    className={[classes.contentContainer, classes.ripple, classes.body1Font].join(' ')} 
+                    className={CardClass.join(' ')} 
                     onClick={props.onClicked}
                 >
                     <p>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
+import axios from "axios";
+
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -105,11 +107,14 @@ export default function CategoriesList(props) {
         name: '',
     });
 
-    const handleNewCategoryChange = (e) => setCategory({
-        [e.target.name]: e.target.value
-    });
+    const handleNewCategoryChange = (e) => {
+        e.preventDefault();
+        setCategory({
+            [e.target.name]: e.target.value
+        })
+    };
 
-    const handleModalOpen = (message) => {
+    const handleModalOpen = () => {
         setModalOpenClose(true);
     }
 
@@ -128,9 +133,9 @@ export default function CategoriesList(props) {
 
     const handleSnackbarClose = () => {
         setSnackbarState({
+            ...snackbar,
             open: false,
-            message: '',
-            isSuccess: false
+            message: ''        
         })
     }
 
@@ -154,14 +159,22 @@ export default function CategoriesList(props) {
 
     const handleDelete = (id, name) => {
         let confirm = window.confirm(`Apakah Anda yakin untuk menghapus Kategori ${name}?`);
+        setLoading(true);
 
         if(confirm) {
             productService.deleteCategory(id)
                 .then((res) => {
-                    console.log(res);
+                    if(res.status === 201) {
+                        let newCategoryData = categoryData.filter(category => category._id !== id);
+                        setCategoryData(newCategoryData);
+                        setLoading(false);
+                        snackBarOpenAction(true, `${name} berhasil dihapus.`);
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
+                    snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
+                    setLoading(false);
                 })
         }
         

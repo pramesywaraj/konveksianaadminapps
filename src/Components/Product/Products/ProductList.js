@@ -185,6 +185,31 @@ export default function ProductList(props) {
         }
     }
 
+    const handleDelete = (id, name) => {
+        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus Kategori ${name}?`);
+        setLoading(true);
+
+        if(confirm) {
+            productService.deleteProduct(id)
+                .then((res) => {
+                    if(res.status === 201) {
+                        // Manipulate the array when deleting the data
+                        let newProductData = productData.filter(category => category._id !== id);
+                        setProductData(newProductData);
+                        setLoading(false);
+                        snackBarOpenAction(true, `${name} berhasil dihapus.`);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
+                    setLoading(false);
+                })
+        }
+        
+    }
+
+
     return (
         <React.Fragment>
 
@@ -213,7 +238,8 @@ export default function ProductList(props) {
                                     id={product._id}
                                     selected={selected}
                                     product={product}
-                                    onClicked={() => props.onSelectProduct(product._id)}    
+                                    onClicked={() => props.onSelectProduct(product._id)}
+                                    onDelete={() => handleDelete(product._id, product.name)}    
                                 />
                             )
                         }

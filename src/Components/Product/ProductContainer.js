@@ -60,6 +60,7 @@ class ProductContainer extends Component {
                     <Grid item xs={6}>
                         <ProductList 
                             categoryId={selectedCategoryId} 
+                            selected={selectedProductId}
                             onSelectProduct={this.selectProductsHandler}
                         />
                         <MaterialList productId={selectedProductId} />

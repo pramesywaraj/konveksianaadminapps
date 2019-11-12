@@ -205,13 +205,20 @@ export default function ProductList(props) {
                     <CircularProgress className={classes.progress} />
                 ) : (
                     productData.length > 0 ? (
-                        productData.map((product) => (
-                            <ProductCard 
-                                key={product._id} 
-                                product={product}
-                                onClicked={() => props.onSelectProduct(product._id)}    
-                            />
-                        ))
+                        productData.map((product) => {
+                            let selected = props.selected;
+                            return (
+                                <ProductCard 
+                                    key={product._id} 
+                                    id={product._id}
+                                    selected={selected}
+                                    product={product}
+                                    onClicked={() => props.onSelectProduct(product._id)}    
+                                />
+                            )
+                        }
+                           
+                        )
                     )
                     :
                        ( 

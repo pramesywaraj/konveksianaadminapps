@@ -4,11 +4,11 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import { product } from '../../../Reducers/productReducer';
 
 const styles = makeStyles((theme) => ({
     card: {
         width: '100%',
+        display: 'flex',
         marginTop: 20,
         cursor: 'pointer',
         '&:hover': {
@@ -17,9 +17,6 @@ const styles = makeStyles((theme) => ({
     },
 
     contentContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
         padding: '10px 15px !important'
     },
 
@@ -35,30 +32,56 @@ const styles = makeStyles((theme) => ({
 
     flexGrow2: {
         flexGrow: 2
+    },
+
+    marginAuto: {
+        margin: 'auto'
+    },
+
+    body1Font: {
+        fontSize: 14
+    },
+
+    selected: {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)'
     }
 }));
 
 export default function ProductCard(props) {
     const classes = styles();
+    let CardClass = [classes.contentContainer, classes.ripple, classes.body1Font];
+
+    if(props.id === props.selected) {
+        CardClass.push(classes.selected);
+    }
 
     return (
         <Card 
-            className={classes.card}
+            className={classes.card} 
             elevation={2}
-            onClick={props.onClicked}    
         >
-            <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
-                <div className={classes.flexGrow2}>
-                    <Typography variant="body1">
+            <div 
+                className={classes.flexGrow2} 
+            >
+                <CardContent 
+                    className={CardClass.join(' ')} 
+                    onClick={props.onClicked}
+                >
+                    <p>
                         {props.product.name}
-                    </Typography>
-                </div>
-                <div>
-                    <Button color="secondary" className={classes.button}>
+                    </p>
+                </CardContent>
+            </div>
+            <div className={classes.marginAuto}>
+                <CardContent className={classes.contentContainer}>
+                    <Button 
+                        onClick={props.onDelete} 
+                        color="secondary"
+                    >
                         Hapus
                     </Button>
-                </div>
-            </CardContent>
+                </CardContent>
+            </div>
             
         </Card>
     )

@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
-import axios from "axios";
-
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -61,13 +58,16 @@ const styles = makeStyles(
 
 const CategoryModal = (props) => {
     const classes = styles();
+    function submitHandler(e) {
+        e.preventDefault();
+    }
  
     return (
         <CustomModal 
             modal={props.modal}
             handleClose={props.onModalClose}
         >
-            <form autoComplete="off" >
+            <form autoComplete="off" onSubmit={submitHandler}>
                 <TextField
                     label="Nama"
                     name="name"
@@ -183,7 +183,6 @@ export default function CategoriesList(props) {
     useEffect(() => {
         setLoading(true)
         setCategoryData(props.categories);
-
         setTimeout(() => {
             setLoading(false);
         }, 2000)

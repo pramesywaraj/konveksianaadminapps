@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -35,7 +35,8 @@ const styles = makeStyles(
         },
 
         progress: {
-            margin: theme.spacing(2),
+            margin: '10% auto',
+            display: 'table'
         },
 
         marginTop20: {
@@ -94,24 +95,21 @@ const ProductModal = (props) => {
 export default function ProductList(props) {
     const classes = styles();
     const [loading, setLoading] = useState(false);
+    const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
     const [productData, setProductData] = useState([]);
     const [newProduct, setNewProduct] = useState({
         name: '',
         categoryId: ''
-    });
+    }); 
     const [modal, setModalOpenClose] = useState(false);
     const [snackbar, setSnackbarState] = useState({
         open: false,
         message: '',
         isSuccess: false
     });
-    
-    // if categoryId change
-    useEffect(() => {
-        setLoading(true);
 
-        if(props.categoryId !== '') {
-            productService.getProduct(props.categoryId)
+    const fetchData = () => {
+        productService.getProduct(props.categoryId)
             .then((res) => {
                 if(res.data.product !== [] || res.data.product.length > 0) {
                     setLoading(false);
@@ -122,10 +120,29 @@ export default function ProductList(props) {
                 setLoading(false);
                 console.log(err);
             });
+    }
+
+    // if categoryId change
+    useEffect(() => {
+        setLoading(true);
+        console.log('Mounted');
+        if(props.categoryId !== '') {
+            fetchData();
         } else {
             setLoading(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.categoryId]);
+
+    // Effect working when update the data
+    useEffect(() => {
+        if(dataUpdate) {
+            setLoading(true);
+            fetchData();
+            setUpdate(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dataUpdate]);
 
     const handleNewProductChange = (e) => {
         setNewProduct({
@@ -172,6 +189,7 @@ export default function ProductList(props) {
                     if(res.status === 201) {
                         snackBarOpenAction(true, 'Berhasil membuat jenis Produk baru.');
                         handleModalClose();
+                        setUpdate(true);
                     } else if(res.data.errors) {
                         snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
                         handleModalClose();
@@ -194,10 +212,11 @@ export default function ProductList(props) {
                 .then((res) => {
                     if(res.status === 201) {
                         // Manipulate the array when deleting the data
-                        let newProductData = productData.filter(category => category._id !== id);
-                        setProductData(newProductData);
+                        // let newProductData = productData.filter(category => category._id !== id);
+                        // setProductData(newProductData);
                         setLoading(false);
                         snackBarOpenAction(true, `${name} berhasil dihapus.`);
+                        setUpdate(true);
                     }
                 })
                 .catch((err) => {

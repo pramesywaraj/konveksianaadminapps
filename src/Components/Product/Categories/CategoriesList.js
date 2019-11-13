@@ -11,12 +11,14 @@ import TextField from '@material-ui/core/TextField';
 import CustomModal from '../../OtherComponent/CustomModal';
 import CustomSnackbar from '../../OtherComponent/CustomSnackbar';
 import { productService } from '../../../Services/productService';
+import CategoriesStepModal from './CategoriesStepModal';
 
 const styles = makeStyles(
     (theme) => ({
         paper: {
             padding: theme.spacing(2),
             color: theme.palette.text.secondary,
+            position: 'relative',
             overflowY: 'hidden',
             height: 500,
             '&::-webkit-scrollbar': { 
@@ -195,7 +197,8 @@ export default function CategoriesList(props) {
 
     return (
         <React.Fragment>
-            <Paper className={classes.paper}>
+            <Paper id="for-step-modal" className={classes.paper}>
+                <CategoriesStepModal />
                 <Box display='flex' flexDirection='row-reverse'>
                     <Button 
                         variant="contained" 

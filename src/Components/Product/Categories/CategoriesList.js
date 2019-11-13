@@ -34,7 +34,8 @@ const styles = makeStyles(
         },
 
         progress: {
-            margin: theme.spacing(2),
+            margin: "20% auto",
+            display: 'table'
         },
 
         formField: {
@@ -44,7 +45,7 @@ const styles = makeStyles(
         },
     
         button: {
-            margin: theme.spacing(1),
+            margin: 'theme.spacing(1)',
         },
 
         submitButton: {
@@ -181,12 +182,15 @@ export default function CategoriesList(props) {
     }
 
     useEffect(() => {
-        setLoading(true)
-        setCategoryData(props.categories);
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000)
-
+        setLoading(true);        
+        const checkCategories = () => {
+            if(props.categories.length > 0) {
+                setCategoryData(props.categories);
+                setLoading(false);
+            }
+        }
+        
+        checkCategories();
     }, [props.categories]);
 
     return (

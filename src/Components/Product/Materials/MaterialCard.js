@@ -51,7 +51,7 @@ export default function MaterialCard(props) {
                     </Typography>
                 </div>
                 <div>
-                    <Button color="secondary" className={classes.button}>
+                    <Button color="secondary" className={classes.button} onClick={props.handleDelete}>
                         Hapus
                     </Button>
                 </div>

@@ -204,7 +204,7 @@ export default function ProductList(props) {
     }
 
     const handleDelete = (id, name) => {
-        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus Kategori ${name}?`);
+        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus jenis Produk ${name}?`);
         setLoading(true);
 
         if(confirm) {

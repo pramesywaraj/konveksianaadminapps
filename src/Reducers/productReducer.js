@@ -1,7 +1,7 @@
 import { 
-    OPEN_MODAL, 
-    CLOSE_MODAL, 
-    HANDLE_ON_CHANGE, 
+    // OPEN_MODAL, 
+    // CLOSE_MODAL, 
+    // HANDLE_ON_CHANGE, 
     FETCHED_ALL_CATEGORIES,
     ERROR
 } from '../Actions/actionTypes';

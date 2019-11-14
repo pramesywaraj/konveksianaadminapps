@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -9,7 +8,7 @@ import CategoriesList from './Categories/CategoriesList';
 import ProductList from './Products/ProductList';
 import MaterialList from './Materials/MaterialList';
 import { productActions } from '../../Actions/productActions';
-import CustomModal from '../OtherComponent/CustomModal';
+// import CustomModal from '../OtherComponent/CustomModal';
 
 class ProductContainer extends Component {
     constructor(props) {

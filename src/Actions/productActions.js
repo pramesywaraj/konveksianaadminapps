@@ -7,7 +7,7 @@ import {
 
 import {
     changeSnackbarToOpen,
-    changeSnackbarToClose
+    // changeSnackbarToClose
 } from './generalActions';
 
 export const productActions = {

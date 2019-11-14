@@ -5,7 +5,7 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 const styles = makeStyles(theme => ({
@@ -21,12 +21,28 @@ const styles = makeStyles(theme => ({
     },
     paper: {
         height: '100%'
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+    },
+    flexContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'baseline',
+    },
+    tableContainer: {
+        display: 'table',
+        width: '100%',
+        padding: 10,
     }
 
 }));
 
 export default function CategoriesStepModal(props) {
     const classes = styles();
+    const { open, closeDialog, steps } = props;
     return (
         <Dialog
             scroll='paper'
@@ -36,7 +52,7 @@ export default function CategoriesStepModal(props) {
                 }
             }
             fullWidth={true}
-            open={true}
+            open={open}
             container={() => document.getElementById("for-step-modal")}
             style={{ position: "absolute" }}
             BackdropProps={{ style: { position: "absolute" } }}
@@ -46,13 +62,40 @@ export default function CategoriesStepModal(props) {
                 <IconButton
                     aria-label="close"
                     className={classes.closeButton}
+                    onClick={() => closeDialog()}
                 >
                     <CloseIcon />
                 </IconButton>
             </MuiDialogTitle>
             <MuiDialogContent>
-                <Typography variant="h6">Ini Isinya</Typography>
-
+                <div className={classes.flexContainer}>
+                    <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Nama langkah"
+                        margin="normal"
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Button color="primary">
+                        Tambah
+                    </Button>
+                </div>
+                <div>
+                    <div className={classes.tableContainer}>
+                        <div style={{display: 'table-cell', textAlign: 'start', fontSize: '14px'}}>
+                            <p>Step 1</p>
+                        </div>
+                        <div style={{display: 'table-cell', textAlign: 'end'}}>
+                            <IconButton  
+                                aria-label="close"
+                                color="secondary"
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </div>
+                    </div>
+                </div>
             </MuiDialogContent>
         </Dialog>
     );

@@ -99,6 +99,7 @@ export default function CategoriesList(props) {
     const [loading, setLoading] = useState(true);
     const [categoryData, setCategoryData] = useState([]);
     const [modal, setModalOpenClose] = useState(false);
+    const [stepDialog, setDialogOpenClose] = useState(false);
     const [snackbar, setSnackbarState] = useState({
         open: false,
         message: '',
@@ -116,6 +117,14 @@ export default function CategoriesList(props) {
             [e.target.name]: e.target.value
         })
     };
+
+    const handleDialogOpen = () => {
+        setDialogOpenClose(true);
+    }
+
+    const handleDialogClose = () => {
+        setDialogOpenClose(false);
+    }
 
     const handleModalOpen = () => {
         setModalOpenClose(true);
@@ -198,7 +207,11 @@ export default function CategoriesList(props) {
     return (
         <React.Fragment>
             <Paper id="for-step-modal" className={classes.paper}>
-                <CategoriesStepModal />
+                <CategoriesStepModal 
+                    closeDialog={handleDialogClose} 
+                    open={stepDialog}
+                    steps={categoryData.step}
+                />
                 <Box display='flex' flexDirection='row-reverse'>
                     <Button 
                         variant="contained" 
@@ -223,7 +236,7 @@ export default function CategoriesList(props) {
                                         id={category._id}
                                         selected={selected}
                                         name={category.name}
-                                        onClicked={() => props.onClickCard(category._id)}
+                                        onClicked={() => {props.onClickCard(category._id); handleDialogOpen()} }
                                         onDelete={() => handleDelete(category._id, category.name)}
                                     />
                                 )

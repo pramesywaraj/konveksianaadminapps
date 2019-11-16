@@ -3,6 +3,7 @@ import config from './config';
 
 export const productService = {
     getCategories,
+    getCategoriesSteps,
     getProduct,
     getMaterial,
     postNewCategory,
@@ -11,11 +12,20 @@ export const productService = {
     deleteCategory,
     deleteProduct,
     deleteMaterial,
-
 }
 
 function getCategories(endpoint) {
     return axios.get(config.baseUrl + endpoint, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        });
+}
+
+function getCategoriesSteps(id) {
+    return axios.get(`${config.baseUrl}step/categoryStep/${id}`, getOptions())
         .then((response) => {
             return response;
         })

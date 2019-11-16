@@ -42,7 +42,11 @@ const styles = makeStyles(theme => ({
 
 export default function CategoriesStepModal(props) {
     const classes = styles();
-    const { open, closeDialog, steps } = props;
+    const { open, closeDialog, categoryId } = props;
+    
+    useEffect(() => {
+        console.log(categoryId);
+    }, [categoryId])
     return (
         <Dialog
             scroll='paper'

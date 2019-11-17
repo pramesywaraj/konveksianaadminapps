@@ -204,6 +204,10 @@ export default function CategoriesList(props) {
         }
         
         checkCategories();
+
+        return () => {
+            
+        }
     }, [props.categories]);
 
     return (
@@ -213,6 +217,7 @@ export default function CategoriesList(props) {
                     closeDialog={handleDialogClose} 
                     open={stepDialog}
                     categoryId={selectedCategory}
+                    snackbarOpen={snackBarOpenAction}
                 />
                 <Box display='flex' flexDirection='row-reverse'>
                     <Button 

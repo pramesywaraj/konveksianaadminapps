@@ -201,6 +201,11 @@ export default function ProductList(props) {
                     handleModalClose();
                 })
         }
+
+        setNewProduct({
+            name: '',
+            categoryId: ''
+        })
     }
 
     const handleDelete = (id, name) => {

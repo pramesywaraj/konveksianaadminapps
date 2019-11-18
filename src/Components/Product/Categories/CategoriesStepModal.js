@@ -56,7 +56,7 @@ const styles = makeStyles(theme => ({
 
 const Step = (props) => {
     const classes = styles();
-    const { step } = props;
+    const { step, onDeleteHandle } = props;
 
     return (
         <div className={classes.tableContainer}>
@@ -67,6 +67,7 @@ const Step = (props) => {
                 <IconButton  
                     aria-label="close"
                     color="secondary"
+                    onClick={onDeleteHandle}
                 >
                     <CloseIcon />
                 </IconButton>
@@ -78,6 +79,7 @@ const Step = (props) => {
 export default function CategoriesStepModal(props) {
     const [steps, setSteps] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
     const classes = styles();
     const { open, closeDialog, categoryId, snackbarOpen } = props;
 
@@ -96,6 +98,25 @@ export default function CategoriesStepModal(props) {
                 setLoading(false);
             })
     }
+
+    const deleteCategoryStep = (id) => {
+        if(window.confirm('Apakah Anda yakin?')) {
+            setLoading(true);
+            productService.deleteCategoryStep(id)
+                .then((res) => {
+                    if(res.status === 201) {
+                        setLoading(false);
+                        snackbarOpen(true, `Tahapan berhasil dihapus.`);
+                        setUpdate(true);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    snackbarOpen(false, 'Terjadi kesalahan saat menghapus.');
+                    setLoading(false);
+                })
+        }
+    }
     
     useEffect(() => {
         setLoading(true);
@@ -104,9 +125,22 @@ export default function CategoriesStepModal(props) {
         } else {
             fetchCategorySteps();
         }
-        
 
-    }, [categoryId])
+        return () => {
+            setSteps([]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [categoryId]);
+
+    useEffect(() => {
+        if(dataUpdate) {
+            setLoading(true);
+            fetchCategorySteps();
+            setUpdate(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dataUpdate]);
+
     return (
         <Dialog
             scroll='paper'
@@ -154,7 +188,7 @@ export default function CategoriesStepModal(props) {
                                 steps.length > 0 ? (
                                     steps.map((step) => {
                                         return (
-                                            <Step step={step} />
+                                            <Step key={step._id} step={step} onDeleteHandle={() => deleteCategoryStep(step._id)} />
                                         )
                                     })
                                 ) : (

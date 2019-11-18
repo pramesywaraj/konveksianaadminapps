@@ -205,9 +205,9 @@ export default function CategoriesList(props) {
         
         checkCategories();
 
-        return () => {
+        // return () => {
             
-        }
+        // }
     }, [props.categories]);
 
     return (

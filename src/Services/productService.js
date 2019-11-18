@@ -12,6 +12,7 @@ export const productService = {
     deleteCategory,
     deleteProduct,
     deleteMaterial,
+    deleteCategoryStep
 }
 
 function getCategories(endpoint) {
@@ -86,6 +87,16 @@ function postNewMaterial(data) {
 
 function deleteCategory(id) {
     return axios.delete(config.baseUrl + 'category/' + id, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        })
+}
+
+function deleteCategoryStep(id) {
+    return axios.delete(config.baseUrl + 'step/' + id, getOptions())
         .then((response) => {
             return response;
         })

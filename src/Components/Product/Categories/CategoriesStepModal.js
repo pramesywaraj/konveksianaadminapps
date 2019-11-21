@@ -80,16 +80,67 @@ export default function CategoriesStepModal(props) {
     const [steps, setSteps] = useState([]);
     const [loading, setLoading] = useState(false);
     const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
+    const [lastQueueNumber, setNextQueueNumber] = useState(0);
+    const [newStep, setNewStep] = useState({
+        'name': '',
+        'queue': '',
+        'categoryId': '',
+    });
+
     const classes = styles();
     const { open, closeDialog, categoryId, snackbarOpen } = props;
+
+    useEffect(() => {
+        setLoading(true);
+        if(categoryId === '') {
+            setLoading(false);
+        } else {
+            fetchCategorySteps();
+        }
+
+
+        return () => {
+            console.log('Unmount')
+            setSteps([]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [categoryId]);
+
+    useEffect(() => {
+        // last steps object to get queue number...
+        const lastQueueNumberArray = () => {
+            let length = steps.length;
+            let nextQueue = 0;
+    
+            if(steps[length-2] !== undefined) {
+                let singleObj = steps[length-2];
+                nextQueue = singleObj.queue + 1;
+            }
+    
+            setNextQueueNumber(nextQueue);
+        };
+
+        lastQueueNumberArray();
+
+    }, [steps])
+
+    useEffect(() => {
+        if(dataUpdate) {
+            setLoading(true);
+            fetchCategorySteps();
+            setUpdate(false);
+        } else {
+            return;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dataUpdate]);
 
     const fetchCategorySteps = () => {
         productService.getCategoriesSteps(categoryId)
             .then((res) => {
                 if(res.status === 200) {
-                    console.log(res);
-                    setSteps(res.data.step);
                     setLoading(false);
+                    setSteps(res.data.step);
                 }
             })
             .catch((err) => {
@@ -97,6 +148,33 @@ export default function CategoriesStepModal(props) {
                 snackbarOpen(false, 'Terjadi kesalahan saat memuat data.');
                 setLoading(false);
             })
+    }
+
+    const submitNewStep = () => {
+        setLoading(true);
+        if(newStep.name === '' && newStep.queue === '' && newStep.categoryId === '') {
+            snackbarOpen(false, `Ada field yang belum terisi.`);
+            return;
+        } else {
+            productService.postNewStep(newStep)
+                .then((res) => {
+                    if(res.status === 201) {
+                        snackbarOpen(true, 'Berhasil membuat tahap baru.');
+                        setUpdate(true);
+                    } else if(res.data.errors) {
+                        snackbarOpen(false, 'Terjadi kesalahan ketika membuat data.');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    snackbarOpen(false, 'Terjadi kesalahan ketika membuat data.');
+                })
+        }
+
+        setNewStep({
+            ...newStep,
+            name: ''
+        })
     }
 
     const deleteCategoryStep = (id) => {
@@ -117,30 +195,15 @@ export default function CategoriesStepModal(props) {
                 })
         }
     }
+
+    const handleChange = (e) => {
+        setNewStep({
+            categoryId: props.categoryId,
+            queue: lastQueueNumber,
+            [e.target.name]: e.target.value
+        })
+    }
     
-    useEffect(() => {
-        setLoading(true);
-        if(categoryId === '') {
-            setLoading(false);
-        } else {
-            fetchCategorySteps();
-        }
-
-        return () => {
-            setSteps([]);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [categoryId]);
-
-    useEffect(() => {
-        if(dataUpdate) {
-            setLoading(true);
-            fetchCategorySteps();
-            setUpdate(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataUpdate]);
-
     return (
         <Dialog
             scroll='paper'
@@ -169,13 +232,16 @@ export default function CategoriesStepModal(props) {
                 <div className={classes.flexContainer}>
                     <TextField
                         id="outlined-basic"
+                        name="name"
                         className={classes.textField}
                         label="Nama langkah"
                         margin="normal"
                         variant="outlined"
+                        value={newStep.name}
                         fullWidth
+                        onChange={handleChange}
                     />
-                    <Button color="primary">
+                    <Button color="primary" onClick={submitNewStep}>
                         Tambah
                     </Button>
                 </div>

@@ -213,12 +213,16 @@ export default function CategoriesList(props) {
     return (
         <React.Fragment>
             <Paper id="for-step-modal" className={classes.paper}>
-                <CategoriesStepModal 
-                    closeDialog={handleDialogClose} 
-                    open={stepDialog}
-                    categoryId={selectedCategory}
-                    snackbarOpen={snackBarOpenAction}
-                />
+                {stepDialog ? (
+                    <CategoriesStepModal 
+                        closeDialog={handleDialogClose} 
+                        open={stepDialog}
+                        categoryId={selectedCategory}
+                        snackbarOpen={snackBarOpenAction}
+                    />
+                ) : ''
+                }
+                
                 <Box display='flex' flexDirection='row-reverse'>
                     <Button 
                         variant="contained" 

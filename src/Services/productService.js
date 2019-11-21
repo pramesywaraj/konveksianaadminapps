@@ -9,6 +9,7 @@ export const productService = {
     postNewCategory,
     postNewProduct,
     postNewMaterial,
+    postNewStep,
     deleteCategory,
     deleteProduct,
     deleteMaterial,
@@ -77,6 +78,16 @@ function postNewProduct(data) {
 
 function postNewMaterial(data) {
     return axios.post(config.baseUrl + 'material', data, getOptions())
+        .then((response) => {
+            return response;
+        })
+        .catch((err) => {
+            return err;
+        });
+}
+
+function postNewStep(data) {
+    return axios.post(config.baseUrl + 'step', data, getOptions())
         .then((response) => {
             return response;
         })

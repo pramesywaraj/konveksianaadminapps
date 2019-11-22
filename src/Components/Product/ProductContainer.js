@@ -8,7 +8,7 @@ import CategoriesList from './Categories/CategoriesList';
 import ProductList from './Products/ProductList';
 import MaterialList from './Materials/MaterialList';
 import { productActions } from '../../Actions/productActions';
-// import CustomModal from '../OtherComponent/CustomModal';
+import CustomSnackbar from '../OtherComponent/CustomSnackbar';
 
 class ProductContainer extends Component {
     constructor(props) {
@@ -40,9 +40,15 @@ class ProductContainer extends Component {
         })
     }
 
+    handleCloseSnackbar = () => {
+        const { dispatch } = this.props;
+        dispatch(productActions.closeSnackbar());
+    }
+
+
     render() {
         const { classes, products } = this.props;
-        const { categories } = products;
+        const { categories, message, isSuccess, snackbar } = products;
 
         const { selectedCategoryId, selectedProductId } = this.state;
 
@@ -65,6 +71,12 @@ class ProductContainer extends Component {
                         <MaterialList productId={selectedProductId} />
                     </Grid>
                 </Grid>
+                <CustomSnackbar 
+                    snackbar={snackbar} 
+                    isSuccess={isSuccess}
+                    message={message}
+                    close={this.handleCloseSnackbar}
+                />     
             </div>
         )
     }

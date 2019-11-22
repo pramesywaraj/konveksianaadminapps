@@ -54,6 +54,10 @@ const styles = makeStyles(
             margin: theme.spacing(1),
             float: 'right',
         },
+
+        marginTop20: {
+            marginTop: 20
+        },
     
         
     })
@@ -199,8 +203,9 @@ export default function CategoriesList(props) {
         const checkCategories = () => {
             if(props.categories.length > 0) {
                 setCategoryData(props.categories);
-                setLoading(false);
             }
+            
+            setLoading(false);
         }
         
         checkCategories();
@@ -260,7 +265,12 @@ export default function CategoriesList(props) {
                             
                         )
                         :
-                            <Typography>Tidak ada Category untuk ditampilkan.</Typography>
+                            <Typography 
+                                align='center'
+                                className={classes.marginTop20}
+                            >
+                                Tidak ada produk untuk ditampilkan.
+                            </Typography> 
                         )
                     }
                 </div>

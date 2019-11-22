@@ -9,7 +9,9 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import { productService } from "../../../Services/productService";
+// import { productService } from "../../../Services/productService";
+import axios from 'axios';
+import config from '../../../Services/config';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -77,9 +79,13 @@ const Step = (props) => {
 }
 
 export default function CategoriesStepModal(props) {
-    const [steps, setSteps] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
+    const [data, setData] = useState({
+        steps: null
+    });
+    const [loading, setLoading] = useState(true);
+    // const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
+    const [submittedStep, setSubmittedStep] = useState(null);
+    const [deletedStepId, setDeletedStepId] = useState(null);
     const [lastQueueNumber, setNextQueueNumber] = useState(0);
     const [newStep, setNewStep] = useState({
         'name': '',
@@ -91,108 +97,142 @@ export default function CategoriesStepModal(props) {
     const { open, closeDialog, categoryId, snackbarOpen } = props;
 
     useEffect(() => {
-        setLoading(true);
-        if(categoryId === '') {
-            setLoading(false);
-        } else {
-            fetchCategorySteps();
-        }
-
-
+        fetchCategorySteps();
+        setLoading(false);
         return () => {
-            console.log('Unmount')
-            setSteps([]);
+            setNewStep({
+                'name': '',
+                'queue': '',
+                'categoryId': '',
+            });
+
+            setData({
+                steps: null
+            })
+
+            setSubmittedStep(null);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [categoryId]);
+    }, []);
 
     useEffect(() => {
         // last steps object to get queue number...
         const lastQueueNumberArray = () => {
-            let length = steps.length;
             let nextQueue = 0;
-    
-            if(steps[length-2] !== undefined) {
-                let singleObj = steps[length-2];
-                nextQueue = singleObj.queue + 1;
+            if(data.steps !== null && data.steps !== []) {
+                let length = data.steps.length;
+                if(data.steps[length-2] !== undefined) {
+                    let singleObj = data.steps[length-2];
+                    nextQueue = singleObj.queue + 1;
+                }
             }
+           
     
             setNextQueueNumber(nextQueue);
         };
 
         lastQueueNumberArray();
 
-    }, [steps])
+    }, [data.steps])
 
     useEffect(() => {
-        if(dataUpdate) {
-            setLoading(true);
-            fetchCategorySteps();
-            setUpdate(false);
-        } else {
-            return;
+        if(submittedStep !== null) {
+            setData({steps: data.steps.concat(submittedStep)});
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataUpdate]);
 
-    const fetchCategorySteps = () => {
-        productService.getCategoriesSteps(categoryId)
-            .then((res) => {
-                if(res.status === 200) {
-                    setLoading(false);
-                    setSteps(res.data.step);
-                }
+        setLoading(false);
+
+        setNewStep({
+            'name': '',
+            'queue': '',
+            'categoryId': '',
+        });
+        
+
+    }, [submittedStep]);
+
+    useEffect(() => {
+        if(deletedStepId !== null) {
+            let stepArray = data.steps;
+            let newAarray = stepArray.filter(step => step._id !== deletedStepId);
+            setData({
+                steps: newAarray
             })
-            .catch((err) => {
-                console.log(err);
-                snackbarOpen(false, 'Terjadi kesalahan saat memuat data.');
-                setLoading(false);
-            })
+        }
+
+        setLoading(false);
+
+    }, [deletedStepId]);
+
+    const fetchCategorySteps = async () => {
+        try {
+            const response = await axios.get(
+                `${config.baseUrl}step/categoryStep/${categoryId}`, 
+                {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}}
+            );
+
+            setData({
+                steps: response.data.step
+            });
+        }
+        catch (err) {
+            console.log(err);
+            snackbarOpen(false, 'Terjadi kesalahan saat memuat data.');
+        }
     }
 
-    const submitNewStep = () => {
-        setLoading(true);
+    const submitNewStep = async () => {
         if(newStep.name === '' && newStep.queue === '' && newStep.categoryId === '') {
             snackbarOpen(false, `Ada field yang belum terisi.`);
             return;
-        } else {
-            productService.postNewStep(newStep)
-                .then((res) => {
-                    if(res.status === 201) {
-                        snackbarOpen(true, 'Berhasil membuat tahap baru.');
-                        setUpdate(true);
-                    } else if(res.data.errors) {
-                        snackbarOpen(false, 'Terjadi kesalahan ketika membuat data.');
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    snackbarOpen(false, 'Terjadi kesalahan ketika membuat data.');
-                })
         }
 
-        setNewStep({
-            ...newStep,
-            name: ''
-        })
+        try {
+            setLoading(true);
+            const response = await axios.post(
+                `${config.baseUrl}step`, newStep,
+                {headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }}
+            );
+
+            console.log(response);
+            
+            const submittedNewStep = await {
+                _id: response.data.step._id,
+                name: newStep.name,
+                queue: newStep.queue,
+                category: newStep.categoryId
+            }
+
+            setSubmittedStep(submittedNewStep);
+            snackbarOpen(true, 'Berhasil membuat tahap baru.');
+        }
+        catch (err) {
+            console.log(err);
+            snackbarOpen(false, 'Terjadi kesalahan saat memuat data.');
+        }
     }
 
-    const deleteCategoryStep = (id) => {
-        if(window.confirm('Apakah Anda yakin?')) {
-            setLoading(true);
-            productService.deleteCategoryStep(id)
-                .then((res) => {
-                    if(res.status === 201) {
-                        setLoading(false);
-                        snackbarOpen(true, `Tahapan berhasil dihapus.`);
-                        setUpdate(true);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    snackbarOpen(false, 'Terjadi kesalahan saat menghapus.');
-                    setLoading(false);
-                })
+    const deleteCategoryStep = async (id) => {
+        if(!window.confirm('Apakah Anda yakin?')) {
+            return;
+        }
+
+        try {
+            const response = await axios.delete(
+                `${config.baseUrl}step/${id}`, 
+                {headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }}
+            );
+
+            setDeletedStepId(id);
+            snackbarOpen(true, `Tahapan berhasil dihapus.`);
+        }
+        catch (err) {
+            console.log(err);
+            snackbarOpen(false, 'Terjadi kesalahan saat memuat data.');
         }
     }
 
@@ -203,7 +243,7 @@ export default function CategoriesStepModal(props) {
             [e.target.name]: e.target.value
         })
     }
-    
+
     return (
         <Dialog
             scroll='paper'
@@ -251,8 +291,8 @@ export default function CategoriesStepModal(props) {
                         <div className={classes.flexContainerColumn}>
                             {
                                 
-                                steps.length > 0 ? (
-                                    steps.map((step) => {
+                                data.steps !== [] && data.steps !== null ? (
+                                    data.steps.map((step) => {
                                         return (
                                             <Step key={step._id} step={step} onDeleteHandle={() => deleteCategoryStep(step._id)} />
                                         )

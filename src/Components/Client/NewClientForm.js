@@ -54,7 +54,7 @@ const NewClientForm = forwardRef((props, ref) => {
     }
     
     return (
-        <div className={classes.paper}>
+        <React.Fragment>
             <h2>Tambahkan Client baru</h2>
             <form autoComplete="off" >
                 <TextField
@@ -105,7 +105,7 @@ const NewClientForm = forwardRef((props, ref) => {
                     Simpan Client Baru
                 </Button>
             </form>
-        </div>
+        </React.Fragment>
     )
 });
 

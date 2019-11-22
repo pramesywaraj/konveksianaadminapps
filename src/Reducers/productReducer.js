@@ -1,7 +1,6 @@
 import { 
-    // OPEN_MODAL, 
-    // CLOSE_MODAL, 
-    // HANDLE_ON_CHANGE, 
+    CLOSE_SNACKBAR,
+    OPEN_SNACKBAR,
     FETCHED_ALL_CATEGORIES,
     ERROR
 } from '../Actions/actionTypes';
@@ -28,6 +27,17 @@ export function product(state = initialState, action) {
             return {
                 ...state,
                 isSuccess: false
+            }
+        case OPEN_SNACKBAR:
+            return {
+                ...state,
+                snackbar: true,
+                message: action.message
+            }
+        case CLOSE_SNACKBAR:
+            return {
+                ...state,
+                snackbar: false
             }
         default: 
             return state;

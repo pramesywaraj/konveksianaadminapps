@@ -7,11 +7,12 @@ import {
 
 import {
     changeSnackbarToOpen,
-    // changeSnackbarToClose
+    changeSnackbarToClose
 } from './generalActions';
 
 export const productActions = {
-    getAllCategories
+    getAllCategories,
+    closeSnackbar
 };
 
 function getAllCategories() {
@@ -26,7 +27,7 @@ function getAllCategories() {
             .catch((err) => {
                 console.log('There is error on getAllCategories', err);
                 dispatch(errorGet());
-                dispatch(changeSnackbarToOpen('Terjadi kesalahan dalam mengambil data.'));
+                dispatch(changeSnackbarToOpen('Terjadi kesalahan dalam pengambilan data Kategori.'));
             })
     }
 } 
@@ -44,4 +45,10 @@ function errorGet() {
     return {
         type: ERROR
     }
+}
+
+function closeSnackbar() {
+    return dispatch => {
+        dispatch(changeSnackbarToClose());
+    };
 }

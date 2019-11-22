@@ -182,6 +182,7 @@ export default function ProductList(props) {
     const submitNewProduct = () => {
         if(newProduct.name === '' && newProduct.categoryId === '') {
             snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
+            return;
         } else {
             productService.postNewProduct(newProduct)
                 .then((res) => {

@@ -26,8 +26,8 @@ function getCategories(endpoint) {
         });
 }
 
-function getCategoriesSteps(id) {
-    return axios.get(`${config.baseUrl}step/categoryStep/${id}`, getOptions())
+async function getCategoriesSteps(id) {
+    return await axios.get(`${config.baseUrl}step/categoryStep/${id}`, getOptions())
         .then((response) => {
             return response;
         })
@@ -86,14 +86,21 @@ function postNewMaterial(data) {
         });
 }
 
-function postNewStep(data) {
-    return axios.post(config.baseUrl + 'step', data, getOptions())
-        .then((response) => {
-            return response;
-        })
-        .catch((err) => {
-            return err;
-        });
+async function postNewStep(data) {
+    // return await axios.post(config.baseUrl + 'step', data, getOptions())
+    //     .then((response) => {
+    //         return response;
+    //     })
+    //     .catch((err) => {
+    //         return err;
+    //     });
+    try {
+        const response = await axios.post(config.baseUrl + 'step', data, getOptions());
+        return response;
+    }
+    catch(err) {
+        return err;
+    }
 }
 
 function deleteCategory(id) {
@@ -106,14 +113,21 @@ function deleteCategory(id) {
         })
 }
 
-function deleteCategoryStep(id) {
-    return axios.delete(config.baseUrl + 'step/' + id, getOptions())
-        .then((response) => {
-            return response;
-        })
-        .catch((err) => {
-            return err;
-        })
+async function deleteCategoryStep(id) {
+    // return await axios.delete(config.baseUrl + 'step/' + id, getOptions())
+    //     .then((response) => {
+    //         return response;
+    //     })
+    //     .catch((err) => {
+    //         return err;
+    //     })
+    try {
+        const response = await axios.delete(config.baseUrl + `step/${id}`, getOptions());
+        return response;
+    }
+    catch(err) {
+        return err;
+    }
 }
 
 function deleteProduct(id) {

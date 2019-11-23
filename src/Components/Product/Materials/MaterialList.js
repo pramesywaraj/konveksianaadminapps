@@ -112,17 +112,16 @@ function Loading() {
     )
 }
 
-function MaterialMap(props) {
+function MaterialMap({materials, handleDelete}) {
     const classes = styles();
-    let materials = props.materialData;
 
-    if(materials.length > 0) {
+    if(materials !== null && materials.length > 0) {
         return (
             materials.map((material) => (
                 <MaterialCard 
                     key={material._id} 
                     material={material} 
-                    handleDelete={() => props.handleDelete(material._id, material.name)}
+                    handleDelete={() => handleDelete(material._id, material.name)}
                 />
             ))
             
@@ -141,9 +140,12 @@ function MaterialMap(props) {
 
 export default function MaterialList(props) {
     const classes = styles();
-    const [loading, setLoading] = useState(false);
-    const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
-    const [materialData, setMaterialData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [submittedNewMaterial, setSubmittedNewMaterial] = useState(null);
+    const [deletedMaterialId, setDeletedMaterialId] = useState(null);
+    const [materialData, setMaterialData] = useState({
+        materials: null
+    });
     const [newMaterial, setNewMaterial] = useState({
         name: '',
         priceMargin: '',
@@ -157,13 +159,10 @@ export default function MaterialList(props) {
     });
 
     useEffect(() => {
-        setLoading(true);
-
         if(props.productId !== '') {
             fetchData();
         } else {
             setLoading(false);
-            setMaterialData([]);
         }
         // This comment was made for prevent warning to showed up
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -171,42 +170,114 @@ export default function MaterialList(props) {
 
     // Effect working when update the data
     useEffect(() => {
-        if(dataUpdate) {
-            setLoading(true);
-            fetchData();
-            setUpdate(false);
+        if(submittedNewMaterial !== null) {
+            setMaterialData({
+                materials: materialData.materials.concat(submittedNewMaterial)
+            });
+
+            setLoading(false);
+        
+            handleModalClose();
+        
+            setNewMaterial({
+                name: '',
+                priceMargin: '',
+                productId: ''
+            });
+        }
+
+        return () => {
+            setSubmittedNewMaterial(null);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataUpdate]);
+    }, [submittedNewMaterial, setSubmittedNewMaterial]);
 
-    const fetchData = () => {
-        productService.getMaterial(props.productId)
+    useEffect(() => {
+        if(deletedMaterialId !== null) {
+            let newMaterialData = materialData.materials.filter(material => material._id !== deletedMaterialId);
+            setMaterialData({
+                materials: newMaterialData
+            })
+            setLoading(false);
+        }
+
+        return () => {
+            setDeletedMaterialId(null);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [deletedMaterialId, setDeletedMaterialId]);
+
+    const fetchData = async () => {
+        await productService.getMaterial(props.productId)
         .then((res) => {
-            if(res.data.material !== [] || res.data.material.length > 0) {
-                setLoading(false);
-                setMaterialData(res.data.material);
+            if(res.status !== 200) {
+                snackBarOpenAction(false, 'Terjadi kesalahan ketika memuat data.');
+                return;
             }
+
+            setMaterialData({
+                materials: res.data.material
+            });
+            setLoading(false);
         })
         .catch((err) => {
-            setLoading(false);
             console.log(err);
+            snackBarOpenAction(false, 'Terjadi kesalahan ketika memuat data.');
+            setLoading(false);
         });
     }
 
-    const handleNewMaterialChange = (e) => {
-        setNewMaterial({
-            ...newMaterial,
-            productId: props.productId,
-            [e.target.name]: e.target.value
-        })
+    const submitNewMaterial = async () => {
+        if(newMaterial.name === '' && newMaterial.productId === '' && newMaterial.priceMargin === '') {
+            snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
+            return;
+        }
+
+        await productService.postNewMaterial(newMaterial)
+            .then((res) => {
+                if(res.data.errors || res.status !== 201) {
+                    snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
+                    handleModalClose();
+                    return;
+                }
+
+                const submittedNewMaterial = {  
+                    _id: res.data.material._id,
+                    name: newMaterial.name,
+                    priceMargin: newMaterial.priceMargin,
+                    product: newMaterial.productId
+                }
+                snackBarOpenAction(true, `Berhasil menambahkan Produk baru.`);
+                setSubmittedNewMaterial(submittedNewMaterial);
+            })
+            .catch((err) => {
+                console.log(err);
+                snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
+                handleModalClose();
+            })
     }
 
-    const handleModalOpen = () => {
-        if(props.productId === '' || props.productId === null || props.productId === undefined) {
-            alert('Silahkan pilih Kategori terlebih dahulu sebelum membuat jenis produk baru!');
-        } else {
-            setModalOpenClose(true);
-        }
+    const handleDelete = async (id, name) => {
+        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus jenis Material ${name}?`);
+
+        if(!confirm) return;
+        
+        setLoading(true);
+        await productService.deleteMaterial(id)
+            .then((res) => {
+                if(res.data.errors || res.status !== 201) {
+                    snackBarOpenAction(false, 'Terjadi kesalahan ketika menghapus data.');
+                    handleModalClose();
+                    return;
+                }
+                snackBarOpenAction(true, `${name} berhasil dihapus.`);
+                setDeletedMaterialId(id);
+            })
+            .catch((err) => {
+                console.log(err);
+                snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
+                setLoading(false);
+            })
     }
 
     const handleModalClose = () => {
@@ -229,53 +300,20 @@ export default function MaterialList(props) {
         })
     }
 
-    const submitNewMaterial = () => {
-        if(newMaterial.name === '' && newMaterial.productId === '' && newMaterial.priceMargin === '') {
-            snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
+    const handleModalOpen = () => {
+        if(props.productId === '' || props.productId === null || props.productId === undefined) {
+            alert('Silahkan pilih Kategori terlebih dahulu sebelum membuat jenis produk baru!');
         } else {
-            productService.postNewMaterial(newMaterial)
-                .then((res) => {
-                    console.log(res);
-                    if(res.status === 201) {
-                        snackBarOpenAction(true, 'Berhasil membuat jenis Produk baru.');
-                        handleModalClose();
-                        setUpdate(true);
-                    } else if(res.data.errors) {
-                        snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
-                        handleModalClose();
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
-                    handleModalClose();
-                })
+            setModalOpenClose(true);
         }
     }
 
-    const handleDelete = (id, name) => {
-        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus jenis Material ${name}?`);
-        setLoading(true);
-
-        if(confirm) {
-            productService.deleteMaterial(id)
-                .then((res) => {
-                    if(res.status === 201) {
-                        // Manipulate the array when deleting the data
-                        // let newProductData = productData.filter(category => category._id !== id);
-                        // setProductData(newProductData);
-                        setLoading(false);
-                        snackBarOpenAction(true, `${name} berhasil dihapus.`);
-                        setUpdate(true);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
-                    setLoading(false);
-                })
-        }
-        
+    const handleNewMaterialChange = (e) => {
+        setNewMaterial({
+            ...newMaterial,
+            productId: props.productId,
+            [e.target.name]: e.target.value
+        })
     }
 
     return (
@@ -293,7 +331,7 @@ export default function MaterialList(props) {
                             <Loading />
                         ) : (
                             <MaterialMap 
-                                materialData={materialData}
+                                materials={materialData.materials}
                                 handleDelete={handleDelete}
                             />
                         )

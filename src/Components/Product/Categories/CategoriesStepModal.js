@@ -135,16 +135,15 @@ export default function CategoriesStepModal(props) {
     useEffect(() => {
         if(submittedStep !== null) {
             setData({steps: data.steps.concat(submittedStep)});
+            setLoading(false);
+
+            setNewStep({
+                'name': '',
+                'queue': '',
+                'categoryId': '',
+            });
         }
 
-        setLoading(false);
-
-        setNewStep({
-            'name': '',
-            'queue': '',
-            'categoryId': '',
-        });
-        
         return () => {
             setSubmittedStep(null);
         }

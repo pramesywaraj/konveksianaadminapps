@@ -145,7 +145,10 @@ export default function CategoriesStepModal(props) {
             'categoryId': '',
         });
         
-
+        return () => {
+            setSubmittedStep(null);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [submittedStep, setSubmittedStep]);
 
     useEffect(() => {
@@ -158,6 +161,10 @@ export default function CategoriesStepModal(props) {
             setLoading(false);
         }
 
+        return () => {
+            setDeletedStepId(null);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [deletedStepId, setDeletedStepId]);
 
     const fetchCategorySteps = async () => {

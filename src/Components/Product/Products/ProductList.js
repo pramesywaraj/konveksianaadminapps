@@ -140,7 +140,9 @@ export default function ProductList(props) {
             });
         }
 
-        
+        return () => {
+            setDeletedProductId(null);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [submittedNewProduct, setNewSubmittedProduct]);
 
@@ -158,8 +160,8 @@ export default function ProductList(props) {
         return () => {
             setDeletedProductId(null);
         }
-        // let newProductData = productData.filter(category => category._id !== id);
-        // setProductData(newProductData);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [deletedProductId, setDeletedProductId])
 
     const fetchData = async () => {

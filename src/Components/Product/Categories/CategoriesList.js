@@ -199,20 +199,15 @@ export default function CategoriesList(props) {
     }
 
     useEffect(() => {
-        setLoading(true);        
         const checkCategories = () => {
             if(props.categories.length > 0) {
                 setCategoryData(props.categories);
+                setLoading(false);
             }
             
-            setLoading(false);
         }
-        
         checkCategories();
-
-        // return () => {
-            
-        // }
+        
     }, [props.categories]);
 
     return (

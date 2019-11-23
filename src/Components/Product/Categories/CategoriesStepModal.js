@@ -79,11 +79,10 @@ const Step = (props) => {
 }
 
 export default function CategoriesStepModal(props) {
+    const [loading, setLoading] = useState(true);
     const [data, setData] = useState({
         steps: null
     });
-    const [loading, setLoading] = useState(true);
-    // const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
     const [submittedStep, setSubmittedStep] = useState(null);
     const [deletedStepId, setDeletedStepId] = useState(null);
     const [lastQueueNumber, setNextQueueNumber] = useState(0);
@@ -98,7 +97,6 @@ export default function CategoriesStepModal(props) {
 
     useEffect(() => {
         fetchCategorySteps();
-        setLoading(false);
         return () => {
             setNewStep({
                 'name': '',
@@ -125,10 +123,9 @@ export default function CategoriesStepModal(props) {
                     let singleObj = data.steps[length-2];
                     nextQueue = singleObj.queue + 1;
                 }
+                setNextQueueNumber(nextQueue);
             }
            
-    
-            setNextQueueNumber(nextQueue);
         };
 
         lastQueueNumberArray();
@@ -149,7 +146,7 @@ export default function CategoriesStepModal(props) {
         });
         
 
-    }, [submittedStep]);
+    }, [submittedStep, setSubmittedStep]);
 
     useEffect(() => {
         if(deletedStepId !== null) {
@@ -158,14 +155,14 @@ export default function CategoriesStepModal(props) {
             setData({
                 steps: newAarray
             })
+            setLoading(false);
         }
 
-        setLoading(false);
-
-    }, [deletedStepId]);
+    }, [deletedStepId, setDeletedStepId]);
 
     const fetchCategorySteps = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(
                 `${config.baseUrl}step/categoryStep/${categoryId}`, 
                 {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}}
@@ -174,6 +171,7 @@ export default function CategoriesStepModal(props) {
             setData({
                 steps: response.data.step
             });
+            setLoading(false);
         }
         catch (err) {
             console.log(err);
@@ -195,8 +193,6 @@ export default function CategoriesStepModal(props) {
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }}
             );
-
-            console.log(response);
             
             const submittedNewStep = await {
                 _id: response.data.step._id,
@@ -286,7 +282,7 @@ export default function CategoriesStepModal(props) {
                     </Button>
                 </div>
                 <div>
-                    {loading ? <CircularProgress className={classes.progress} /> 
+                    {loading ? (<CircularProgress className={classes.progress} /> )
                         : 
                         <div className={classes.flexContainerColumn}>
                             {

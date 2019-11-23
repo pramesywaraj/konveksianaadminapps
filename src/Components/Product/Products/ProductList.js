@@ -94,9 +94,12 @@ const ProductModal = (props) => {
 
 export default function ProductList(props) {
     const classes = styles();
-    const [loading, setLoading] = useState(false);
-    const [dataUpdate, setUpdate] = useState(false); // Parameter for controlling useEffect when updating the data
-    const [productData, setProductData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [submittedNewProduct, setNewSubmittedProduct] = useState(null);
+    const [deletedProductId, setDeletedProductId] = useState(null);
+    const [productData, setProductData] = useState({
+        products: null
+    });
     const [newProduct, setNewProduct] = useState({
         name: '',
         categoryId: ''
@@ -108,43 +111,74 @@ export default function ProductList(props) {
         isSuccess: false
     });
 
-    const fetchData = () => {
-        productService.getProduct(props.categoryId)
-            .then((res) => {
-                if(res.data.product !== [] || res.data.product.length > 0) {
-                    setLoading(false);
-                    setProductData(res.data.product);
-                }
-            })
-            .catch((err) => {
-                setLoading(false);
-                console.log(err);
-            });
-    }
-
-    // if categoryId change
+      // if categoryId change
     useEffect(() => {
-        setLoading(true);
-        console.log('Mounted');
-        if(props.categoryId !== '') {
-            fetchData();
-        } else {
+        if(props.categoryId === '') {
             setLoading(false);
-        }
+            return;
+        } 
+
+        fetchData();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.categoryId]);
 
-    // Effect working when update the data
+    // Effect working when adding new data
     useEffect(() => {
-        if(dataUpdate) {
-            setLoading(true);
-            fetchData();
-            setUpdate(false);
+        if(submittedNewProduct !== null) {
+            setProductData({
+                products: productData.products.concat(submittedNewProduct)
+            });
+
+            setLoading(false);
+        
+            handleModalClose();
+        
+            setNewProduct({
+                name: '',
+                categoryId: ''
+            });
         }
+
+        
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataUpdate]);
+    }, [submittedNewProduct, setNewSubmittedProduct]);
+
+    // This effect is for deleting an object
+    useEffect(() => {
+        // Manipulate the array when deleting the data
+        if(deletedProductId !== null) {
+            let newProductData = productData.products.filter(product => product._id !== deletedProductId);
+            setProductData({
+                products: newProductData
+            })
+            setLoading(false);
+        }
+
+        return () => {
+            setDeletedProductId(null);
+        }
+        // let newProductData = productData.filter(category => category._id !== id);
+        // setProductData(newProductData);
+    }, [deletedProductId, setDeletedProductId])
+
+    const fetchData = async () => {
+        await productService.getProduct(props.categoryId)
+            .then((res) => {
+                setProductData({
+                    products: res.data.product
+                });
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                snackBarOpenAction(false, `Terjadi kesalahan dalam pengambilan data Produk.`);
+                setLoading(false);
+            });        
+    }
 
     const handleNewProductChange = (e) => {
+        e.preventDefault();
         setNewProduct({
             categoryId: props.categoryId,
             [e.target.name]: e.target.value
@@ -179,65 +213,65 @@ export default function ProductList(props) {
         })
     }
 
-    const submitNewProduct = () => {
+    const submitNewProduct = async () => {
         if(newProduct.name === '' && newProduct.categoryId === '') {
             snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
             return;
-        } else {
-            productService.postNewProduct(newProduct)
-                .then((res) => {
-                    console.log(res);
-                    if(res.status === 201) {
-                        snackBarOpenAction(true, 'Berhasil membuat jenis Produk baru.');
-                        handleModalClose();
-                        setUpdate(true);
-                    } else if(res.data.errors) {
-                        snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
-                        handleModalClose();
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
-                    handleModalClose();
-                })
         }
 
-        setNewProduct({
-            name: '',
-            categoryId: ''
-        })
-    }
-
-    const handleDelete = (id, name) => {
-        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus jenis Produk ${name}?`);
         setLoading(true);
 
-        if(confirm) {
-            productService.deleteProduct(id)
-                .then((res) => {
-                    if(res.status === 201) {
-                        // Manipulate the array when deleting the data
-                        // let newProductData = productData.filter(category => category._id !== id);
-                        // setProductData(newProductData);
-                        setLoading(false);
-                        snackBarOpenAction(true, `${name} berhasil dihapus.`);
-                        setUpdate(true);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
-                    setLoading(false);
-                })
-        }
+        await productService.postNewProduct(newProduct)
+            .then((res) => {
+                if(res.data.errors || res.status !== 201) {
+                    snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
+                    handleModalClose();
+                    return;
+                }
+
+                const submittedNewProduct = {  
+                    _id: res.data.product._id,
+                    name: newProduct.name,
+                    material: [],
+                    category: newProduct.categoryId
+                }
+                snackBarOpenAction(true, `Berhasil menambahkan Produk baru.`);
+                setNewSubmittedProduct(submittedNewProduct);
+            })
+            .catch((err) => {
+                console.log(err);
+                snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
+                handleModalClose();
+            })
+    }
+
+    const handleDelete = async (id, name) => {
+        let confirm = window.confirm(`Apakah Anda yakin untuk menghapus jenis Produk ${name}?`);
+
+        if(!confirm) return;
+
+        await productService.deleteProduct(id)
+        .then((res) => {
+            if(res.data.errors || res.status !== 201) {
+                snackBarOpenAction(false, 'Terjadi kesalahan ketika menghapus data.');
+                handleModalClose();
+                return;
+            }
+            
+            snackBarOpenAction(true, `${name} berhasil dihapus.`);
+            setDeletedProductId(id);
+        })
+        .catch((err) => {
+            console.log(err);
+            snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
+            setLoading(false);
+        })
         
     }
 
 
     return (
         <React.Fragment>
-
         <Paper className={classes.paper}>
             <Box display='flex' flexDirection='row-reverse'>
                 <Button 
@@ -253,9 +287,9 @@ export default function ProductList(props) {
             <div className={classes.contentLayout}>
                 {loading ? (
                     <CircularProgress className={classes.progress} />
-                ) : (
-                    productData.length > 0 ? (
-                        productData.map((product) => {
+                ) :
+                    productData.products !== null && productData.products.length > 0 ? (
+                        productData.products.map((product) => {
                             let selected = props.selected;
                             return (
                                 <ProductCard 
@@ -280,7 +314,7 @@ export default function ProductList(props) {
                                 Tidak ada produk untuk ditampilkan.
                             </Typography> 
                         )
-                )}
+                }
             </div>
         </Paper>
         <ProductModal 

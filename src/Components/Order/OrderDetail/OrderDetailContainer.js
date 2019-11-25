@@ -6,8 +6,8 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
-import OrderPhotos from "../OrderDetail/OrderPhotos";
-
+import OrderPhotos from "./OrderPhotos";
+import OrderDescription from "./OrderDescription"
 const styles = makeStyles(theme => ({
     root: {
         width: "100%",
@@ -48,7 +48,7 @@ export default function OrderDetailContainer() {
             const response = await axios.get(`${config.baseUrl}order/id/${orderId}`, {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }
             });
-
+            console.log(response);
             setOrderData(response.data.order);
         } catch (err) {
             console.log(err);
@@ -61,7 +61,7 @@ export default function OrderDetailContainer() {
             <div className={classes.gridWrapper}>
                 <Grid container spacing={3}>
                     <Grid item xs={6}>
-                        <Paper className={classes.paper}>xs=6</Paper>
+                        <OrderDescription />
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.paper}>xs=6</Paper>

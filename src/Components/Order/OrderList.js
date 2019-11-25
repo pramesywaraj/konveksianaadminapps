@@ -29,8 +29,9 @@ const styles = makeStyles(
             cursor: 'pointer'
         },
         progress: {
-            margin: '10% auto',
-            display: 'table'
+            position: "absolute",
+            top: "50%",
+            left: "50%",
         },
         
         noOrder: {
@@ -41,7 +42,9 @@ const styles = makeStyles(
 
         tableWrapper: {
             textAlign: 'center',
-            maxHeight: 500
+            height: 500,
+            maxHeight: 500,
+            position: "relative"
         }
 
     })
@@ -50,14 +53,15 @@ const styles = makeStyles(
 const OrderList = (props) => {
     const classes = styles();
     const [orders, setOrders] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         setOrders(props.orders);
         setTimeout(() => {
             setLoading(false);
         }, 2000)
-    }, [props.orders])
+    }, [props.orders, orders])
 
     return(
         <Paper className={classes.root}>
@@ -70,7 +74,7 @@ const OrderList = (props) => {
             </Typography>
             <div className={classes.tableWrapper}>
                 {
-                    loading ? <CircularProgress /> 
+                    loading ? <CircularProgress className={classes.progress} /> 
                         : (
                             <OrderTable
                                 orders={orders}

@@ -17,6 +17,10 @@ const styles = makeStyles(
             flexWrap: 'nowrap',
             justifyContent: 'space-evenly',
             padding: 30
+        },
+        image: {
+            width: 200,
+            height: 200
         }
 
     })
@@ -28,7 +32,11 @@ export default function OrderPhotos() {
     return (
         <Paper className={classes.root}>
             <div className={classes.imageContainer}>
-                <img src='http://via.placeholder.com/200x200' />
+                <img 
+                    className={classes.image}
+                    alt="Gambar Tampak Desain Pengguna" 
+                    src={require('../../../Assets/konveksiana-logo.svg')} 
+                />
             </div>
         </Paper>
     )

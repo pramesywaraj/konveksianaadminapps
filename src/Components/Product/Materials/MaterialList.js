@@ -82,6 +82,16 @@ const MaterialModal = (props) => {
                     onChange={props.handleNewMaterialChange}
                 />
                 <TextField
+                    label="Berat (Gram)"
+                    name="weight"
+                    className={classes.formField}
+                    value={props.newMaterial.weight}
+                    margin="normal"
+                    type="number"
+                    variant="outlined"
+                    onChange={props.handleNewMaterialChange}
+                />
+                <TextField
                     label="Harga Material Perkiraan"
                     name="priceMargin"
                     className={classes.formField}
@@ -148,6 +158,7 @@ export default function MaterialList(props) {
     });
     const [newMaterial, setNewMaterial] = useState({
         name: '',
+        weight: '',
         priceMargin: '',
         productId: ''
     }); 
@@ -181,6 +192,7 @@ export default function MaterialList(props) {
         
             setNewMaterial({
                 name: '',
+                weight: '',
                 priceMargin: '',
                 productId: ''
             });
@@ -228,7 +240,7 @@ export default function MaterialList(props) {
     }
 
     const submitNewMaterial = async () => {
-        if(newMaterial.name === '' && newMaterial.productId === '' && newMaterial.priceMargin === '') {
+        if(newMaterial.name === '' && newMaterial.productId === '' && newMaterial.priceMargin === '' && newMaterial.weight === '') {
             snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
             return;
         }
@@ -244,6 +256,7 @@ export default function MaterialList(props) {
                 const submittedNewMaterial = {  
                     _id: res.data.material._id,
                     name: newMaterial.name,
+                    weight: newMaterial.weight,
                     priceMargin: newMaterial.priceMargin,
                     product: newMaterial.productId
                 }

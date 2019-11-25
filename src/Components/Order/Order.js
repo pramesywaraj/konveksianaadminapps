@@ -29,7 +29,6 @@ class Order extends Component {
 
 
     render() {
-        const { classes } = this.props;
         const { orders } = this.props.orders;
 
         return(

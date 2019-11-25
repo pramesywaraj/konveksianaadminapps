@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -68,48 +68,56 @@ export default function OrderDescription({}) {
             </Typography>
             <div>
                 <table className={classes.userInformationTable}>
-                    <tr>
-                        <td class="placeholder">Nama :</td>
-                        <td>Mamat Abdurahman</td>
-                    </tr>
-                    <tr>
-                        <td class="placeholder">Alamat :</td>
-                        <td>Jalan Jendral Sudirman No. 80, RT 10 RW 12, Kabupaten Bogor, Jawa Barat</td>
-                    </tr>
-                    <tr>
-                        <td class="placeholder">Kontak WA :</td>
-                        <td>08123209320</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td className="placeholder">Nama :</td>
+                            <td>Mamat Abdurahman</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Alamat :</td>
+                            <td>Jalan Jendral Sudirman No. 80, RT 10 RW 12, Kabupaten Bogor, Jawa Barat</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Kontak WA :</td>
+                            <td>08123209320</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div>
                 <Typography
                     component="div"
-                    align="Left"
+                    align="left"
                 >
                     Detil barang yang dipesan
                 </Typography>
                 <table className={classes.userInformationTable}>
-                    <tr>
-                        <td class="placeholder">Kategori :</td>
-                        <td>Jaket</td>
-                    </tr>
-                    <tr>
-                        <td class="placeholder">Produk :</td>
-                        <td>Parka</td>
-                    </tr>
-                    <tr>
-                        <td class="placeholder">Material :</td>
-                        <td>Taslan</td>
-                    </tr>
-                    <tr>
-                        <td class="placeholder">Jumlah :</td>
-                        <td>20 pcs</td>
-                    </tr>
-                    <tr>
-                        <td class="placeholder">Catatan :</td>
-                        <td>Ada gambar hello kitty nya sekitar dada</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td className="placeholder">Kategori :</td>
+                            <td>Jaket</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Produk :</td>
+                            <td>Parka</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Material :</td>
+                            <td>Taslan</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Warna :</td>
+                            <td>Hijau</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Jumlah :</td>
+                            <td>20 pcs</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Catatan :</td>
+                            <td>Ada gambar hello kitty nya sekitar dada</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <PriceChangerSection />

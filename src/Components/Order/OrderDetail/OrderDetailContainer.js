@@ -7,7 +7,9 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
 import OrderPhotos from "./OrderPhotos";
-import OrderDescription from "./OrderDescription"
+import OrderDescription from "./OrderDescription";
+import OrderPriceConfirmation from "./OrderPriceConfirmation";
+
 const styles = makeStyles(theme => ({
     root: {
         width: "100%",
@@ -64,7 +66,7 @@ export default function OrderDetailContainer() {
                         <OrderDescription />
                     </Grid>
                     <Grid item xs={6}>
-                        <Paper className={classes.paper}>xs=6</Paper>
+                        <OrderPriceConfirmation />
                     </Grid>
                 </Grid>
             </div>

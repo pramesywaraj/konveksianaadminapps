@@ -37,6 +37,10 @@ export default function OrderDetailContainer() {
         if (orderId !== "") {
             fetchOrder();
         }
+
+        return () => {
+            setOrderData(null);
+        }
     }, [orderId]);
 
     const fetchOrder = async () => {

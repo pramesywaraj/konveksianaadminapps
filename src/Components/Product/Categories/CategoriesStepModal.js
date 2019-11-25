@@ -97,6 +97,8 @@ export default function CategoriesStepModal(props) {
 
     useEffect(() => {
         fetchCategorySteps();
+
+        console.log(data.steps)
         return () => {
             setNewStep({
                 'name': '',
@@ -293,7 +295,7 @@ export default function CategoriesStepModal(props) {
                         <div className={classes.flexContainerColumn}>
                             {
                                 
-                                data.steps !== [] && data.steps !== null ? (
+                                data.steps.length > 0 && data.steps !== null ? (
                                     data.steps.map((step) => {
                                         return (
                                             <Step key={step._id} step={step} onDeleteHandle={() => deleteCategoryStep(step._id)} />

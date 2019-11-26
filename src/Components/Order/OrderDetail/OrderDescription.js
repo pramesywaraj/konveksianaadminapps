@@ -53,7 +53,7 @@ function PriceChangerSection() {
     )
 }
 
-export default function OrderDescription({user, goods}) {
+export default function OrderDescription({user, goods, isOnProcess}) {
     const classes = styles();
 
     return (
@@ -131,7 +131,7 @@ export default function OrderDescription({user, goods}) {
                     </tbody>
                 </table>
             </div>
-            <PriceChangerSection />
+            {isOnProcess && <PriceChangerSection />}
         </Paper>
     )
 }

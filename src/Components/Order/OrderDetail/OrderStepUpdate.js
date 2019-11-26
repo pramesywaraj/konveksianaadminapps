@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
+import config from "../../../Services/config";
+import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -39,15 +41,31 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-export default function OrderStepUpdate({}) {
+export default function OrderStepUpdate({steps, categoryId}) {
     const classes = styles();
     const [age, setAge] = useState('');
+    const [availableStep, setAvailableStep] = useState([]);
 
     const inputLabel = useRef(null);
 
     const handleChange = event => {
         setAge(event.target.value);
     };
+
+    useEffect(() => {
+        const fetchAvailableStep = async () => {
+            try {
+                const response = await axios.get(`${config.baseUrl}step/categorystep/${categoryId}`, {
+                    headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+                });
+                setAvailableStep(response.data.step);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        if(categoryId !== '') fetchAvailableStep();
+    }, [])
 
 
     return (
@@ -72,29 +90,24 @@ export default function OrderStepUpdate({}) {
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {availableStep.map(step => (
+                        <MenuItem value={step._id}>{step.name}</MenuItem>
+                    ))}
                 </TextField>
                 <Button variant="contained" color="primary">
                     Perbarui
                 </Button>
             </div>
             <div className={classes.flexContainerColumn}>
-                <Typography
+                {steps.map((step, index) => (
+                    <Typography
                     variant="body1"
                     component="div"
                     align="left"
-                >
-                    1. Pending
-                </Typography>
-                <Typography
-                    variant="body1"
-                    component="div"
-                    align="left"
-                >
-                    2. Ngerjain
-                </Typography>
+                    >
+                        {index}. {step.name}
+                    </Typography>
+                ))}
             </div>
         </Paper>
     )

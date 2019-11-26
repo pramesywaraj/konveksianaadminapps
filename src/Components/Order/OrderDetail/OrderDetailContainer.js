@@ -94,12 +94,24 @@ export default function OrderDetailContainer() {
                                 quantity: orderData.quantity,
                                 description: orderData.description
                             }}
+                            isOnProcess={orderData.status.isOnProcess}
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <OrderPriceConfirmation />
-                        <OrderStepUpdate />
-                        <OrderPriceUpdate />
+                        {orderData.status.isPending ? (
+                            <OrderPriceConfirmation />
+                        ) : ''}
+
+                        {orderData.status.isOnProcess ? (
+                            <React.Fragment>
+                                <OrderStepUpdate 
+                                    steps={orderData.orderStep}
+                                    categoryId={orderData.material.product.category._id}
+                                />
+                                <OrderPriceUpdate />
+                            </React.Fragment>
+                        ) : ''}
+                        
                     </Grid>
                 </Grid>
             </div>

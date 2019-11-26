@@ -90,7 +90,7 @@ function OrderTable({orders}) {
     const classes = styles();
     if(orders !== null && orders !== [])
     return (
-        <Table stickyHeader className={classes.table}>
+        <Table stickyheader="true" className={classes.table}>
             <TableHead>
                 <TableRow>
                     <TableCell>Pelanggan</TableCell>

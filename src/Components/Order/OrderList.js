@@ -89,13 +89,14 @@ const OrderList = (props) => {
 function OrderTable({orders}) {
     const classes = styles();
     return (
-        <Table className={classes.table}>
-            <TableHead stickyHeader>
+        <Table stickyHeader className={classes.table}>
+            <TableHead>
                 <TableRow>
                     <TableCell>Pelanggan</TableCell>
                     <TableCell align="right">Tanggal Masuk</TableCell>
                 </TableRow>
             </TableHead>
+            {/* Need to fix this, warning message that Typography can't be inside Tables */}
             <TableBody>
                 {orders !== null && orders !== [] ? (orders.map(order => (
                     <TableRow 

@@ -39,7 +39,7 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-export default function OrderStepUpdate({}) {
+export default function OrderPriceUpdate({}) {
     const classes = styles();
     const [age, setAge] = useState('');
 
@@ -57,15 +57,14 @@ export default function OrderStepUpdate({}) {
                 component="div"
                 align="left"
             >
-                Perbarui Langkah Pengerjaan
+                Catatan Pembayaran
             </Typography>
             <div className={classes.flexContainer}>
                 <TextField
-                    select
                     className={classes.stepSelect}
                     variant="outlined"
-                    label="Langkah"
-                    value={age}
+                    label="Jumlah Nominal"
+                    value={0}
                     onChange={handleChange}
                     inputProps={{ name: "age", id: "outlined-age-simple" }}
                 >
@@ -86,14 +85,7 @@ export default function OrderStepUpdate({}) {
                     component="div"
                     align="left"
                 >
-                    1. Pending
-                </Typography>
-                <Typography
-                    variant="body1"
-                    component="div"
-                    align="left"
-                >
-                    2. Ngerjain
+                    1. Rp.20000 --- Desember 2019
                 </Typography>
             </div>
         </Paper>

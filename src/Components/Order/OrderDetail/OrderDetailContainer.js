@@ -5,11 +5,13 @@ import config from "../../../Services/config";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 import OrderPhotos from "./OrderPhotos";
 import OrderDescription from "./OrderDescription";
 import OrderPriceConfirmation from "./OrderPriceConfirmation";
 import OrderStepUpdate from "./OrderStepUpdate";
+import OrderPriceUpdate from "./OrderPriceUpdate";
+
 
 const styles = makeStyles(theme => ({
     root: {
@@ -44,34 +46,58 @@ export default function OrderDetailContainer() {
         return () => {
             setOrderData(null);
         }
-    }, [orderId]);
+    }, []);
+
+    useEffect(() => {
+        console.log(orderData);
+    }, [orderData]); 
 
     const fetchOrder = async () => {
         try {
             const response = await axios.get(`${config.baseUrl}order/id/${orderId}`, {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }
             });
-            console.log(response);
             setOrderData(response.data.order);
         } catch (err) {
             console.log(err);
         }
     };
 
-    return (
+    if(orderData !== null) return (
         <div>
             <OrderPhotos />
             <div className={classes.gridWrapper}>
                 <Grid container spacing={3}>
                     <Grid item xs={6}>
-                        <OrderDescription />
+                        <OrderDescription 
+                            user={{
+                                name: orderData.user.name,
+                                city: orderData.city,
+                                address: orderData.detailAddress,
+                                phone: orderData.phoneNumber
+                            }}
+                            goods={{
+                                baseId: orderData.baseId,
+                                courier: orderData.courier,
+                                category: orderData.material.product.category.name,
+                                product: orderData.material.product.name,
+                                material: orderData.material.name,
+                                color: orderData.color,
+                                quantity: orderData.quantity,
+                            }}
+                        />
                     </Grid>
                     <Grid item xs={6}>
                         <OrderPriceConfirmation />
                         <OrderStepUpdate />
+                        <OrderPriceUpdate />
                     </Grid>
                 </Grid>
             </div>
         </div>
     );
+
+    return (
+        <CircularProgress />
+    )
 }

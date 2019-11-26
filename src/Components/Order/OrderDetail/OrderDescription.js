@@ -14,7 +14,7 @@ const styles = makeStyles(theme => ({
         width: '100%',
         padding: "20px 0",
         '& .placeholder': {
-            width: "20%"
+            width: "23%"
         }
     },
     flexContainer: {
@@ -53,7 +53,7 @@ function PriceChangerSection() {
     )
 }
 
-export default function OrderDescription({}) {
+export default function OrderDescription({user, goods}) {
     const classes = styles();
 
     return (
@@ -70,15 +70,19 @@ export default function OrderDescription({}) {
                     <tbody>
                         <tr>
                             <td className="placeholder">Nama :</td>
-                            <td>Mamat Abdurahman</td>
+                            <td>{user.name}</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Kota :</td>
+                            <td>{user.city}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Alamat :</td>
-                            <td>Jalan Jendral Sudirman No. 80, RT 10 RW 12, Kabupaten Bogor, Jawa Barat</td>
+                            <td>{user.address}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Kontak WA :</td>
-                            <td>08123209320</td>
+                            <td>{user.phone}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -93,24 +97,32 @@ export default function OrderDescription({}) {
                 <table className={classes.userInformationTable}>
                     <tbody>
                         <tr>
+                            <td className="placeholder">Kode Pesanan :</td>
+                            <td>{goods.baseId}</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Kurir Dipilih :</td>
+                            <td>{goods.courier}</td>
+                        </tr>
+                        <tr>
                             <td className="placeholder">Kategori :</td>
-                            <td>Jaket</td>
+                            <td>{goods.category}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Produk :</td>
-                            <td>Parka</td>
+                            <td>{goods.product}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Material :</td>
-                            <td>Taslan</td>
+                            <td>{goods.material}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Warna :</td>
-                            <td>Hijau</td>
+                            <td>{goods.color}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Jumlah :</td>
-                            <td>20 pcs</td>
+                            <td>{goods.quantity}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Catatan :</td>

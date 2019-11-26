@@ -71,6 +71,22 @@ export default function OrderDetailContainer() {
         }
     };
 
+    const confirmOrder = async (price) => {
+        try {
+            console.log(`Order Accepted with price ${price}`);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const rejectOrder = async () => {
+        try {
+            console.log(`Order Rejected`);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     if(orderData !== null) return (
         <div>
             <OrderPhotos />
@@ -98,9 +114,12 @@ export default function OrderDetailContainer() {
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        {orderData.status.isPending ? (
-                            <OrderPriceConfirmation />
-                        ) : ''}
+                        {orderData.status.isPending && (
+                            <OrderPriceConfirmation 
+                                confirmOrder={confirmOrder}
+                                rejectOrder={rejectOrder}
+                            />
+                        )}
 
                         {orderData.status.isOnProcess ? (
                             <React.Fragment>

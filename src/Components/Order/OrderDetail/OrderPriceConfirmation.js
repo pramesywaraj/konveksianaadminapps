@@ -37,8 +37,18 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-export default function OrderPriceConfirmation({}) {
+export default function OrderPriceConfirmation({confirmOrder, rejectOrder}) {
     const classes = styles();
+    const [price, setPrice] = useState(0);
+
+    const handleChange = (e) => {
+        e.preventDefault();
+        setPrice(e.target.value);
+    }
+
+    const handleOnAccept = () => {
+        confirmOrder(price);
+    }
 
     return (
         <Paper className={classes.paper}>
@@ -51,6 +61,8 @@ export default function OrderPriceConfirmation({}) {
             </Typography>
             <div className={classes.flexContainer}>
                 <TextField
+                    value={price}
+                    onChange={handleChange}
                     name="price"
                     className={classes.textField}
                     label="Harga"
@@ -61,10 +73,17 @@ export default function OrderPriceConfirmation({}) {
                 />
             </div>
             <div className={classes.buttonSection}>
-                <Button variant="contained" className={classes.acceptButton}>
+                <Button 
+                    variant="contained" 
+                    className={classes.acceptButton}
+                    onClick={handleOnAccept}
+                >
                     Terima
                 </Button>
-                <Button variant="contained">
+                <Button 
+                    variant="contained"
+                    onClick={() => rejectOrder()}
+                >
                     Tolak
                 </Button>
             </div>

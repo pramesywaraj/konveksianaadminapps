@@ -1,7 +1,7 @@
 {
   "name": "konveksiana",
   "author": "Pramesywara Jembar Panalar",
-  "homepage": "http://admin.konveksiana.id",
+  "homepage": "https://admin.konveksiana.id/",
   "version": "0.1.1",
   "private": true,
   "dependencies": {
@@ -26,7 +26,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "rm -rf build"
   },
   "eslintConfig": {
     "extends": "react-app"

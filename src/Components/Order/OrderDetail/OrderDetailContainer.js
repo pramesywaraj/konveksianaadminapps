@@ -17,7 +17,7 @@ const styles = makeStyles(theme => ({
     root: {
         width: "100%",
         marginTop: theme.spacing(1),
-        overflowX: "auto"
+        overflowX: "auto",
     },
 
     gridWrapper: {
@@ -30,6 +30,14 @@ const styles = makeStyles(theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+
+    centerProgress: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: 300
+    }
+
 }));
 
 export default function OrderDetailContainer() {
@@ -84,6 +92,7 @@ export default function OrderDetailContainer() {
                                 material: orderData.material.name,
                                 color: orderData.color,
                                 quantity: orderData.quantity,
+                                description: orderData.description
                             }}
                         />
                     </Grid>
@@ -98,6 +107,8 @@ export default function OrderDetailContainer() {
     );
 
     return (
-        <CircularProgress />
+        <div className={classes.centerProgress}>
+            <CircularProgress />
+        </div>
     )
 }

@@ -88,6 +88,7 @@ const OrderList = (props) => {
 
 function OrderTable({orders}) {
     const classes = styles();
+    if(orders !== null && orders !== [])
     return (
         <Table stickyHeader className={classes.table}>
             <TableHead>
@@ -98,7 +99,7 @@ function OrderTable({orders}) {
             </TableHead>
             {/* Need to fix this, warning message that Typography can't be inside Tables */}
             <TableBody>
-                {orders !== null && orders !== [] ? (orders.map(order => (
+                {(orders.map(order => (
                     <TableRow 
                         hover
                         key={order._id} 
@@ -115,18 +116,18 @@ function OrderTable({orders}) {
                         </TableCell>
                     </TableRow>
                 )))
-                :
-                (
-                    <Typography 
-                            align='center'
-                            className={classes.marginTop20}
-                        >
-                            Tidak ada produk untuk ditampilkan.
-                    </Typography> 
-                )
                 }
             </TableBody>
         </Table>
+    )
+
+    return (
+        <Typography 
+                align='center'
+                className={classes.marginTop20}
+            >
+                Tidak ada produk untuk ditampilkan.
+        </Typography> 
     )
 
 }

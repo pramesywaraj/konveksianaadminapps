@@ -126,7 +126,7 @@ export default function OrderDescription({user, goods}) {
                         </tr>
                         <tr>
                             <td className="placeholder">Catatan :</td>
-                            <td>Ada gambar hello kitty nya sekitar dada</td>
+                            <td>{goods.description}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -10,12 +10,11 @@ const styles = makeStyles(theme => ({
         padding: theme.spacing(2),
         color: theme.palette.text.secondary,
     },
-
     userInformationTable: {
         width: '100%',
         padding: "20px 0",
         '& .placeholder': {
-            width: "25%"
+            width: "20%"
         }
     },
     flexContainer: {

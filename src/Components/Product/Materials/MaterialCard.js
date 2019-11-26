@@ -51,6 +51,11 @@ export default function MaterialCard(props) {
                     </Typography>
                 </div>
                 <div>
+                    <Typography variant="body1">
+                        {props.material.weight} (Gram)
+                    </Typography>
+                </div>
+                <div>
                     <Button color="secondary" className={classes.button} onClick={props.handleDelete}>
                         Hapus
                     </Button>

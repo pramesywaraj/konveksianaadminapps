@@ -91,7 +91,12 @@ export default function OrderStepUpdate({steps, categoryId}) {
                         <em>None</em>
                     </MenuItem>
                     {availableStep.map(step => (
-                        <MenuItem value={step._id}>{step.name}</MenuItem>
+                        <MenuItem 
+                            key={step._id} 
+                            value={step._id}
+                        >
+                            {step.name}
+                        </MenuItem>
                     ))}
                 </TextField>
                 <Button variant="contained" color="primary">
@@ -101,9 +106,10 @@ export default function OrderStepUpdate({steps, categoryId}) {
             <div className={classes.flexContainerColumn}>
                 {steps.map((step, index) => (
                     <Typography
-                    variant="body1"
-                    component="div"
-                    align="left"
+                        key={index}
+                        variant="body1"
+                        component="div"
+                        align="left"
                     >
                         {index}. {step.name}
                     </Typography>

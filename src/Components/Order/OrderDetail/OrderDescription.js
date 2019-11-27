@@ -29,17 +29,26 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-function PriceChangerSection() {
+function PriceWeightChangerSection() {
     const classes = styles();
 
     return (
         <div>
-            <span>Ubah bila harga tidak sesuai:</span>
+            <span>Ubah bila harga dan berat tidak sesuai:</span>
             <div className={classes.flexContainer}>
                 <TextField
                     name="price"
                     className={classes.textField}
                     label="Harga"
+                    margin="normal"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                />
+                <TextField
+                    name="weight"
+                    className={classes.textField}
+                    label="Berat"
                     margin="normal"
                     variant="outlined"
                     fullWidth
@@ -131,7 +140,7 @@ export default function OrderDescription({user, goods, isOnProcess}) {
                     </tbody>
                 </table>
             </div>
-            {isOnProcess && <PriceChangerSection />}
+            {isOnProcess && <PriceWeightChangerSection />}
         </Paper>
     )
 }

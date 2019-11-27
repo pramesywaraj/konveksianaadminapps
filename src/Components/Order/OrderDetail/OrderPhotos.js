@@ -19,6 +19,8 @@ const styles = makeStyles(
             padding: 30
         },
         image: {
+            cursor: "pointer",
+            display: "block",
             width: 200,
             height: 200
         }
@@ -26,17 +28,21 @@ const styles = makeStyles(
     })
 )
 
-export default function OrderPhotos() {
+export default function OrderPhotos({photos}) {
     const classes = styles();
 
     return (
         <Paper className={classes.root}>
             <div className={classes.imageContainer}>
-                <img 
-                    className={classes.image}
-                    alt="Gambar Tampak Desain Pengguna" 
-                    src={require('../../../Assets/konveksiana-logo.svg')} 
-                />
+                {photos.map((photo, index) => (
+                    <img 
+                        onClick={() => window.open(`https://endpoint.konveksiana.id/${photo}`, "_blank")}
+                        key={index}
+                        className={classes.image}
+                        alt="Gambar Tampak Desain Pengguna" 
+                        src={`https://endpoint.konveksiana.id/${photo}`} 
+                    />
+                ))}
             </div>
         </Paper>
     )

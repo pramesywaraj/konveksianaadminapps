@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import config from "../../../Services/config";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import OrderPhotos from "./OrderPhotos";
 import OrderDescription from "./OrderDescription";
@@ -89,7 +88,7 @@ export default function OrderDetailContainer() {
 
     if(orderData !== null) return (
         <div>
-            <OrderPhotos />
+            <OrderPhotos photos={orderData.photoUrls}/>
             <div className={classes.gridWrapper}>
                 <Grid container spacing={3}>
                     <Grid item xs={6}>

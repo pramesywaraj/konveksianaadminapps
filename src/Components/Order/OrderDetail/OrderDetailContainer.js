@@ -10,6 +10,7 @@ import OrderDescription from "./OrderDescription";
 import OrderPriceConfirmation from "./OrderPriceConfirmation";
 import OrderStepUpdate from "./OrderStepUpdate";
 import OrderPriceUpdate from "./OrderPriceUpdate";
+import CustomSnackbar from "../../OtherComponent/CustomSnackbar";
 
 
 const styles = makeStyles(theme => ({
@@ -44,6 +45,12 @@ export default function OrderDetailContainer() {
     const classes = styles();
 
     const [orderData, setOrderData] = useState(null);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: '',
+        isSuccess: '',
+        isWarning: ''
+    });
 
     useEffect(() => {
         if (orderId !== "") {
@@ -67,14 +74,34 @@ export default function OrderDetailContainer() {
             setOrderData(response.data.order);
         } catch (err) {
             console.log(err);
+            snackBarOpenAction(false, '', 'Terjadi kesalahan pada saat pengambilan data pada server.');
         }
     };
 
     const confirmOrder = async (price) => {
+        let payload = {
+            "_id": orderId,
+            "productPrice": price
+        };
+
         try {
-            console.log(`Order Accepted with price ${price}`);
+            const response = await axios.post(`${config.baseUrl}order/set/onprogress`, payload, {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            });
+
+            setOrderData({
+                ...orderData,
+                status: {
+                    ...orderData.status,
+                    isPending: false,
+                    isOnProcess: true
+                }
+            })
+
+            snackBarOpenAction(true, '', 'Harga telah disepakati.');
         } catch (err) {
             console.log(err);
+            snackBarOpenAction(false, '', 'Terjadi kesalahan pada saat melakukan konfirmasi pesanan.');
         }
     }
 
@@ -84,6 +111,24 @@ export default function OrderDetailContainer() {
         } catch (err) {
             console.log(err);
         }
+    }
+
+    function snackBarOpenAction(isSuccess, isWarning, message) {
+        setSnackbar({
+            open: true,
+            message: message,
+            isSuccess: isSuccess,
+            isWarning: isWarning
+        });
+    }
+    
+    const handleSnackbarClose = () => {
+        setSnackbar({
+            open: false,
+            message: '',
+            isSuccess: '',
+            isWarning: ''        
+        })
     }
 
     if(orderData !== null) return (
@@ -117,10 +162,11 @@ export default function OrderDetailContainer() {
                             <OrderPriceConfirmation 
                                 confirmOrder={confirmOrder}
                                 rejectOrder={rejectOrder}
+                                snackbarOpen={snackBarOpenAction}
                             />
                         )}
 
-                        {orderData.status.isOnProcess ? (
+                        {orderData.status.isOnProcess && (
                             <React.Fragment>
                                 <OrderStepUpdate 
                                     steps={orderData.orderStep}
@@ -128,11 +174,21 @@ export default function OrderDetailContainer() {
                                 />
                                 <OrderPriceUpdate />
                             </React.Fragment>
-                        ) : ''}
+                        )}
                         
                     </Grid>
                 </Grid>
             </div>
+            {snackbar.open && (
+                <CustomSnackbar 
+                    snackbar={snackbar.open}
+                    message={snackbar.message}
+                    isWarning={snackbar.isWarning}
+                    isSuccess={snackbar.isSuccess}
+                    close={handleSnackbarClose}
+                />
+            )}
+            
         </div>
     );
 

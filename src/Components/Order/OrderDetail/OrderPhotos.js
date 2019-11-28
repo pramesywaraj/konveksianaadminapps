@@ -34,6 +34,11 @@ export default function OrderPhotos({photos}) {
     return (
         <Paper className={classes.root}>
             <div className={classes.imageContainer}>
+                {photos === [] && 
+                    (
+                        <p>Kosong</p>
+                    )
+                }
                 {photos.map((photo, index) => (
                     <img 
                         onClick={() => window.open(`https://endpoint.konveksiana.id/${photo}`, "_blank")}

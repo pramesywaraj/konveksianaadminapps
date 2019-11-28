@@ -84,32 +84,58 @@ MySnackbarContentWrapper.propTypes = {
         .isRequired,
 };
 
-export default function CustomSnackbar(props) {
-    return (
+export default function CustomSnackbar({snackbar, close, isSuccess, isWarning, message}) {
+    if(isSuccess !== '') return (
         <div>
             <Snackbar
                 anchorOrigin={{
                     vertical: "top",
                     horizontal: "right",
                 }}
-                open={props.snackbar}
+                open={snackbar}
                 autoHideDuration={2000}
-                onClose={props.close}
+                onClose={close}
             >
-                {props.isSuccess ? (
+                {isSuccess ? (
                     <MySnackbarContentWrapper
-                        onClose={props.close}
+                        onClose={close}
                         variant="success"
-                        message={props.message}
+                        message={message}
                     />
                 ) : (
                     <MySnackbarContentWrapper
                         variant="error"
-                        onClose={props.close}
-                        message={props.message}
+                        onClose={close}
+                        message={message}
                     />
                 )}
             </Snackbar>
         </div>
     );
+
+    if(isWarning !== '') return (
+        <div>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                }}
+                open={snackbar}
+                autoHideDuration={2000}
+                onClose={close}
+            >
+                {isWarning ?  
+                    <MySnackbarContentWrapper
+                        variant="warning"
+                        onClose={close}
+                        message={message}
+                    />
+                : ('')}
+            </Snackbar>
+        </div>
+    )
+
+    return (
+        <div></div>
+    )
 }

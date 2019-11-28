@@ -14,7 +14,7 @@ const styles = makeStyles(theme => ({
         width: '100%',
         padding: "20px 0",
         '& .placeholder': {
-            width: "23%"
+            width: "25%"
         }
     },
     flexContainer: {
@@ -29,7 +29,7 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-function PriceWeightChangerSection() {
+function PriceWeightChangerSection({onHandleChange, onProductPriceChange}) {
     const classes = styles();
 
     return (
@@ -37,6 +37,7 @@ function PriceWeightChangerSection() {
             <span>Ubah bila harga dan berat tidak sesuai:</span>
             <div className={classes.flexContainer}>
                 <TextField
+                    onChange={onHandleChange}
                     name="price"
                     className={classes.textField}
                     label="Harga"
@@ -45,7 +46,7 @@ function PriceWeightChangerSection() {
                     fullWidth
                     type="number"
                 />
-                <TextField
+                {/* <TextField
                     name="weight"
                     className={classes.textField}
                     label="Berat"
@@ -53,8 +54,8 @@ function PriceWeightChangerSection() {
                     variant="outlined"
                     fullWidth
                     type="number"
-                />
-                <Button color="primary">
+                /> */}
+                <Button onClick={onProductPriceChange} color="primary">
                     Perbarui
                 </Button>
             </div>
@@ -62,8 +63,21 @@ function PriceWeightChangerSection() {
     )
 }
 
-export default function OrderDescription({user, goods, isOnProcess}) {
+export default function OrderDescription({user, goods, status, otherAttribute, handleChangeProductPrice}) {
     const classes = styles();
+    const { isPending, isReject, isPaidOff, isOnProcess, isDone } = status;
+
+    const [price, setPrice] = useState('');
+
+    const handleChange = (e) => {
+        e.preventDefault();
+        setPrice(e.target.value);
+    }
+
+    const productPriceChange = async () => {
+        await handleChangeProductPrice(price);
+        setPrice('');
+    }
 
     return (
         <Paper className={classes.paper}>
@@ -131,7 +145,19 @@ export default function OrderDescription({user, goods, isOnProcess}) {
                         </tr>
                         <tr>
                             <td className="placeholder">Jumlah :</td>
-                            <td>{goods.quantity}</td>
+                            <td>{goods.quantity} pcs</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Berat Perkiraan :</td>
+                            <td>{goods.weightPrediction} gram</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Ongkos Kirim :</td>
+                            <td>Rp. {goods.shippingPricePrediction}</td>
+                        </tr>
+                        <tr>
+                            <td className="placeholder">Harga Perkiraan :</td>
+                            <td>Rp. {goods.productPricePrediction}</td>
                         </tr>
                         <tr>
                             <td className="placeholder">Catatan :</td>
@@ -140,7 +166,34 @@ export default function OrderDescription({user, goods, isOnProcess}) {
                     </tbody>
                 </table>
             </div>
-            {isOnProcess && <PriceWeightChangerSection />}
+            {isOnProcess && (
+                <React.Fragment>
+                    <div>
+                        <Typography
+                            component="div"
+                            align="left"
+                        >
+                            Harga yang telah disepakati dan Berat
+                        </Typography>
+                        <table className={classes.userInformationTable}>
+                            <tbody>
+                                <tr>
+                                    <td className="placeholder">Harga :</td>
+                                    <td>Rp. {otherAttribute.productPrice}</td>
+                                </tr>
+                                <tr>
+                                    <td className="placeholder">Berat :</td>
+                                    <td>{otherAttribute.weight} gram</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <PriceWeightChangerSection 
+                        onHandleChange={handleChange} 
+                        onProductPriceChange={productPriceChange}
+                    />
+                </React.Fragment>
+            )}
         </Paper>
     )
 }

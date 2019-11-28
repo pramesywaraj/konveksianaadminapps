@@ -62,9 +62,6 @@ export default function OrderDetailContainer() {
         }
     }, []);
 
-    useEffect(() => {
-        console.log(orderData);
-    }, [orderData]); 
 
     const fetchOrder = async () => {
         try {
@@ -113,6 +110,54 @@ export default function OrderDetailContainer() {
         }
     }
 
+    const changeProductPrice = async (price) => {
+        let payload = {
+            "_id": orderId,
+            "productPrice": price
+        };
+
+        try {
+            const response = await axios.post(`${config.baseUrl}order/update/product-price`, payload, {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            });
+
+            setOrderData({
+                ...orderData,
+                productPrice: price
+            })
+
+            snackBarOpenAction(true, '', 'Harga telah diubah.');
+        } catch (err) {
+            console.log(err);
+            snackBarOpenAction(false, '', 'Terjadi kesalahan pada saat melakukan penggantian harga pesanan.');
+        }
+    }
+
+    const addStepToOrder = async (step) => {
+        let payload = {
+            "orderId": orderId,
+            "stepId": step._id
+        };
+
+        try {
+            const response = await axios.post(`${config.baseUrl}order-step`, payload, {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            });
+
+            console.log(response);
+
+            // setOrderData({
+            //     ...orderData,
+            //     orderStep: orderData.orderStep.p(step)
+            // })
+
+            snackBarOpenAction(true, '', 'Langkah telah ditambahkan.');
+        } catch (err) {
+            console.log(err);
+            snackBarOpenAction(false, '', 'Terjadi kesalahan pada saat melakukan penggantian harga pesanan.');
+        }
+    }
+
     function snackBarOpenAction(isSuccess, isWarning, message) {
         setSnackbar({
             open: true,
@@ -152,9 +197,17 @@ export default function OrderDetailContainer() {
                                 material: orderData.material.name,
                                 color: orderData.color,
                                 quantity: orderData.quantity,
-                                description: orderData.description
+                                description: orderData.description,
+                                weightPrediction: orderData.weightPrediction,
+                                shippingPricePrediction: orderData.shippingPricePrediction,
+                                productPricePrediction: orderData.productPricePrediction   
                             }}
-                            isOnProcess={orderData.status.isOnProcess}
+                            otherAttribute={{
+                                productPrice: orderData.productPrice,
+                                weight: orderData.weight
+                            }}
+                            status={orderData.status}
+                            handleChangeProductPrice={changeProductPrice}
                         />
                     </Grid>
                     <Grid item xs={6}>
@@ -171,6 +224,7 @@ export default function OrderDetailContainer() {
                                 <OrderStepUpdate 
                                     steps={orderData.orderStep}
                                     categoryId={orderData.material.product.category._id}
+                                    addStepToOrder={addStepToOrder}
                                 />
                                 <OrderPriceUpdate />
                             </React.Fragment>

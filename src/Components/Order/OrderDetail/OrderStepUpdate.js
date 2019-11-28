@@ -41,16 +41,23 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-export default function OrderStepUpdate({steps, categoryId}) {
+export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
     const classes = styles();
-    const [age, setAge] = useState('');
+    const [selectedStep, setSelectedStep] = useState('');
     const [availableStep, setAvailableStep] = useState([]);
 
-    const inputLabel = useRef(null);
+    useEffect(() => {
+        console.log(steps);
+    }, [])
 
     const handleChange = event => {
-        setAge(event.target.value);
+        setSelectedStep(event.target.value);
     };
+
+    const submitAddStepOrder = async () => {
+        delete selectedStep.category;
+        await addStepToOrder(selectedStep);
+    }
 
     useEffect(() => {
         const fetchAvailableStep = async () => {
@@ -83,9 +90,8 @@ export default function OrderStepUpdate({steps, categoryId}) {
                     className={classes.stepSelect}
                     variant="outlined"
                     label="Langkah"
-                    value={age}
+                    value={selectedStep}
                     onChange={handleChange}
-                    inputProps={{ name: "age", id: "outlined-age-simple" }}
                 >
                     <MenuItem value="">
                         <em>None</em>
@@ -93,27 +99,33 @@ export default function OrderStepUpdate({steps, categoryId}) {
                     {availableStep.map(step => (
                         <MenuItem 
                             key={step._id} 
-                            value={step._id}
+                            value={step}
                         >
                             {step.name}
                         </MenuItem>
                     ))}
                 </TextField>
-                <Button variant="contained" color="primary">
+                <Button 
+                    variant="contained" 
+                    color="primary"
+                    onClick={submitAddStepOrder}
+                >
                     Perbarui
                 </Button>
             </div>
             <div className={classes.flexContainerColumn}>
-                {steps.map((step, index) => (
-                    <Typography
-                        key={index}
-                        variant="body1"
-                        component="div"
-                        align="left"
-                    >
-                        {index}. {step.name}
-                    </Typography>
-                ))}
+                {steps.length > 0 && (
+                    steps.map((step, index) => (
+                        <Typography
+                            key={step._id}
+                            variant="body1"
+                            component="div"
+                            align="left"
+                        >
+                            {index + 1}. {step.step.name}
+                        </Typography>
+                    ))
+                )}
             </div>
         </Paper>
     )

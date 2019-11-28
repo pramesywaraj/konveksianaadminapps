@@ -85,7 +85,7 @@ export default function CategoriesStepModal(props) {
     });
     const [submittedStep, setSubmittedStep] = useState(null);
     const [deletedStepId, setDeletedStepId] = useState(null);
-    const [lastQueueNumber, setNextQueueNumber] = useState(0);
+    const [lastQueueNumber, setNextQueueNumber] = useState(null);
     const [newStep, setNewStep] = useState({
         'name': '',
         'queue': '',
@@ -119,15 +119,16 @@ export default function CategoriesStepModal(props) {
         // last steps object to get queue number...
         const lastQueueNumberArray = () => {
             let nextQueue = 0;
-            if(data.steps !== null && data.steps !== []) {
+            if(data.steps !== null && data.steps.length > 0) {
                 let length = data.steps.length;
-                if(data.steps[length-2] !== undefined) {
-                    let singleObj = data.steps[length-2];
+                console.log("panjang array", length);
+                if(data.steps[length-1] !== undefined) {
+                    let singleObj = data.steps[length-1];
                     nextQueue = singleObj.queue + 1;
                 }
-                setNextQueueNumber(nextQueue);
             }
-           
+            console.log(nextQueue);
+            setNextQueueNumber(nextQueue);           
         };
 
         lastQueueNumberArray();

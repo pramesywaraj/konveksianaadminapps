@@ -10,6 +10,7 @@ import OrderDescription from "./OrderDescription";
 import OrderPriceConfirmation from "./OrderPriceConfirmation";
 import OrderStepUpdate from "./OrderStepUpdate";
 import OrderPriceUpdate from "./OrderPriceUpdate";
+import OrderIsDone from "./OrderIsDone";
 import CustomSnackbar from "../../OtherComponent/CustomSnackbar";
 
 
@@ -228,6 +229,10 @@ export default function OrderDetailContainer() {
                                 />
                                 <OrderPriceUpdate />
                             </React.Fragment>
+                        )}
+
+                        {orderData.status.isDone && (
+                            <OrderIsDone />
                         )}
                         
                     </Grid>

@@ -15,7 +15,7 @@ const styles = makeStyles(theme => ({
         width: '100%',
         padding: "20px 0",
         '& .placeholder': {
-            width: "25%"
+            width: "40%"
         }
     },
     flexContainer: {
@@ -170,7 +170,7 @@ export default function OrderDescription({user, goods, status, otherAttribute, h
                             <td>{goods.weightPrediction} gram</td>
                         </tr>
                         <tr>
-                            <td className="placeholder">Ongkos Kirim :</td>
+                            <td className="placeholder">Ongkos Kirim Perkiraan :</td>
                             <td>Rp. {goods.shippingPricePrediction}</td>
                         </tr>
                         <tr>

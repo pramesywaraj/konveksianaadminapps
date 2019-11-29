@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -27,9 +28,20 @@ const styles = makeStyles(theme => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
     },
+    buttonWrapper: {
+        position: 'relative'
+    },
+    buttonProgress: {
+        color: "rgb(3,172,14)",
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
 }));
 
-function PriceWeightChangerSection({onHandleChange, onProductPriceChange}) {
+function PriceWeightChangerSection({loadingProccess, amount, onHandleChange, onProductPriceChange}) {
     const classes = styles();
 
     return (
@@ -43,21 +55,25 @@ function PriceWeightChangerSection({onHandleChange, onProductPriceChange}) {
                     label="Harga"
                     margin="normal"
                     variant="outlined"
+                    value={amount}
                     fullWidth
                     type="number"
                 />
-                {/* <TextField
-                    name="weight"
-                    className={classes.textField}
-                    label="Berat"
-                    margin="normal"
-                    variant="outlined"
-                    fullWidth
-                    type="number"
-                /> */}
-                <Button onClick={onProductPriceChange} color="primary">
-                    Perbarui
-                </Button>
+                <div className={classes.buttonWrapper}>
+                    <Button 
+                        onClick={onProductPriceChange} 
+                        color="primary"
+                        disabled={loadingProccess}
+                    >
+                        Perbarui
+                    </Button>
+                    {loadingProccess && 
+                        <CircularProgress 
+                            size={24} 
+                            className={classes.buttonProgress} 
+                        />
+                    }
+                </div>
             </div>
         </div>
     )
@@ -66,7 +82,7 @@ function PriceWeightChangerSection({onHandleChange, onProductPriceChange}) {
 export default function OrderDescription({user, goods, status, otherAttribute, handleChangeProductPrice}) {
     const classes = styles();
     const { isPending, isReject, isPaidOff, isOnProcess, isDone } = status;
-
+    const [loadingProcess, setLoadingProcess] = useState(false);
     const [price, setPrice] = useState('');
 
     const handleChange = (e) => {
@@ -75,8 +91,10 @@ export default function OrderDescription({user, goods, status, otherAttribute, h
     }
 
     const productPriceChange = async () => {
+        setLoadingProcess(true);
         await handleChangeProductPrice(price);
         setPrice('');
+        setLoadingProcess(false);
     }
 
     return (
@@ -189,7 +207,9 @@ export default function OrderDescription({user, goods, status, otherAttribute, h
                 </div>
             )}
             {isOnProcess && (
-                <PriceWeightChangerSection 
+                <PriceWeightChangerSection
+                    amount={price}
+                    loadingProccess={loadingProcess}
                     onHandleChange={handleChange} 
                     onProductPriceChange={productPriceChange}
                 />

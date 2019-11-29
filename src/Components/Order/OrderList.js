@@ -88,7 +88,8 @@ const OrderList = (props) => {
 
 function OrderTable({orders}) {
     const classes = styles();
-    if(orders !== null && orders !== [])
+    
+    if(orders !== null && orders.length > 0)
     return (
         <Table stickyheader="true" className={classes.table}>
             <TableHead>

@@ -235,7 +235,10 @@ export default function OrderDetailContainer() {
                                     categoryId={orderData.material.product.category._id}
                                     addStepToOrder={addStepToOrder}
                                 />
-                                <OrderPriceUpdate />
+                                <OrderPriceUpdate 
+                                    orderId={orderId}
+                                    snackbarOpen={snackBarOpenAction}
+                                />
                             </React.Fragment>
                         )}
 

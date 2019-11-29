@@ -57,7 +57,7 @@ export default function OrderIsDone({}) {
         "shippingPrice": '',
         "weight": '' 
     });
-    const [loadingProccess, setLoadingProccess] = useState(false);
+    const [loadingProccess, setLoadingProcess] = useState(false);
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -68,8 +68,9 @@ export default function OrderIsDone({}) {
     }
 
     const handleOnSubmit = () => {
-        setLoadingProccess(true);
+        setLoadingProcess(true);
         console.log(data);
+        setLoadingProcess(false);
     }
 
     return (
@@ -113,17 +114,14 @@ export default function OrderIsDone({}) {
                         onClick={handleOnSubmit}
                         disabled={loadingProccess}
                     >
-                        Terima
+                        Tentukan
                     </Button>
-                    {loadingProccess && <CircularProgress size={24} className={classes.buttonProgress} />}
-                </div>
-                <div className={classes.buttonWrapper}>
-                    <Button 
-                        variant="contained"
-                        onClick={() => console.log('tes')}
-                    >
-                        Tolak
-                    </Button>
+                    {loadingProccess && 
+                        <CircularProgress 
+                            size={24} 
+                            className={classes.buttonProgress} 
+                        />
+                    }
                 </div>
             </div>
         </Paper>

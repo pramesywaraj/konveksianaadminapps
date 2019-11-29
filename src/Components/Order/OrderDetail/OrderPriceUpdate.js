@@ -41,12 +41,10 @@ const styles = makeStyles(theme => ({
 
 export default function OrderPriceUpdate({}) {
     const classes = styles();
-    const [age, setAge] = useState('');
-
-    const inputLabel = useRef(null);
+    const [paymentAmount, setPaymentAmount] = useState('');
 
     const handleChange = event => {
-        setAge(event.target.value);
+        setPaymentAmount(event.target.value);
     };
 
 
@@ -57,24 +55,17 @@ export default function OrderPriceUpdate({}) {
                 component="div"
                 align="left"
             >
-                Catatan Pembayaran
+                Angsuran Pembayaran
             </Typography>
             <div className={classes.flexContainer}>
                 <TextField
                     className={classes.stepSelect}
                     variant="outlined"
                     label="Jumlah Nominal"
-                    value={0}
+                    value={paymentAmount}
                     onChange={handleChange}
-                    inputProps={{ name: "age", id: "outlined-age-simple" }}
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </TextField>
+                    type="number"
+                />
                 <Button variant="contained" color="primary">
                     Perbarui
                 </Button>

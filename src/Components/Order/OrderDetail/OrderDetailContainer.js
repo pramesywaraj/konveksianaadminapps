@@ -69,6 +69,7 @@ export default function OrderDetailContainer() {
             const response = await axios.get(`${config.baseUrl}order/id/${orderId}`, {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }
             });
+            console.log(response);
             setOrderData(response.data.order);
         } catch (err) {
             console.log(err);
@@ -145,12 +146,19 @@ export default function OrderDetailContainer() {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }
             });
 
-            console.log(response);
+            let newStep = {
+                _id: response.data.orderStep._id,
+                step: {
+                    _id: step._id,
+                    queue: step.queue,
+                    name: step.name
+                }
+            }
 
-            // setOrderData({
-            //     ...orderData,
-            //     orderStep: orderData.orderStep.p(step)
-            // })
+            setOrderData({
+                ...orderData,
+                orderStep: orderData.orderStep.concat(newStep)
+            })
 
             snackBarOpenAction(true, '', 'Langkah telah ditambahkan.');
         } catch (err) {
@@ -232,7 +240,9 @@ export default function OrderDetailContainer() {
                         )}
 
                         {orderData.status.isDone && (
-                            <OrderIsDone />
+                            <OrderIsDone 
+
+                            />
                         )}
                         
                     </Grid>

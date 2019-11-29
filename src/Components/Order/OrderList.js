@@ -94,6 +94,7 @@ function OrderTable({orders}) {
             <TableHead>
                 <TableRow>
                     <TableCell>Pelanggan</TableCell>
+                    <TableCell>Status</TableCell>
                     <TableCell align="right">Tanggal Masuk</TableCell>
                 </TableRow>
             </TableHead>
@@ -108,6 +109,14 @@ function OrderTable({orders}) {
                     >
                         <TableCell component="th" scope="row">
                             {order.user.name}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                            {
+                                (order.status.isDone) ? "Pesanan Selesai" 
+                                : (order.status.isOnProcess) ? "Pesanan dalam Proses" 
+                                : (order.status.isPending) ? "Pending" 
+                                : ""
+                            }
                         </TableCell>
                         <TableCell align="right">
                             <Moment format="D MMM YYYY">

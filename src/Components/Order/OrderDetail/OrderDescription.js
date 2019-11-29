@@ -166,33 +166,33 @@ export default function OrderDescription({user, goods, status, otherAttribute, h
                     </tbody>
                 </table>
             </div>
+            {(isOnProcess || isDone) && (
+                <div>
+                    <Typography
+                        component="div"
+                        align="left"
+                    >
+                        Harga yang telah disepakati dan Berat
+                    </Typography>
+                    <table className={classes.userInformationTable}>
+                        <tbody>
+                            <tr>
+                                <td className="placeholder">Harga :</td>
+                                <td>Rp. {otherAttribute.productPrice}</td>
+                            </tr>
+                            <tr>
+                                <td className="placeholder">Berat :</td>
+                                <td>{otherAttribute.weight} gram</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )}
             {isOnProcess && (
-                <React.Fragment>
-                    <div>
-                        <Typography
-                            component="div"
-                            align="left"
-                        >
-                            Harga yang telah disepakati dan Berat
-                        </Typography>
-                        <table className={classes.userInformationTable}>
-                            <tbody>
-                                <tr>
-                                    <td className="placeholder">Harga :</td>
-                                    <td>Rp. {otherAttribute.productPrice}</td>
-                                </tr>
-                                <tr>
-                                    <td className="placeholder">Berat :</td>
-                                    <td>{otherAttribute.weight} gram</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <PriceWeightChangerSection 
-                        onHandleChange={handleChange} 
-                        onProductPriceChange={productPriceChange}
-                    />
-                </React.Fragment>
+                <PriceWeightChangerSection 
+                    onHandleChange={handleChange} 
+                    onProductPriceChange={productPriceChange}
+                />
             )}
         </Paper>
     )

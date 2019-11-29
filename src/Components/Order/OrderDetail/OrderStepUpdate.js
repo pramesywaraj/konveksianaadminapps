@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from '@material-ui/core/MenuItem';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -38,16 +39,30 @@ const styles = makeStyles(theme => ({
     },
     marginTop: {
         marginTop: 20
-    }
+    },
+    buttonWrapper: {
+        position: 'relative'
+    },
+    buttonProgress: {
+        color: "rgb(3,172,14)",
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
 }));
 
 export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
     const classes = styles();
     const [selectedStep, setSelectedStep] = useState('');
     const [availableStep, setAvailableStep] = useState([]);
+    const [loadingProcess, setLoadingProcess] = useState(false);
 
     useEffect(() => {
-        console.log(steps);
+        return () => {
+
+        }
     }, [])
 
     const handleChange = event => {
@@ -55,8 +70,10 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
     };
 
     const submitAddStepOrder = async () => {
+        setLoadingProcess(true);
         delete selectedStep.category;
         await addStepToOrder(selectedStep);
+        setLoadingProcess(false);
     }
 
     useEffect(() => {
@@ -65,6 +82,7 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
                 const response = await axios.get(`${config.baseUrl}step/categorystep/${categoryId}`, {
                     headers: { Authorization: "Bearer " + localStorage.getItem("token") }
                 });
+                
                 setAvailableStep(response.data.step);
             } catch (err) {
                 console.log(err);
@@ -105,13 +123,23 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
                         </MenuItem>
                     ))}
                 </TextField>
-                <Button 
-                    variant="contained" 
-                    color="primary"
-                    onClick={submitAddStepOrder}
-                >
-                    Perbarui
-                </Button>
+                <div className={classes.buttonWrapper}>
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        onClick={submitAddStepOrder}
+                        disabled={loadingProcess}
+                    >
+                        Perbarui
+                    </Button>
+                    {loadingProcess && 
+                        <CircularProgress 
+                            size={24} 
+                            className={classes.buttonProgress} 
+                        />
+                    }
+                </div>
+                
             </div>
             <div className={classes.flexContainerColumn}>
                 {steps.length > 0 && (

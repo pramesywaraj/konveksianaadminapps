@@ -46,12 +46,18 @@ const styles = makeStyles(theme => ({
         '& .placeholder': {
             width: "25%"
         }
+    },
+    totalAmountSection: {
+        backgroundColor: 'rgb(175,175,175)',
+        textAlign: 'center',
+        padding: 10
     }
 }));
 
 export default function OrderPriceUpdate({orderId, snackbarOpen}) {
     const classes = styles();
     const [paymentAmount, setPaymentAmount] = useState('');
+    const [totalAmount, setTotalamount] = useState('');
     const [data, setData] = useState({
         paymentHistory: ''
     });
@@ -65,18 +71,29 @@ export default function OrderPriceUpdate({orderId, snackbarOpen}) {
 
     const fetchPriceUpdateHistory = async () => {
         try {
-            const response = await axios.get(`${config.baseUrl}payment-step/get-history/${orderId}`, {
-                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            let auth = {Authorization: "Bearer " + localStorage.getItem("token")};
+
+            const [paymentHistory, paymentAmount] = await Promise.all([
+                await axios.get(`${config.baseUrl}payment-step/get-history/${orderId}`, {headers: auth}),
+                await axios.get(`${config.baseUrl}payment-step/get-total-amount//${orderId}`, {headers: auth})
+            ]);
+
+            console.log(paymentHistory, paymentAmount);
+
+            await setData({
+                paymentHistory: paymentHistory.data.paymentStep
             });
 
-            setData({
-                paymentHistory: response.data.paymentStep
-            })
+            await setTotalamount(paymentAmount.data.amount);
         }
         catch (err) {
             console.log("there is an error in OrderPriceUpdate", err);
             snackbarOpen(false, '', 'Terjadi kesalahan saat mengambil data Riwayat Pembayaran');
         }
+    }
+
+    const submitNewPayment = async() => {
+
     }
 
     const handleChange = event => {
@@ -110,7 +127,8 @@ export default function OrderPriceUpdate({orderId, snackbarOpen}) {
                     <tbody>
                     {
                         data.paymentHistory.length > 0 && data.paymentHistory !== '' ? (
-                            data.paymentHistory.map((payment, index) => (
+                            <React.Fragment>
+                            {data.paymentHistory.map((payment, index) => (
                                 <tr key={payment._id}>
                                     <td>{index + 1}</td>
                                     <td>Rp.{payment.amount}</td>
@@ -123,11 +141,17 @@ export default function OrderPriceUpdate({orderId, snackbarOpen}) {
                                         {payment.description}
                                     </td>
                                 </tr>
-                            ))
+                            ))}
+                            <tr className={classes.totalAmountSection}>
+                                <td colSpan={2}>Total yang telah dibayarkan: </td>
+                                <td colSpan={2}>Rp. {totalAmount}</td>
+                            </tr>
+                            </React.Fragment>
                         )
                         :
                         <tr></tr>
                     }
+                        
                     </tbody>
                 </table>
             </div> 

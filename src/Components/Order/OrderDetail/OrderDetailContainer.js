@@ -93,6 +93,7 @@ export default function OrderDetailContainer() {
 
             setOrderData({
                 ...orderData,
+                productPrice: price,
                 status: {
                     ...orderData.status,
                     isPending: false,
@@ -123,7 +124,10 @@ export default function OrderDetailContainer() {
             })
 
             snackBarOpenAction(true, '', 'Pesanan telah ditolak.');
-            history.goBack();
+
+            setTimeout(() => {
+                history.goBack();
+            }, 1500)
         } catch (err) {
             console.log(err);
             snackBarOpenAction(true, '', 'Terdapat kesalahan. Tidak dapat menolak pesanan.');

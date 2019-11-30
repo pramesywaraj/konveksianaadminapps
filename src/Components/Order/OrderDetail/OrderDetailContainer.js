@@ -12,6 +12,7 @@ import OrderStepUpdate from "./OrderStepUpdate";
 import OrderPriceUpdate from "./OrderPriceUpdate";
 import OrderIsDone from "./OrderIsDone";
 import CustomSnackbar from "../../OtherComponent/CustomSnackbar";
+import { history } from '../../../Helpers/history';
 
 
 const styles = makeStyles(theme => ({
@@ -108,9 +109,24 @@ export default function OrderDetailContainer() {
 
     const rejectOrder = async () => {
         try {
-            console.log(`Order Rejected`);
+            const response = await axios.get(`${config.baseUrl}order/reject/${orderId}`, {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            });
+
+            setOrderData({
+                ...orderData,
+                status: {
+                    ...orderData.status,
+                    isPending: false,
+                    isReject: true
+                }
+            })
+
+            snackBarOpenAction(true, '', 'Pesanan telah ditolak.');
+            history.goBack();
         } catch (err) {
             console.log(err);
+            snackBarOpenAction(true, '', 'Terdapat kesalahan. Tidak dapat menolak pesanan.');
         }
     }
 

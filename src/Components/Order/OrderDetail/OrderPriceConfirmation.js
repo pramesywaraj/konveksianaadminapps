@@ -54,7 +54,10 @@ const styles = makeStyles(theme => ({
 export default function OrderPriceConfirmation({confirmOrder, rejectOrder, snackbarOpen}) {
     const classes = styles();
     const [price, setPrice] = useState("");
-    const [loadingProccess, setLoadingProccess] = useState(false);
+    const [loadingProcess, setLoadingProcess] = useState({
+        confirm: false,
+        reject: false
+    });
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -62,12 +65,34 @@ export default function OrderPriceConfirmation({confirmOrder, rejectOrder, snack
     }
 
     const handleOnAccept = async () => {
-        setLoadingProccess(true);
+        setLoadingProcess({
+            ...loadingProcess,
+            confirm: true
+        });
         if(price === '') {
             return snackbarOpen('', true, 'Harap isi harga yang telah disepakati terlebih dahulu.')
         }
         await confirmOrder(price);
-        setLoadingProccess(false);
+        setLoadingProcess({
+            ...loadingProcess,
+            confirm: false
+        });
+    }
+
+    const handleReject = async () => {
+        setLoadingProcess({
+            ...loadingProcess,
+            reject: true
+        });
+
+        if(!window.confirm('Apakah Anda yakin untuk menolak pesanan ini?')) return;
+
+        rejectOrder();
+
+        setLoadingProcess({
+            ...loadingProcess,
+            reject: false
+        });
     }
 
     return (
@@ -98,19 +123,31 @@ export default function OrderPriceConfirmation({confirmOrder, rejectOrder, snack
                         variant="contained" 
                         className={classes.acceptButton}
                         onClick={handleOnAccept}
-                        disabled={loadingProccess}
+                        disabled={loadingProcess.confirm}
                     >
                         Terima
                     </Button>
-                    {loadingProccess && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    {loadingProcess.confirm && 
+                        <CircularProgress 
+                            size={24} 
+                            className={classes.buttonProgress} 
+                        />
+                    }
                 </div>
                 <div className={classes.buttonWrapper}>
                     <Button 
                         variant="contained"
-                        onClick={() => rejectOrder()}
+                        onClick={handleReject}
+                        disabled={loadingProcess.reject}
                     >
                         Tolak
                     </Button>
+                    {loadingProcess.reject && 
+                        <CircularProgress 
+                            size={24} 
+                            className={classes.buttonProgress} 
+                        />
+                    }
                 </div>
             </div>
         </Paper>

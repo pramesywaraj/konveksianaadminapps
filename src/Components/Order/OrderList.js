@@ -55,7 +55,7 @@ const styles = makeStyles(
             color: "white"
         },
 
-        orderReject: {
+        orderRejected: {
             display: "inline-block",
             minWidth: "1em",
             padding: ".3em",
@@ -133,7 +133,7 @@ function OrderTable({orders}) {
                                 (order.status.isDone) ? (<span className={classes.orderDone}>Pesanan Selesai</span>) 
                                 : (order.status.isOnProcess) ? "Pesanan dalam Proses" 
                                 : (order.status.isPending) ? "Pending" 
-                                : (order.status.isRejected) ? (<span className={classes.orderRejected}>Pesanan Ditolak</span>)
+                                : (order.status.isReject) ? (<span className={classes.orderRejected}>Pesanan Ditolak</span>)
                                 : "" 
                             }
                         </TableCell>

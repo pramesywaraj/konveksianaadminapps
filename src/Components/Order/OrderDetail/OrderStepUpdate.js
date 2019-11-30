@@ -176,7 +176,7 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder, snac
             </div>
             <div className={classes.flexContainerColumn}>
                 {steps.length > 0 && (
-                    steps.map((step, index) => (
+                    steps.slice(0).reverse().map((step, index) => (
                         <Typography
                             key={step._id}
                             variant="body1"

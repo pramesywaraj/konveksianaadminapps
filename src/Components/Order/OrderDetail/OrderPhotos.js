@@ -34,9 +34,14 @@ export default function OrderPhotos({photos}) {
     return (
         <Paper className={classes.root}>
             <div className={classes.imageContainer}>
-                {photos === [] && 
+                {photos.length === 0 && 
                     (
-                        <p>Kosong</p>
+                        <img
+                            width="200"
+                            height="200"
+                            alt="Konveksiana"
+                            src={require('../../../Assets/konveksiana-logo.svg')}
+                        />
                     )
                 }
                 {photos.map((photo, index) => (

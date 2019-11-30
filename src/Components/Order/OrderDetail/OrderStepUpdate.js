@@ -70,12 +70,6 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder, snac
     });
     const [isDone, setIsDone] = useState(false);
 
-    // useEffect(() => {
-    //     return () => {
-
-    //     }
-    // }, [])
-
     useEffect(() => {
         const fetchAvailableStep = async () => {
             try {
@@ -94,14 +88,10 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder, snac
     }, [])
 
     useEffect(() => {
-        console.log(steps.length, availableStep.length);
-        const changeToIsDone = () => {
-            if(steps.length === availableStep.length) {
-                setIsDone(true);
-            }
+        if(availableStep.length === 0 || availableStep === undefined) return;
+        if(steps[0].step.queue === availableStep[availableStep.length - 1].queue) {
+            setIsDone(true);
         }
-
-        changeToIsDone();
     }, [steps, availableStep])
 
     const handleChange = event => {
@@ -117,13 +107,13 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder, snac
         await addStepToOrder(selectedStep);
         setLoadingProcess({
             ...loadingProcess,
-            update: true
+            update: false
         });
     }
 
     const handleOrderIsDoneChange = async () => {
         if(!window.confirm('Apakah Anda yakin?')) return;
-        
+
         setLoadingProcess({
             ...loadingProcess,
             confirm: true

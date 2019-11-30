@@ -33,7 +33,6 @@ const styles = makeStyles(
             top: "50%",
             left: "50%",
         },
-        
         noOrder: {
             padding: theme.spacing(3, 2),
             width: '100%',
@@ -45,8 +44,26 @@ const styles = makeStyles(
             height: 500,
             maxHeight: 500,
             position: "relative"
-        }
+        },
+        orderDone: {
+            display: "inline-block",
+            minWidth: "1em",
+            padding: ".3em",
+            borderRadius: "4px",
+            textAlign: "center",
+            background: "rgb(3,172,14)",
+            color: "white"
+        },
 
+        orderReject: {
+            display: "inline-block",
+            minWidth: "1em",
+            padding: ".3em",
+            borderRadius: "4px",
+            textAlign: "center",
+            background: "rgb(226,0,0)",
+            color: "white"
+        }
     })
 )
 
@@ -113,10 +130,11 @@ function OrderTable({orders}) {
                         </TableCell>
                         <TableCell component="th" scope="row">
                             {
-                                (order.status.isDone) ? "Pesanan Selesai" 
+                                (order.status.isDone) ? (<span className={classes.orderDone}>Pesanan Selesai</span>) 
                                 : (order.status.isOnProcess) ? "Pesanan dalam Proses" 
                                 : (order.status.isPending) ? "Pending" 
-                                : ""
+                                : (order.status.isRejected) ? (<span className={classes.orderRejected}>Pesanan Ditolak</span>)
+                                : "" 
                             }
                         </TableCell>
                         <TableCell align="right">

@@ -22,7 +22,6 @@ function login(email, password) {
                     localStorage.setItem('user', JSON.stringify(res.data.result));                    
                     dispatch(setUserDetails(res.data));
                     history.push('/dashboard');
-                    alert(res.data.message);
                 }
             })
             .catch((err) => {

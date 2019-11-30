@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import DashboardLayout from './DashboardLayout';
 
 const styles = theme => ({
     root : {
@@ -16,7 +17,7 @@ class Dashboard extends Component {
         const { classes } = this.props;
         return(
             <div className={classes.root}>
-                <p>Home</p>
+                <DashboardLayout />
             </div>
         )
     }

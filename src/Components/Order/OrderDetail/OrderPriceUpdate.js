@@ -90,7 +90,7 @@ export default function OrderPriceUpdate({orderId, snackbarOpen}) {
 
             const [paymentHistory, paymentAmount] = await Promise.all([
                 await axios.get(`${config.baseUrl}payment-step/get-history/${orderId}`, {headers: auth}),
-                await axios.get(`${config.baseUrl}payment-step/get-total-amount//${orderId}`, {headers: auth})
+                await axios.get(`${config.baseUrl}payment-step/get-total-amount/${orderId}`, {headers: auth})
             ]);
 
             console.log(paymentHistory, paymentAmount);

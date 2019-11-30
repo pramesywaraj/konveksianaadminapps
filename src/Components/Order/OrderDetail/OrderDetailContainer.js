@@ -58,10 +58,12 @@ export default function OrderDetailContainer() {
             fetchOrder();
         }
 
-        return () => {
-            setOrderData(null);
-        }
     }, []);
+
+    useEffect(() => {
+        fetchOrder();
+        
+    }, [setOrderData]);
 
 
     const fetchOrder = async () => {
@@ -167,6 +169,51 @@ export default function OrderDetailContainer() {
         }
     }
 
+    const confirmIsDone = async () => {
+        try {
+            const response = await axios.get(`${config.baseUrl}order/set/done/${orderId}`, {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            });
+
+            setOrderData({
+                ...orderData,
+                status: {
+                    ...orderData.status,
+                    isDone: true
+                }
+            })
+
+            snackBarOpenAction(true, '', 'Pesanan telah selesai.');
+        } catch (err) {
+            console.log(err);
+            snackBarOpenAction(false, '', 'Terjadi kesalahan pada saat melakukan konfirmasi penyelesaian.');
+        }   
+    }
+
+    const changeShippingPriceAndWeight = async (data) => {
+        let payload = {
+            _id: orderId,
+            shippingPrice: data.shippingPrice,
+            weight: data.weight
+        }
+        try {
+            const response = await axios.post(`${config.baseUrl}order/update/shipping-weight/`, payload, {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            });
+
+            setOrderData({
+                ...orderData,
+                shippingPrice: data.shippingPrice,
+                weight: data.weight
+            })
+
+            snackBarOpenAction(true, '', 'Ongkos Kirim dan Berat berhasil diubah.');
+        } catch (err) {
+            console.log(err);
+            snackBarOpenAction(false, '', 'Terjadi kesalahan pada saat melakukan perubahan Ongkos Kirim dan Berat.');
+        }   
+    } 
+
     function snackBarOpenAction(isSuccess, isWarning, message) {
         setSnackbar({
             open: true,
@@ -213,7 +260,8 @@ export default function OrderDetailContainer() {
                             }}
                             otherAttribute={{
                                 productPrice: orderData.productPrice,
-                                weight: orderData.weight
+                                weight: orderData.weight,
+                                shippingPrice: orderData.shippingPrice
                             }}
                             status={orderData.status}
                             handleChangeProductPrice={changeProductPrice}
@@ -234,6 +282,8 @@ export default function OrderDetailContainer() {
                                     steps={orderData.orderStep}
                                     categoryId={orderData.material.product.category._id}
                                     addStepToOrder={addStepToOrder}
+                                    snackbarOpen={snackBarOpenAction}
+                                    confirmIsDone={confirmIsDone}
                                 />
                                 <OrderPriceUpdate 
                                     orderId={orderId}
@@ -244,7 +294,8 @@ export default function OrderDetailContainer() {
 
                         {orderData.status.isDone && (
                             <OrderIsDone 
-
+                                snackbarOpen={snackBarOpenAction}
+                                changeShippingPriceAndWeight={changeShippingPriceAndWeight}
                             />
                         )}
                         

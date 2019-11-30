@@ -202,6 +202,10 @@ export default function OrderDescription({user, goods, status, otherAttribute, h
                                 <td className="placeholder">Berat :</td>
                                 <td>{otherAttribute.weight} gram</td>
                             </tr>
+                            <tr>
+                                <td className="placeholder">Ongkos Kirim :</td>
+                                <td>Rp. {otherAttribute.shippingPrice}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

@@ -37,11 +37,18 @@ const styles = makeStyles(theme => ({
             backgroundColor: "rgb(5,137,12)"
         }
     },
+    confirmButton: {
+        color: 'white',
+        backgroundColor: "rgb(3,172,14)",
+        "&:hover": {
+            backgroundColor: "rgb(5,137,12)"
+        }
+    },
     marginTop: {
         marginTop: 20
     },
     buttonWrapper: {
-        position: 'relative'
+        position: 'relative',
     },
     buttonProgress: {
         color: "rgb(3,172,14)",
@@ -53,28 +60,21 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
+export default function OrderStepUpdate({steps, categoryId, addStepToOrder, snackbarOpen, confirmIsDone}) {
     const classes = styles();
     const [selectedStep, setSelectedStep] = useState('');
     const [availableStep, setAvailableStep] = useState([]);
-    const [loadingProcess, setLoadingProcess] = useState(false);
+    const [loadingProcess, setLoadingProcess] = useState({
+        update: false,
+        confirm: false
+    });
+    const [isDone, setIsDone] = useState(false);
 
-    useEffect(() => {
-        return () => {
+    // useEffect(() => {
+    //     return () => {
 
-        }
-    }, [])
-
-    const handleChange = event => {
-        setSelectedStep(event.target.value);
-    };
-
-    const submitAddStepOrder = async () => {
-        setLoadingProcess(true);
-        delete selectedStep.category;
-        await addStepToOrder(selectedStep);
-        setLoadingProcess(false);
-    }
+    //     }
+    // }, [])
 
     useEffect(() => {
         const fetchAvailableStep = async () => {
@@ -86,11 +86,54 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
                 setAvailableStep(response.data.step);
             } catch (err) {
                 console.log(err);
+                snackbarOpen(false, '', 'Terjadi kesalahan pada saat pengambilan data Langkah yang tersedia.');
             }
         }
 
         if(categoryId !== '') fetchAvailableStep();
     }, [])
+
+    useEffect(() => {
+        console.log(steps.length, availableStep.length);
+        const changeToIsDone = () => {
+            if(steps.length === availableStep.length) {
+                setIsDone(true);
+            }
+        }
+
+        changeToIsDone();
+    }, [steps, availableStep])
+
+    const handleChange = event => {
+        setSelectedStep(event.target.value);
+    };
+
+    const submitAddStepOrder = async () => {
+        setLoadingProcess({
+            ...loadingProcess,
+            update: true
+        });
+        delete selectedStep.category;
+        await addStepToOrder(selectedStep);
+        setLoadingProcess({
+            ...loadingProcess,
+            update: true
+        });
+    }
+
+    const handleOrderIsDoneChange = async () => {
+        if(!window.confirm('Apakah Anda yakin?')) return;
+        
+        setLoadingProcess({
+            ...loadingProcess,
+            confirm: true
+        });
+        await confirmIsDone();
+        setLoadingProcess({
+            ...loadingProcess,
+            confirm: false
+        });
+    }
 
 
     return (
@@ -128,11 +171,11 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
                         variant="contained" 
                         color="primary"
                         onClick={submitAddStepOrder}
-                        disabled={loadingProcess}
+                        disabled={loadingProcess.update}
                     >
                         Perbarui
                     </Button>
-                    {loadingProcess && 
+                    {loadingProcess.update && 
                         <CircularProgress 
                             size={24} 
                             className={classes.buttonProgress} 
@@ -155,6 +198,28 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder}) {
                     ))
                 )}
             </div>
+            {isDone && (
+                <div 
+                    className={[classes.buttonWrapper, classes.marginTop].join(' ')} 
+                    style={{textAlign: 'center'}}
+                >
+                    <Button 
+                        variant="contained" 
+                        className={classes.confirmButton}
+                        onClick={handleOrderIsDoneChange}
+                        disabled={loadingProcess.confirm}
+                    >
+                        Pesanan Selesai
+                    </Button>
+                    {loadingProcess.confirm && 
+                        <CircularProgress 
+                            size={24} 
+                            className={classes.buttonProgress} 
+                        />
+                    }
+                </div>
+            )}
+            
         </Paper>
     )
 }

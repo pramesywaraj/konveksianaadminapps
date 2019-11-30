@@ -51,7 +51,7 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-export default function OrderIsDone({}) {
+export default function OrderIsDone({snackbarOpen, changeShippingPriceAndWeight}) {
     const classes = styles();
     const [data, setData] = useState({
         "shippingPrice": '',
@@ -67,9 +67,18 @@ export default function OrderIsDone({}) {
         });
     }
 
-    const handleOnSubmit = () => {
+    const handleOnSubmit = async () => {
+        if(data.shippingPrice === "" || data.weight === "") {
+            snackbarOpen('', true, 'Ada form yang belum terisi, silahkan isi terlebih dahulu');
+            return;
+        }
+
         setLoadingProcess(true);
-        console.log(data);
+        await changeShippingPriceAndWeight(data);
+        setData({
+            "shippingPrice": '',
+            "weight": '' 
+        });
         setLoadingProcess(false);
     }
 
@@ -80,7 +89,7 @@ export default function OrderIsDone({}) {
                 component="div"
                 align="center"
             >
-                Ongkos Kirim dan Berat Akir
+                Ongkos Kirim dan Berat Akhir
             </Typography>
             <div className={classes.flexContainer}>
                 <TextField

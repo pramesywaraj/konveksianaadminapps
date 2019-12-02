@@ -142,10 +142,10 @@ export default function OrderDescription({user, goods, status, otherAttribute, h
                             <td className="placeholder">Status Pesanan :</td>
                             <td>
                             {
-                                (status.isDone) ? (<StatusBadge type="done">Pesanan Selesai</StatusBadge>) 
-                                : (status.isOnProcess) ? (<StatusBadge type="ongoing">Pesanan dalam Proses</StatusBadge>) 
-                                : (status.isPending) ? (<StatusBadge type="pending">Pending</StatusBadge>) 
-                                : (status.isReject) ? (<StatusBadge type="reject">Pesanan Ditolak</StatusBadge>) 
+                                (isDone) ? (<StatusBadge type="done">Pesanan Selesai</StatusBadge>) 
+                                : (isOnProcess) ? (<StatusBadge type="ongoing">Pesanan dalam Proses</StatusBadge>) 
+                                : (isPending) ? (<StatusBadge type="pending">Pending</StatusBadge>) 
+                                : (isReject) ? (<StatusBadge type="reject">Pesanan Ditolak</StatusBadge>) 
                                 : "" 
                             }
                             </td>

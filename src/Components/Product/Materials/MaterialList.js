@@ -174,6 +174,9 @@ export default function MaterialList(props) {
             fetchData();
         } else {
             setLoading(false);
+            setMaterialData({
+                materials: null
+            })
         }
         // This comment was made for prevent warning to showed up
         // eslint-disable-next-line react-hooks/exhaustive-deps

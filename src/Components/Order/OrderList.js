@@ -116,7 +116,6 @@ function OrderTable({orders}) {
                     <TableCell align="right">Tanggal Masuk</TableCell>
                 </TableRow>
             </TableHead>
-            {/* Need to fix this, warning message that Typography can't be inside Tables */}
             <TableBody>
                 {(orders.map(order => (
                     <TableRow 

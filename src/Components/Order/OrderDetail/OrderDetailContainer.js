@@ -268,9 +268,9 @@ export default function OrderDetailContainer() {
                             goods={{
                                 baseId: orderData.baseId,
                                 courier: orderData.courier,
-                                category: orderData.material.product.category.name,
-                                product: orderData.material.product.name,
-                                material: orderData.material.name,
+                                category: orderData.material !== null ? orderData.material.product.category.name : '---',
+                                product: orderData.material !== null ? orderData.material.product.name : '---',
+                                material: orderData.material !== null ? orderData.material.name : '---',
                                 color: orderData.color,
                                 quantity: orderData.quantity,
                                 description: orderData.description,

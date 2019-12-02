@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import StatusBadge from '../../OtherComponent/StatusBadge';
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -137,6 +138,18 @@ export default function OrderDescription({user, goods, status, otherAttribute, h
                 </Typography>
                 <table className={classes.userInformationTable}>
                     <tbody>
+                        <tr>
+                            <td className="placeholder">Status Pesanan :</td>
+                            <td>
+                            {
+                                (status.isDone) ? (<StatusBadge type="done">Pesanan Selesai</StatusBadge>) 
+                                : (status.isOnProcess) ? (<StatusBadge type="ongoing">Pesanan dalam Proses</StatusBadge>) 
+                                : (status.isPending) ? (<StatusBadge type="pending">Pending</StatusBadge>) 
+                                : (status.isReject) ? (<StatusBadge type="reject">Pesanan Ditolak</StatusBadge>) 
+                                : "" 
+                            }
+                            </td>
+                        </tr>
                         <tr>
                             <td className="placeholder">Kode Pesanan :</td>
                             <td>{goods.baseId}</td>

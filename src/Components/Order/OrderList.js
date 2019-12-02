@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-// import CustomSnackbar from '../../OtherComponent/CustomSnackbar';
+import StatusBadge from '../OtherComponent/StatusBadge';
 import Moment from 'react-moment';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -130,10 +130,10 @@ function OrderTable({orders}) {
                         </TableCell>
                         <TableCell component="th" scope="row">
                             {
-                                (order.status.isDone) ? (<span className={classes.orderDone}>Pesanan Selesai</span>) 
-                                : (order.status.isOnProcess) ? "Pesanan dalam Proses" 
-                                : (order.status.isPending) ? "Pending" 
-                                : (order.status.isReject) ? (<span className={classes.orderRejected}>Pesanan Ditolak</span>)
+                                (order.status.isDone) ? (<StatusBadge type="done">Pesanan Selesai</StatusBadge>) 
+                                : (order.status.isOnProcess) ? (<StatusBadge type="ongoing">Pesanan dalam Proses</StatusBadge>) 
+                                : (order.status.isPending) ? (<StatusBadge type="pending">Pending</StatusBadge>) 
+                                : (order.status.isReject) ? (<StatusBadge type="reject">Pesanan Ditolak</StatusBadge>) 
                                 : "" 
                             }
                         </TableCell>

@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import CustomModal from '../../OtherComponent/CustomModal';
 import CustomSnackbar from '../../OtherComponent/CustomSnackbar';
 import {productService} from '../../../Services/productService';
+import axios from 'axios';
+import config from '../../../Services/config';
 
 
 const styles = makeStyles(
@@ -56,7 +58,7 @@ const styles = makeStyles(
     })
 )
 
-const ProductModal = (props) => {
+const ProductModal = ({modal, onModalClose, onSubmitNewProduct, onSubmitEditProduct, handleNewProductChange, isEdit, newProduct}) => {
     const classes = styles();
 
     function submitHandler(e) {
@@ -65,25 +67,25 @@ const ProductModal = (props) => {
  
     return (
         <CustomModal 
-            modal={props.modal}
-            handleClose={props.onModalClose}
+            modal={modal}
+            handleClose={onModalClose}
         >
             <form autoComplete="off" onSubmit={submitHandler}>
                 <TextField
                     label="Nama"
                     name="name"
                     className={classes.formField}
-                    value={props.newProduct.name}
+                    value={newProduct.name}
                     margin="normal"
                     variant="outlined"
-                    onChange={props.handleNewProductChange}
+                    onChange={handleNewProductChange}
                 />
                 <Button 
                     variant="contained" 
                     size="medium" 
                     color="primary" 
                     className={classes.submitButton}
-                    onClick={props.onSubmitNewProduct}
+                    onClick={isEdit ? onSubmitEditProduct : onSubmitNewProduct}
                 >
                     Simpan
                 </Button>
@@ -97,6 +99,10 @@ export default function ProductList(props) {
     const [loading, setLoading] = useState(true);
     const [submittedNewProduct, setNewSubmittedProduct] = useState(null);
     const [deletedProductId, setDeletedProductId] = useState(null);
+    const [editProduct, setEditProduct] = useState({
+        status: false,
+        id: ''
+    });
     const [productData, setProductData] = useState({
         products: null
     });
@@ -115,6 +121,9 @@ export default function ProductList(props) {
     useEffect(() => {
         if(props.categoryId === '') {
             setLoading(false);
+            setProductData({
+                products: null
+            })
             return;
         } 
 
@@ -154,8 +163,9 @@ export default function ProductList(props) {
             setProductData({
                 products: newProductData
             })
-            setLoading(false);
         }
+
+        setLoading(false);
 
         return () => {
             setDeletedProductId(null);
@@ -247,10 +257,58 @@ export default function ProductList(props) {
             })
     }
 
+    const submitEditProduct = async () => {
+        setLoading(true);
+        try {
+            delete newProduct.categoryId;
+            let editProductPayload = newProduct;
+
+            const response = await axios.put(`${config.baseUrl}product/${editProduct.id}`, editProductPayload, {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+            });
+
+            let changedObjectIndex = productData.products.findIndex(item => item._id === editProduct.id);
+            productData.products[changedObjectIndex].name = editProductPayload.name;
+
+            setEditProduct({
+                status: false,
+                id: ''
+            });
+    
+            setNewProduct({
+                ...newProduct,
+                name: ''        
+            });
+            handleModalClose();
+            snackBarOpenAction(true, `Berhasil mengubah produk.`);
+        }
+        catch (err) {
+            console.log(err);
+        }
+
+        setLoading(false);
+    }
+
+    const handleEdit = async (id, name) => {
+        setEditProduct({
+            status: true,
+            id: id
+        });
+
+        setNewProduct({
+            ...newProduct,
+            name: name        
+        });
+
+        handleModalOpen();
+    }
+
     const handleDelete = async (id, name) => {
         let confirm = window.confirm(`Apakah Anda yakin untuk menghapus jenis Produk ${name}?`);
 
         if(!confirm) return;
+
+        setLoading(true);
 
         await productService.deleteProduct(id)
         .then((res) => {
@@ -300,7 +358,8 @@ export default function ProductList(props) {
                                     selected={selected}
                                     product={product}
                                     onClicked={() => props.onSelectProduct(product._id)}
-                                    onDelete={() => handleDelete(product._id, product.name)}    
+                                    onDelete={() => handleDelete(product._id, product.name)}
+                                    onEdit={() => handleEdit(product._id, product.name) }
                                 />
                             )
                         }
@@ -322,7 +381,9 @@ export default function ProductList(props) {
         <ProductModal 
             newProduct={newProduct}
             handleNewProductChange={handleNewProductChange}
+            isEdit={editProduct.status}
             onSubmitNewProduct={submitNewProduct}
+            onSubmitEditProduct={submitEditProduct}
             modal={modal}
             onModalClose={handleModalClose}
         />

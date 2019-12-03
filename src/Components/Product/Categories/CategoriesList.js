@@ -11,6 +11,8 @@ import TextField from '@material-ui/core/TextField';
 import CustomModal from '../../OtherComponent/CustomModal';
 import CustomSnackbar from '../../OtherComponent/CustomSnackbar';
 import { productService } from '../../../Services/productService';
+import axios from 'axios';
+import config from '../../../Services/config';
 import CategoriesStepModal from './CategoriesStepModal';
 
 const styles = makeStyles(
@@ -105,6 +107,10 @@ export default function CategoriesList(props) {
     const [modal, setModalOpenClose] = useState(false);
     const [stepDialog, setDialogOpenClose] = useState(false);
     const [selectedCategory, setOpenedCategory] = useState('');
+    const [editing, setEditing] = useState({
+        status: false,
+        id: ''
+    });
     const [snackbar, setSnackbarState] = useState({
         open: false,
         message: '',
@@ -157,45 +163,84 @@ export default function CategoriesList(props) {
         })
     }
 
-    const submitNewCategory = () => {
+    const submitNewCategory = async () => {
         if(newCategory.name === '' || newCategory.name === null || newCategory.name === undefined) {
             snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
-        } else {
-            productService.postNewCategory(newCategory)
-                .then((res) => {
-                    if(res.status === 201) {
-                        snackBarOpenAction(true, 'Berhasil membuat jenis Kategori baru.');
-                        handleModalClose();
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
-                })
+        }
+
+        await productService.postNewCategory(newCategory)
+            .then((res) => {
+                if(res.status === 201) {
+                    snackBarOpenAction(true, 'Berhasil membuat jenis Kategori baru.');
+                    setCategory({
+                        name: ''
+                    });
+                    handleModalClose();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                snackBarOpenAction(false, 'Terjadi kesalahan ketika membuat data.');
+            })
+    }
+
+    const submitEditCategory = async () => {
+        setLoading(true);
+
+        try {
+            const response = await axios.post(`${config.baseUrl}category/${editing.id}`);
+
+            setCategory({
+                name: ''
+            });
+
+            setEditing({
+                status: false,
+                id: ''
+            });
+
+            snackBarOpenAction(true, 'Berhasil mengubah kategori.');
+        }
+        catch (err) {
+            console.log(err);
+            snackBarOpenAction(false, 'Terjadi kesalahan saat menyunting data.');
         }
     }
 
-    const handleDelete = (id, name) => {
+    const handleDelete = async (id, name) => {
         let confirm = window.confirm(`Apakah Anda yakin untuk menghapus Kategori ${name}?`);
         setLoading(true);
 
         if(confirm) {
-            productService.deleteCategory(id)
+            await productService.deleteCategory(id)
                 .then((res) => {
                     if(res.status === 201) {
                         let newCategoryData = categoryData.filter(category => category._id !== id);
                         setCategoryData(newCategoryData);
-                        setLoading(false);
                         snackBarOpenAction(true, `${name} berhasil dihapus.`);
                     }
                 })
                 .catch((err) => {
                     console.log(err);
                     snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
-                    setLoading(false);
                 })
         }
+
+        setLoading(false);
+    }
+
+    const handleEdit = (name, id) => {
+        // setCategory({
+        //     name: name
+        // });
+
+        // setEditing({
+        //     status: true,
+        //     id: id
+        // });
+        console.log(categoryData);
         
+        // handleModalOpen();
     }
 
     useEffect(() => {
@@ -253,6 +298,7 @@ export default function CategoriesList(props) {
                                             } 
                                         }
                                         onDelete={() => handleDelete(category._id, category.name)}
+                                        onEdit={() => handleEdit(category.name, category._id)}
                                     />
                                 )
                             }

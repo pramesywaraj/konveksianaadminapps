@@ -45,11 +45,6 @@ const styles = theme => ({
 });
 
 class Client extends Component {
-
-    // constructor(props) {
-    //     super();
-    // }
-
     
     componentDidMount() {
         this.fetchClientData();

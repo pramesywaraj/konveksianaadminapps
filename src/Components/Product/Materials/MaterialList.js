@@ -172,12 +172,15 @@ export default function MaterialList(props) {
     useEffect(() => {
         if(props.productId !== '') {
             fetchData();
-        } else {
-            setLoading(false);
-            setMaterialData({
-                materials: null
-            })
+            return;
         }
+
+        setMaterialData({
+            materials: null
+        });
+
+        setLoading(false);
+
         // This comment was made for prevent warning to showed up
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.productId]);

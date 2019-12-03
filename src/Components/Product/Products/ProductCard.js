@@ -44,6 +44,10 @@ const styles = makeStyles((theme) => ({
 
     selected: {
         backgroundColor: 'rgba(0, 0, 0, 0.08)'
+    },
+    
+    editButton: {
+        color: 'green'
     }
 }));
 
@@ -74,6 +78,12 @@ export default function ProductCard(props) {
             </div>
             <div className={classes.marginAuto}>
                 <CardContent className={classes.contentContainer}>
+                    <Button 
+                        onClick={props.onEdit} 
+                        className={classes.editButton}
+                    >
+                        Edit
+                    </Button>
                     <Button 
                         onClick={props.onDelete} 
                         color="secondary"

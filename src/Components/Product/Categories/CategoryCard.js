@@ -44,17 +44,20 @@ const styles = makeStyles((theme) => ({
 
     selected: {
         backgroundColor: 'rgba(0, 0, 0, 0.08)'
+    },
+
+    editButton: {
+        color: 'green'
     }
 }));
 
-export default function CategoryCard(props) {
+export default function CategoryCard({name, onClicked, onDelete, onEdit, selected, id }) {
     const classes = styles();
     let CardClass = [classes.contentContainer, classes.ripple, classes.body1Font];
 
-    if(props.id === props.selected) {
+    if(id === selected) {
         CardClass.push(classes.selected);
     }
-   
 
     return (
         <Card 
@@ -66,21 +69,28 @@ export default function CategoryCard(props) {
             >
                 <CardContent 
                     className={CardClass.join(' ')} 
-                    onClick={props.onClicked}
+                    onClick={onClicked}
                 >
                     <p>
-                        {props.name}
+                        {name}
                     </p>
                 </CardContent>
             </div>
             <div className={classes.marginAuto}>
                 <CardContent className={classes.contentContainer}>
                     <Button 
-                        onClick={props.onDelete} 
+                        onClick={onEdit} 
+                        className={classes.editButton}
+                    >
+                        Edit
+                    </Button>
+                    <Button 
+                        onClick={onDelete} 
                         color="secondary"
                     >
                         Hapus
                     </Button>
+                    
                 </CardContent>
             </div>
             

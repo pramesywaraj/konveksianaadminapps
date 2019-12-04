@@ -320,6 +320,7 @@ export default function CategoriesList(props) {
                 newCategory={newCategory}
                 handleNewCategoryChange={handleNewCategoryChange}
                 onSubmitNewCategory={submitNewCategory}
+                onEdit={submitEditCategory}
                 modal={modal}
                 onModalClose={handleModalClose}
             />

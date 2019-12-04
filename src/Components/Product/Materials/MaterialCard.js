@@ -31,10 +31,14 @@ const styles = makeStyles((theme) => ({
             backgroundSize: '100%',
             transition: "background 0s"
         }
+    },
+
+    editButton: {
+        color: 'green'
     }
 }));
 
-export default function MaterialCard(props) {
+export default function MaterialCard({material, handleDelete, handleEdit}) {
     const classes = styles();
     
     return (
@@ -42,21 +46,30 @@ export default function MaterialCard(props) {
             <CardContent className={[classes.contentContainer, classes.ripple].join(' ')}>
                 <div>
                     <Typography variant="body1">
-                        {props.material.name}
+                        {material.name}
                     </Typography>
                 </div>
                 <div>
                     <Typography variant="body1">
-                        Rp.{props.material.priceMargin}
+                        Rp.{material.priceMargin}
                     </Typography>
                 </div>
                 <div>
                     <Typography variant="body1">
-                        {props.material.weight} (Gram)
+                        {material.weight} (Gram)
                     </Typography>
                 </div>
                 <div>
-                    <Button color="secondary" className={classes.button} onClick={props.handleDelete}>
+                    <Button 
+                        onClick={handleEdit} 
+                        className={classes.editButton}
+                    >
+                        Edit
+                    </Button>
+                    <Button 
+                        color="secondary" 
+                        onClick={handleDelete}
+                    >
                         Hapus
                     </Button>
                 </div>

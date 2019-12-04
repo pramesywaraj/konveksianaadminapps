@@ -11,7 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import CustomModal from '../../OtherComponent/CustomModal';
 import CustomSnackbar from '../../OtherComponent/CustomSnackbar';
 import {productService} from '../../../Services/productService';
-
+import axios from 'axios';
+import config from '../../../Services/config';
 
 const styles = makeStyles(
     (theme) => ({
@@ -59,7 +60,7 @@ const styles = makeStyles(
     })
 )
 
-const MaterialModal = (props) => {
+const MaterialModal = ({modal, onModalClose, newMaterial, handleNewMaterialChange, onSubmitNewMaterial, onSubmitEditMaterial, isEdit}) => {
     const classes = styles();
 
     function submitHandler(e) {
@@ -68,45 +69,45 @@ const MaterialModal = (props) => {
  
     return (
         <CustomModal 
-            modal={props.modal}
-            handleClose={props.onModalClose}
+            modal={modal}
+            handleClose={onModalClose}
         >
             <form autoComplete="off" onSubmit={submitHandler}>
                 <TextField
                     label="Nama"
                     name="name"
                     className={classes.formField}
-                    value={props.newMaterial.name}
+                    value={newMaterial.name}
                     margin="normal"
                     variant="outlined"
-                    onChange={props.handleNewMaterialChange}
+                    onChange={handleNewMaterialChange}
                 />
                 <TextField
                     label="Berat (Gram)"
                     name="weight"
                     className={classes.formField}
-                    value={props.newMaterial.weight}
+                    value={newMaterial.weight}
                     margin="normal"
                     type="number"
                     variant="outlined"
-                    onChange={props.handleNewMaterialChange}
+                    onChange={handleNewMaterialChange}
                 />
                 <TextField
                     label="Harga Material Perkiraan"
                     name="priceMargin"
                     className={classes.formField}
-                    value={props.newMaterial.priceMargin}
+                    value={newMaterial.priceMargin}
                     margin="normal"
                     type="number"
                     variant="outlined"
-                    onChange={props.handleNewMaterialChange}
+                    onChange={handleNewMaterialChange}
                 />
                 <Button 
                     variant="contained" 
                     size="medium" 
                     color="primary" 
                     className={classes.submitButton}
-                    onClick={props.onSubmitNewMaterial}
+                    onClick={onSubmitNewMaterial}
                 >
                     Simpan
                 </Button>
@@ -122,7 +123,7 @@ function Loading() {
     )
 }
 
-function MaterialMap({materials, handleDelete}) {
+function MaterialMap({materials, handleDelete, handleEdit}) {
     const classes = styles();
 
     if(materials !== null && materials.length > 0) {
@@ -132,6 +133,7 @@ function MaterialMap({materials, handleDelete}) {
                     key={material._id} 
                     material={material} 
                     handleDelete={() => handleDelete(material._id, material.name)}
+                    handleEdit={() => handleEdit(material._id, material)}
                 />
             ))
             
@@ -161,7 +163,11 @@ export default function MaterialList(props) {
         weight: '',
         priceMargin: '',
         productId: ''
-    }); 
+    });
+    const [editMaterial, setOnEditMaterial] = useState({
+        status: true,
+        id: ''
+    });
     const [modal, setModalOpenClose] = useState(false);
     const [snackbar, setSnackbarState] = useState({
         open: false,
@@ -276,6 +282,49 @@ export default function MaterialList(props) {
             })
     }
 
+    const submitEditMaterial = async () => {
+        setLoading(true);
+        
+        if(newMaterial.name === '' && newMaterial.productId === '' && newMaterial.priceMargin === '' && newMaterial.weight === '') {
+            snackBarOpenAction(false, 'Silahkan mengisi form terlebih dahulu.');
+            return;
+        }
+
+        try {
+            let temp = newMaterial;
+            let editMaterialPayload = temp.productId;
+
+            const response = await axios.put(`${config.baseUrl}material/${editMaterial.id}`, editMaterialPayload, {
+                headers: { Authorization : `Bearer ${localStorage.getItem("token")}`}
+            })
+
+            let changedMaterialIndex = materialData.materials.findIndex(item => item._id === editMaterial.id);
+            materialData.materials[changedMaterialIndex].name = editMaterialPayload.name;
+            materialData.materials[changedMaterialIndex].weight = editMaterialPayload.weight;
+            materialData.materials[changedMaterialIndex].priceMargin = editMaterialPayload.priceMargin;
+
+            setOnEditMaterial({
+                status: false,
+                id: ''
+            });
+
+            setNewMaterial({
+                name: '',
+                weight: '',
+                priceMargin: '',
+                productId: ''
+            });
+
+            handleModalClose();
+            snackBarOpenAction(true, 'Berhasil mengubah material.');
+
+        }
+        catch (err) {
+            console.log(err);
+            snackBarOpenAction(false, `Telah terjadi kesalahan, gagal mengubah material.`);
+        }
+    }
+
     const handleDelete = async (id, name) => {
         let confirm = window.confirm(`Apakah Anda yakin untuk menghapus jenis Material ${name}?`);
 
@@ -297,6 +346,22 @@ export default function MaterialList(props) {
                 snackBarOpenAction(false, 'Terjadi kesalahan saat menghapus data.');
                 setLoading(false);
             })
+    }
+
+    const handleEdit = (id, material) => {
+        setOnEditMaterial({
+            status: true,
+            id: id
+        })
+
+        setNewMaterial({
+            productId: '',
+            name: material.name,
+            weight: material.weight,
+            priceMargin: material.priceMargin
+        })
+
+        handleModalOpen();
     }
 
     const handleModalClose = () => {
@@ -352,6 +417,7 @@ export default function MaterialList(props) {
                             <MaterialMap 
                                 materials={materialData.materials}
                                 handleDelete={handleDelete}
+                                handleEdit={handleEdit}
                             />
                         )
                     }
@@ -360,7 +426,9 @@ export default function MaterialList(props) {
             <MaterialModal 
                 newMaterial={newMaterial}
                 handleNewMaterialChange={handleNewMaterialChange}
-                onSubmitNewMaterial={submitNewMaterial}  
+                isEdit={editMaterial.status}
+                onSubmitNewMaterial={submitNewMaterial}
+                onSubmitEditMaterial={submitEditMaterial}
                 modal={modal}
                 onModalClose={handleModalClose}
             />

@@ -260,8 +260,9 @@ export default function ProductList(props) {
     const submitEditProduct = async () => {
         setLoading(true);
         try {
-            delete newProduct.categoryId;
-            let editProductPayload = newProduct;
+            // we do in immutable way
+            let temp = newProduct;
+            let editProductPayload = temp.categoryId;
 
             const response = await axios.put(`${config.baseUrl}product/${editProduct.id}`, editProductPayload, {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }
@@ -284,12 +285,13 @@ export default function ProductList(props) {
         }
         catch (err) {
             console.log(err);
+            snackBarOpenAction(false, `Telah terjadi kesalahan, gagal mengubah produk.`);
         }
 
         setLoading(false);
     }
 
-    const handleEdit = async (id, name) => {
+    const handleEdit = (id, name) => {
         setEditProduct({
             status: true,
             id: id

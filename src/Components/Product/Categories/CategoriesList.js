@@ -65,7 +65,7 @@ const styles = makeStyles(
     })
 )
 
-const CategoryModal = (props) => {
+const CategoryModal = ({modal, newCategory, onModalClose, handleNewCategoryChange, onSubmitNewCategory, onSubmitEditCategory, isEdit}) => {
     const classes = styles();
     function submitHandler(e) {
         e.preventDefault();
@@ -73,25 +73,25 @@ const CategoryModal = (props) => {
  
     return (
         <CustomModal 
-            modal={props.modal}
-            handleClose={props.onModalClose}
+            modal={modal}
+            handleClose={onModalClose}
         >
             <form autoComplete="off" onSubmit={submitHandler}>
                 <TextField
                     label="Nama"
                     name="name"
                     className={classes.formField}
-                    value={props.newCategory.name}
+                    value={newCategory.name}
                     margin="normal"
                     variant="outlined"
-                    onChange={props.handleNewCategoryChange}
+                    onChange={handleNewCategoryChange}
                 />
                 <Button 
                     variant="contained" 
                     size="medium" 
                     color="primary" 
                     className={classes.submitButton}
-                    onClick={props.onSubmitNewCategory}
+                    onClick={isEdit ? onSubmitEditCategory : onSubmitNewCategory}
                 >
                     Simpan
                 </Button>
@@ -188,7 +188,15 @@ export default function CategoriesList(props) {
         setLoading(true);
 
         try {
-            const response = await axios.post(`${config.baseUrl}category/${editing.id}`);
+            let temp = newCategory;
+            let editCategoryPayload = temp;
+
+            const response = await axios.put(`${config.baseUrl}category/${editing.id}`, editCategoryPayload, {
+                headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+            });
+
+            let changedObjectIndex = categoryData.findIndex(item => item._id === editing.id);
+            categoryData[changedObjectIndex].name = editCategoryPayload.name;
 
             setCategory({
                 name: ''
@@ -199,12 +207,15 @@ export default function CategoriesList(props) {
                 id: ''
             });
 
+            handleModalClose();
             snackBarOpenAction(true, 'Berhasil mengubah kategori.');
         }
         catch (err) {
             console.log(err);
             snackBarOpenAction(false, 'Terjadi kesalahan saat menyunting data.');
         }
+
+        setLoading(false);
     }
 
     const handleDelete = async (id, name) => {
@@ -230,17 +241,16 @@ export default function CategoriesList(props) {
     }
 
     const handleEdit = (name, id) => {
-        // setCategory({
-        //     name: name
-        // });
+        setCategory({
+            name: name
+        });
 
-        // setEditing({
-        //     status: true,
-        //     id: id
-        // });
-        console.log(categoryData);
+        setEditing({
+            status: true,
+            id: id
+        });
         
-        // handleModalOpen();
+        handleModalOpen();
     }
 
     useEffect(() => {
@@ -320,7 +330,8 @@ export default function CategoriesList(props) {
                 newCategory={newCategory}
                 handleNewCategoryChange={handleNewCategoryChange}
                 onSubmitNewCategory={submitNewCategory}
-                onEdit={submitEditCategory}
+                onSubmitEditCategory={submitEditCategory}
+                isEdit={editing.status}
                 modal={modal}
                 onModalClose={handleModalClose}
             />

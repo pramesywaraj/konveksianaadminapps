@@ -262,7 +262,7 @@ export default function ProductList(props) {
         try {
             // we do in immutable way
             let temp = newProduct;
-            let editProductPayload = temp.categoryId;
+            let editProductPayload = temp;
 
             const response = await axios.put(`${config.baseUrl}product/${editProduct.id}`, editProductPayload, {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }

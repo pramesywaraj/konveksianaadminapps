@@ -107,7 +107,7 @@ const MaterialModal = ({modal, onModalClose, newMaterial, handleNewMaterialChang
                     size="medium" 
                     color="primary" 
                     className={classes.submitButton}
-                    onClick={onSubmitNewMaterial}
+                    onClick={isEdit ? onSubmitEditMaterial : onSubmitNewMaterial}
                 >
                     Simpan
                 </Button>
@@ -292,23 +292,23 @@ export default function MaterialList(props) {
 
         try {
             let temp = newMaterial;
-            let editMaterialPayload = temp.productId;
+            let editMaterialPayload = temp;
 
             const response = await axios.put(`${config.baseUrl}material/${editMaterial.id}`, editMaterialPayload, {
                 headers: { Authorization : `Bearer ${localStorage.getItem("token")}`}
             })
 
-            let changedMaterialIndex = materialData.materials.findIndex(item => item._id === editMaterial.id);
+            let changedMaterialIndex = await materialData.materials.findIndex(item => item._id === editMaterial.id);
             materialData.materials[changedMaterialIndex].name = editMaterialPayload.name;
             materialData.materials[changedMaterialIndex].weight = editMaterialPayload.weight;
             materialData.materials[changedMaterialIndex].priceMargin = editMaterialPayload.priceMargin;
 
-            setOnEditMaterial({
+            await setOnEditMaterial({
                 status: false,
                 id: ''
             });
 
-            setNewMaterial({
+            await setNewMaterial({
                 name: '',
                 weight: '',
                 priceMargin: '',
@@ -323,6 +323,8 @@ export default function MaterialList(props) {
             console.log(err);
             snackBarOpenAction(false, `Telah terjadi kesalahan, gagal mengubah material.`);
         }
+
+        setLoading(false);
     }
 
     const handleDelete = async (id, name) => {

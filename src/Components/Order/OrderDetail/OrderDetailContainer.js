@@ -72,7 +72,7 @@ export default function OrderDetailContainer() {
             const response = await axios.get(`${config.baseUrl}order/id/${orderId}`, {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }
             });
-            console.log(response);
+
             setOrderData(response.data.order);
         } catch (err) {
             console.log(err);
@@ -128,6 +128,7 @@ export default function OrderDetailContainer() {
             setTimeout(() => {
                 history.goBack();
             }, 1500)
+            
         } catch (err) {
             console.log(err);
             snackBarOpenAction(true, '', 'Terdapat kesalahan. Tidak dapat menolak pesanan.');

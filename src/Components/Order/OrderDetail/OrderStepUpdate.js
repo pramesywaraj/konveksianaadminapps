@@ -88,7 +88,7 @@ export default function OrderStepUpdate({steps, categoryId, addStepToOrder, snac
     }, [])
 
     useEffect(() => {
-        if(availableStep.length === 0 || availableStep === undefined) return;
+        if(availableStep.length === 0 || availableStep === undefined || steps.length === 0) return;
         if(steps[0].step.queue === availableStep[availableStep.length - 1].queue) {
             setIsDone(true);
         }

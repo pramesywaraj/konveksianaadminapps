@@ -93,8 +93,6 @@ export default function OrderPriceUpdate({orderId, snackbarOpen}) {
                 await axios.get(`${config.baseUrl}payment-step/get-total-amount/${orderId}`, {headers: auth})
             ]);
 
-            console.log(paymentHistory, paymentAmount);
-
             await setData({
                 paymentHistory: paymentHistory.data.paymentStep
             });

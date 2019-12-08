@@ -177,8 +177,23 @@ export default function ProductList(props) {
     const fetchData = async () => {
         await productService.getProduct(props.categoryId)
             .then((res) => {
+                let sortedProduct = res.data.product;
+                sortedProduct.sort((first, second) => {
+                    let firstOrder = first.name.toUpperCase();
+                    let secondOrder = second.name.toUpperCase();
+                    if(firstOrder < secondOrder) {
+                        return -1;
+                    }
+
+                    if(firstOrder > secondOrder) {
+                        return 1;
+                    }
+
+                    return 0;
+                })
+
                 setProductData({
-                    products: res.data.product
+                    products: sortedProduct
                 });
                 setLoading(false);
             })

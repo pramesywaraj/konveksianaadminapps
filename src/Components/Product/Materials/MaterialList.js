@@ -239,8 +239,23 @@ export default function MaterialList(props) {
                 return;
             }
 
+            let sortedMaterial = res.data.material;
+            sortedMaterial.sort((first, second) => {
+                let firstOrder = first.name.toUpperCase();
+                let secondOrder = second.name.toUpperCase();
+                if(firstOrder < secondOrder) {
+                    return -1;
+                }
+
+                if(firstOrder > secondOrder) {
+                    return 1;
+                }
+
+                return 0;
+            })
+
             setMaterialData({
-                materials: res.data.material
+                materials: sortedMaterial
             });
             setLoading(false);
         })

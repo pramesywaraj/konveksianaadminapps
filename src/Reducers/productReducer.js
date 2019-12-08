@@ -18,9 +18,24 @@ const initialState = {
 export function product(state = initialState, action) {
     switch(action.type) {
         case FETCHED_ALL_CATEGORIES:
+            let sortedCategory = action.categories;
+            sortedCategory.sort((first, second) => {
+                let firstOrder = first.name.toUpperCase();
+                let secondOrder = second.name.toUpperCase();
+                if(firstOrder < secondOrder) {
+                    return -1;
+                }
+
+                if(firstOrder > secondOrder) {
+                    return 1;
+                }
+
+                return 0;
+            })
+
             return {
                 ...state,
-                categories: action.categories,
+                categories: sortedCategory,
                 loading: false
             }
         case ERROR:

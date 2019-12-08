@@ -165,7 +165,7 @@ export default function MaterialList(props) {
         productId: ''
     });
     const [editMaterial, setOnEditMaterial] = useState({
-        status: true,
+        status: false,
         id: ''
     });
     const [modal, setModalOpenClose] = useState(false);

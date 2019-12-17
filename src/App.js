@@ -11,6 +11,7 @@ import { Review } from './Components/Review/Review';
 
 // With React Hooks
 import OrderDetailContainer from './Components/Order/OrderDetail/OrderDetailContainer';
+import UserContainer from './Components/User/UserContainer';
 
 
 import { history } from './Helpers';
@@ -25,6 +26,7 @@ function App() {
           <Route exact path='/' render={() => (<Redirect to="/dashboard" />)} />
                    
           <PrivateRoute exact path='/dashboard' component={Dashboard}/>
+          <PrivateRoute exact path='/users' component={UserContainer}/>
           <PrivateRoute exact path='/orders' component={Order}/>
           <PrivateRoute exact path='/orders/:orderId' component={OrderDetailContainer}/>
           <PrivateRoute exact path='/products' component={ProductContainer}/>

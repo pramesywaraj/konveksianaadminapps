@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import { history } from '../../Helpers/history';
 import config from '../../Services/config';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
@@ -59,6 +60,10 @@ export default function DashboardLayout() {
         }
     }
 
+    const goToUserList = () => {
+        history.push('/users');
+    }
+
     if(data.users !== '' || data.orders !== '' || data.pendingOrders !== '') return (
         <div className={classes.root}>
             <Grid
@@ -72,7 +77,10 @@ export default function DashboardLayout() {
                     xl={3}
                     xs={12}
                 >
-                    <TotalUser userCount={data.users}/>
+                    <TotalUser 
+                        userCount={data.users}
+                        goToUserList={goToUserList}    
+                    />
                 </Grid>
                 <Grid
                     item

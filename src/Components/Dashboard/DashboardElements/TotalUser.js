@@ -6,7 +6,8 @@ import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        height: '100%'
+        height: '100%',
+        cursor: 'pointer'
     },
     content: {
         alignItems: 'center',
@@ -35,13 +36,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const TotalUser = props => {
-    const { className, userCount } = props;
+    const { className, userCount, goToUserList } = props;
 
     const classes = useStyles();
 
     return (
         <Card
             className={clsx(classes.root, className)}
+            onClick={goToUserList}
         >
             <CardContent>
                 <Grid

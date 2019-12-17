@@ -106,57 +106,57 @@ const OrderList = (props) => {
 function OrderTable({orders}) {
     const classes = styles();
     
-    if(orders !== null && orders.length > 0)
-    return (
-        <Table stickyheader="true" className={classes.table}>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Pelanggan</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell align="right">Tanggal Masuk</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {(orders.map(order => (
-                    <TableRow 
-                        hover
-                        key={order._id} 
-                        className={classes.table_row_clickable}
-                        onClick={() => history.push(`/orders/${order._id}`)}
-                    >
-                        <TableCell component="th" scope="row">
-                            {order.user.name}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                            {
-                                (order.status.isDone) ? (<StatusBadge type="done">Pesanan Selesai</StatusBadge>) 
-                                : (order.status.isOnProcess) ? (<StatusBadge type="ongoing">Pesanan dalam Proses</StatusBadge>) 
-                                : (order.status.isPending) ? (<StatusBadge type="pending">Pending</StatusBadge>) 
-                                : (order.status.isReject) ? (<StatusBadge type="reject">Pesanan Ditolak</StatusBadge>) 
-                                : "" 
-                            }
-                        </TableCell>
-                        <TableCell align="right">
-                            <Moment format="D MMM YYYY">
-                                {order.createdAt}
-                            </Moment>
-                        </TableCell>
+    if(orders !== null && orders.length > 0) {
+        return (
+            <Table stickyheader="true" className={classes.table}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Pelanggan</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell align="right">Tanggal Masuk</TableCell>
                     </TableRow>
-                )))
-                }
-            </TableBody>
-        </Table>
-    )
-
-    return (
-        <Typography 
-                align='center'
-                className={classes.marginTop20}
-            >
-                Tidak ada produk untuk ditampilkan.
-        </Typography> 
-    )
-
+                </TableHead>
+                <TableBody>
+                    {(orders.map(order => (
+                        <TableRow 
+                            hover
+                            key={order._id} 
+                            className={classes.table_row_clickable}
+                            onClick={() => history.push(`/orders/${order._id}`)}
+                        >
+                            <TableCell component="th" scope="row">
+                                {order.user.name}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                                {
+                                    (order.status.isDone) ? (<StatusBadge type="done">Pesanan Selesai</StatusBadge>) 
+                                    : (order.status.isOnProcess) ? (<StatusBadge type="ongoing">Pesanan dalam Proses</StatusBadge>) 
+                                    : (order.status.isPending) ? (<StatusBadge type="pending">Pending</StatusBadge>) 
+                                    : (order.status.isReject) ? (<StatusBadge type="reject">Pesanan Ditolak</StatusBadge>) 
+                                    : "" 
+                                }
+                            </TableCell>
+                            <TableCell align="right">
+                                <Moment format="D MMM YYYY">
+                                    {order.createdAt}
+                                </Moment>
+                            </TableCell>
+                        </TableRow>
+                    )))
+                    }
+                </TableBody>
+            </Table>
+        )
+    } else {
+        return (
+            <Typography 
+                    align='center'
+                    className={classes.marginTop20}
+                >
+                    Tidak ada produk untuk ditampilkan.
+            </Typography> 
+        )
+    }
 }
 
 export default OrderList;

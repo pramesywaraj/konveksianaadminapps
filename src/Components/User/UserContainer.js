@@ -95,7 +95,7 @@ function UserListTable({users}) {
                             {user.email}
                         </TableCell>
                         <TableCell component="th" scope="row">
-                            {user.phoneNumber !== undefined || user.phoneNumber !== null ? user.phoneNumber : (`---`)}
+                            {(user.phoneNumber ? user.phoneNumber : "---")}
                         </TableCell>
                         <TableCell component="th" scope="row">
                             {
